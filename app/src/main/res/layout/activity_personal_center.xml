@@ -65,7 +65,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Your Name"
+            android:text="点击登录"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
