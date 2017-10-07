@@ -58,7 +58,7 @@
 //        if (null == mContext){
 //            mContext = parent.getContext();
 //        }
-//        View view = LayoutInflater.from(mContext).inflate(R.layout.message_appointment_layout)
+//        View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_browse)
 //    }
 //
 //    @Override

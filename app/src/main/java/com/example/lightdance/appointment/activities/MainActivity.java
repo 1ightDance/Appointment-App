@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
+import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        changeFragment(new NewAppointmentFragment());
+
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_appointment:
-                        Toast.makeText(MainActivity.this , "first item" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "first item" , Toast.LENGTH_SHORT).show();
                         changeFragment(new NewAppointmentFragment());
                         break;
                     case R.id.menu_browse:
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.menu_news:
                         Toast.makeText(MainActivity.this , "third item" , Toast.LENGTH_SHORT).show();
+                        changeFragment(new NewsFragment());
                         break;
                     case R.id.menu_me:
                         Toast.makeText(MainActivity.this , "fourth item" , Toast.LENGTH_SHORT).show();

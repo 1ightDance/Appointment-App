@@ -8,13 +8,13 @@
     <item
         android:id="@+id/menu_browse"
         android:icon="@drawable/more"
-        android:title="发现" />
+        android:title="广场" />
     <item
         android:id="@+id/menu_news"
-        android:icon="@drawable/note"
-        android:title="咨询" />
+        android:icon="@drawable/activity"
+        android:title="资讯" />
     <item
         android:id="@+id/menu_me"
-        android:icon="@drawable/activity"
+        android:icon="@drawable/me"
         android:title="我的" />
 </menu>
