@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.R;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class BrowserMsgAdapter
 
     private Context mContext;
 
-    private List<BrowserMsgBean> BrowseMsgList;
+    private List<BrowseMsgBean> msgBeanList;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
@@ -48,8 +50,8 @@ public class BrowserMsgAdapter
         }
     }
 
-    public BrowserMsgAdapter(List<BrowserMsgBean> messageAppointmentList){
-        this.BrowseMsgList = messageAppointmentList;
+    public BrowserMsgAdapter(List<BrowseMsgBean> messageAppointmentList){
+        this.msgBeanList = messageAppointmentList;
     }
 
     @Override
@@ -57,13 +59,13 @@ public class BrowserMsgAdapter
         if (null == mContext){
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.message_appointment_layout, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list_browse_msg, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MessageAppointment msgAppointment = messageAppointmentList.get(position);
+        BrowseMsgBean msgAppointment = msgBeanList.get(position);
         holder.title.setText(msgAppointment.getTitle());
         holder.publishTime.setText(msgAppointment.getPublishTime());
         holder.beginTime.setText(msgAppointment.getBeginTime());
@@ -72,11 +74,11 @@ public class BrowserMsgAdapter
         holder.personNumber.setText(msgAppointment.getPersonNumber());
         holder.place.setText(msgAppointment.getPlace());
         Glide.with(mContext).load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
-        Glide.with(mContext).load(msgAppointment.getType()).into(holder.type);
+        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
     }
 
     @Override
     public int getItemCount() {
-        return messageAppointmentList.size();
+        return msgBeanList.size();
     }
 }
