@@ -152,8 +152,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="忘记密码？"
-        android:textColor="@android:color/black"
-        android:textSize="10sp"
+        android:textAlignment="viewEnd"
+        android:textSize="12sp"
+        android:textStyle="italic"
         app:layout_constraintRight_toRightOf="@+id/edittxt_password"
         app:layout_constraintTop_toBottomOf="@+id/edittxt_password" />
 
