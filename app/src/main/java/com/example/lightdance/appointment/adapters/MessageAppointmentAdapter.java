@@ -8,7 +8,7 @@
 //import android.widget.ImageView;
 //import android.widget.TextView;
 //
-//import com.example.lightdance.appointment.fragments.AppointmentMsgFragment;
+//import com.example.lightdance.appointment.fragments.BrowseFragment;
 //import com.example.lightdance.appointment.R;
 //
 //import java.util.List;
@@ -22,7 +22,7 @@
 //
 //    private Context mContext;
 //
-//    private List<AppointmentMsgFragment> appointmentMsgFragmentList;
+//    private List<BrowseFragment> appointmentMsgFragmentList;
 //
 //    static class ViewHolder extends RecyclerView.ViewHolder{
 //        private TextView title;
@@ -49,7 +49,7 @@
 //        }
 //    }
 //
-//    public MessageAppointmentAdapter(List<AppointmentMsgFragment> appointmentMsgFragmentList){
+//    public MessageAppointmentAdapter(List<BrowseFragment> appointmentMsgFragmentList){
 //        this.appointmentMsgFragmentList = appointmentMsgFragmentList;
 //    }
 //

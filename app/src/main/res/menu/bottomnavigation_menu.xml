@@ -3,18 +3,18 @@
     <item
         android:id="@+id/menu_appointment"
         android:checked="true"
-        android:icon="@drawable/activity"
-        android:title="new appointment" />
+        android:icon="@drawable/note"
+        android:title="约吧" />
     <item
         android:id="@+id/menu_browse"
         android:icon="@drawable/more"
-        android:title="browse" />
+        android:title="发现" />
     <item
         android:id="@+id/menu_news"
         android:icon="@drawable/note"
-        android:title="news" />
+        android:title="咨询" />
     <item
         android:id="@+id/menu_me"
-        android:icon="@drawable/me"
-        android:title="me" />
+        android:icon="@drawable/activity"
+        android:title="我的" />
 </menu>

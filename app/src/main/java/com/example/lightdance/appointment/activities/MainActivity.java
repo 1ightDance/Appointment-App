@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.fragments.BrowseFragment;
+import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.menu_appointment:
                         Toast.makeText(MainActivity.this , "first item" , Toast.LENGTH_SHORT).show();
+                        changeFragment(new NewAppointmentFragment());
                         break;
                     case R.id.menu_browse:
                         Toast.makeText(MainActivity.this , "second item" , Toast.LENGTH_SHORT).show();
+                        changeFragment(new BrowseFragment());
                         break;
                     case R.id.menu_news:
                         Toast.makeText(MainActivity.this , "third item" , Toast.LENGTH_SHORT).show();
