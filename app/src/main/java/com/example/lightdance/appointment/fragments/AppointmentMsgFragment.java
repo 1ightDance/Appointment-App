@@ -1,10 +1,10 @@
-package com.example.lightdance.appointment;
+package com.example.lightdance.appointment.fragments;
 
 /**
  * Created by LightDance on 2017/10/5.
  */
 
-public class MessageAppointment {
+public class AppointmentMsgFragment {
 
     //暂未考虑限制条件
     private String title;
@@ -18,9 +18,9 @@ public class MessageAppointment {
     private int inviterIconId;
 
     //构造方法
-    public MessageAppointment(String title, String publishTime, String beginTime,
-                              String endTime, String place, String inviter, String type,
-                              int personNumber, int inviterIconId) {
+    public AppointmentMsgFragment(String title, String publishTime, String beginTime,
+                                  String endTime, String place, String inviter, String type,
+                                  int personNumber, int inviterIconId) {
         this.title = title;
         this.publishTime = publishTime;
         this.beginTime = beginTime;

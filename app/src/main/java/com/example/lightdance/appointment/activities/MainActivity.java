@@ -1,11 +1,17 @@
-package com.example.lightdance.appointment;
+package com.example.lightdance.appointment.activities;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.menu_me:
                         Toast.makeText(MainActivity.this , "fourth item" , Toast.LENGTH_SHORT).show();
+                        changeFragment(new PersonalCenterFragment());
                         break;
                 }
                 return true;
@@ -39,4 +46,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    //动态加载碎片的方法
+    private void changeFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container,fragment);
+        transaction.commit();
+    }
+
 }
