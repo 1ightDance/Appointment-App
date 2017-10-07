@@ -48,11 +48,22 @@ public class NewsFragment extends Fragment{
     }
 
     private void initNews() {
-        NewsBean news1 = new NewsBean(R.mipmap.news_pic1,getString(R.string.news_title1),
-                getString(R.string.news_content1));
-        newsMsgList.add(news1);
-        NewsBean news2 = new NewsBean(R.mipmap.news_pic2,getString(R.string.news_title2),
-                getString(R.string.news_content2));
-        newsMsgList.add(news2);
+        for (int i = 0;i < 5;i++) {
+            NewsBean news1 = new NewsBean(R.mipmap.news_pic1, getString(R.string.news_title1),
+                    getString(R.string.news_content1));
+            newsMsgList.add(news1);
+            NewsBean news2 = new NewsBean(R.mipmap.news_pic2, getString(R.string.news_title2),
+                    getString(R.string.news_content2));
+            newsMsgList.add(news2);
+            NewsBean news3 = new NewsBean(R.mipmap.news_pic3, getString(R.string.news_title3),
+                    getString(R.string.news_content3));
+            newsMsgList.add(news3);
+            NewsBean news4 = new NewsBean(R.mipmap.news_pic4, getString(R.string.news_title4),
+                    getString(R.string.news_content4));
+            newsMsgList.add(news4);
+            NewsBean news5 = new NewsBean(R.mipmap.news_pic5, getString(R.string.news_title5),
+                    getString(R.string.news_content5));
+            newsMsgList.add(news5);
+        }
     }
 }
