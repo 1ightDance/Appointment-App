@@ -23,8 +23,10 @@ public class BrowserMsgAdapter
 
     private Context mContext;
 
+    //存放每一条信息的数组
     private List<BrowseMsgBean> msgBeanList;
 
+    //内部类ViewHolder与视图进行连接
     static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
         private TextView publishTime;
@@ -36,6 +38,7 @@ public class BrowserMsgAdapter
         private ImageView type;
         private ImageView inviterIcon;
 
+        //构造方法，将成员变量与界面组件一一对应
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView)itemView.findViewById(R.id.message_appointment_title);
@@ -54,6 +57,8 @@ public class BrowserMsgAdapter
         this.msgBeanList = messageAppointmentList;
     }
 
+    //重写从RecyclerView ADapter中继承来的三个方法
+    //传入布局文件 并膨胀为视图暂存在holder中
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (null == mContext){
@@ -63,6 +68,7 @@ public class BrowserMsgAdapter
         return new ViewHolder(view);
     }
 
+    //数据与视图绑定
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         BrowseMsgBean msgAppointment = msgBeanList.get(position);
@@ -77,6 +83,7 @@ public class BrowserMsgAdapter
         Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
     }
 
+    //传入数据源长度
     @Override
     public int getItemCount() {
         return msgBeanList.size();
