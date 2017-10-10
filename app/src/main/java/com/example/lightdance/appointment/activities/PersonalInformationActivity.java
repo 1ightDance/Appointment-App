@@ -16,6 +16,7 @@ import butterknife.OnClick;
 
 public class PersonalInformationActivity extends AppCompatActivity {
 
+    //利用黄油刀完成的FindViewById
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.img_userinfor_back)
@@ -42,6 +43,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
+    //XML中控件的点击监听
     @OnClick({R.id.img_userinfor_back, R.id.tv_userinfor_nickname, R.id.img_userinfor_avatar, R.id.tv_userinfor_name, R.id.tv_userinfor_sex, R.id.tv_userinfor_college, R.id.tv_userinfor_studentnumb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
