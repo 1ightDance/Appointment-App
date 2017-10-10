@@ -16,6 +16,7 @@ public class MsgLitePalManager {
         Connector.getDatabase();
     }
 
+    private void savaMsg(){}
 
 
 }
