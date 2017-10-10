@@ -151,6 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:linksClickable="false"
         android:text="忘记密码？"
         android:textAlignment="viewEnd"
         android:textSize="12sp"
