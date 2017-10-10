@@ -18,5 +18,15 @@ public class MsgLitePalManager {
 
     private void savaMsg(){}
 
+    private void showByClass(){}
+
+    private void showByPublishTime(){}
+
+    private void showByStartTime(){}
+
+    private void deleteMsg(){}
+
+    private void updateMsg(){}
+
 
 }
