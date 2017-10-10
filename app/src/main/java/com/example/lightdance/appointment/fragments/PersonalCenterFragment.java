@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.LoginActivity;
+import com.example.lightdance.appointment.activities.PersonalInformationActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,6 +91,7 @@ public class PersonalCenterFragment extends Fragment {
                 intent = new Intent(getActivity(), LoginActivity.class);
                 break;
             case R.id.tv_information:
+                intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.img_infor_next:
                 break;

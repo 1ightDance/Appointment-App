@@ -29,6 +29,8 @@ dependencies {
     //    听说很厉害的图片加载库
     //一个很方便的工具——黄油刀 用来快速实现FindViewById方法
     //用LitePal操作数据库，书上讲很方便
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
@@ -38,7 +40,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'org.litepal.android:core:1.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
