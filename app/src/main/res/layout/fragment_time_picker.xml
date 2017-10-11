@@ -14,15 +14,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        tools:layout_editor_absoluteY="93dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp" />
 
     <ImageView
         android:id="@+id/img_time_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/black"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/timePicker"
+        app:layout_constraintRight_toRightOf="@+id/timePicker"
         app:layout_constraintTop_toBottomOf="@+id/timePicker"
-        app:srcCompat="@mipmap/ic_check_circle_black" />
+        app:srcCompat="@mipmap/ic_done_white" />
 </android.support.constraint.ConstraintLayout>

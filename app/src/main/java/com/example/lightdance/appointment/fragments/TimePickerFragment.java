@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.example.lightdance.appointment.R;
 
@@ -25,7 +26,8 @@ public class TimePickerFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //去掉标题栏
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return inflater.inflate(R.layout.fragment_time_picker, container, false);
     }
 

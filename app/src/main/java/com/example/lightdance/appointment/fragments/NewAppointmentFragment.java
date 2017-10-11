@@ -1,6 +1,9 @@
 package com.example.lightdance.appointment.fragments;
 
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,12 @@ public class NewAppointmentFragment extends Fragment {
     @BindView(R.id.tv_activity_end_data)
     TextView tvActivityEndData;
 
+    private Calendar calendar;
+    private int year;
+    private int month;
+    private int day;
+
+    //获取日期选择器和时间选择器实例
     private DataPickerFragment dataPickerFragment = new DataPickerFragment();
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
 
@@ -41,12 +50,14 @@ public class NewAppointmentFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_appointment, container, false);
         unbinder = ButterKnife.bind(this, view);
+
         return view;
     }
 
