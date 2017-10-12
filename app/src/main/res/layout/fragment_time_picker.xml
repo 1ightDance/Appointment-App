@@ -7,27 +7,51 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TimePicker
-        android:id="@+id/timePicker"
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="0dp" />
-
-    <ImageView
-        android:id="@+id/img_time_select"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/black"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/timePicker"
-        app:layout_constraintRight_toRightOf="@+id/timePicker"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
-        app:srcCompat="@mipmap/ic_done_white" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="@+id/datePicker"
+                app:layout_constraintRight_toRightOf="@+id/datePicker"
+                app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+
+            <ImageView
+                android:id="@+id/img_time_select"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/black"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/timePicker"
+                app:layout_constraintRight_toRightOf="@+id/timePicker"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker"
+                app:srcCompat="@mipmap/ic_done_white" />
+
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

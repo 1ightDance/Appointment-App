@@ -8,20 +8,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
-import com.example.lightdance.appointment.fragments.DatePickerFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
+import com.example.lightdance.appointment.fragments.TimePickerFragment;
 
-public class MainActivity extends AppCompatActivity implements DatePickerFragment.dateListener{
+public class MainActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
 
     private int yearSelect;
     private int monthSelect;
     private int daySelect;
+    private int hourSelect;
+    private int minuteSelect;
 
     private BottomNavigationView bottomNavigationView;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerFragmen
 
         newAppointmentFragment = new NewAppointmentFragment();
 
+        //TODO 重写changeFragment方法 目前存在BUG
         changeFragment(newAppointmentFragment);
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
@@ -43,19 +45,15 @@ public class MainActivity extends AppCompatActivity implements DatePickerFragmen
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_appointment:
-                        Toast.makeText(MainActivity.this, "first item" , Toast.LENGTH_SHORT).show();
                         changeFragment(new NewAppointmentFragment());
                         break;
                     case R.id.menu_browse:
-                        Toast.makeText(MainActivity.this , "second item" , Toast.LENGTH_SHORT).show();
                         changeFragment(new BrowseFragment());
                         break;
                     case R.id.menu_news:
-                        Toast.makeText(MainActivity.this , "third item" , Toast.LENGTH_SHORT).show();
                         changeFragment(new NewsFragment());
                         break;
                     case R.id.menu_me:
-                        Toast.makeText(MainActivity.this , "fourth item" , Toast.LENGTH_SHORT).show();
                         changeFragment(new PersonalCenterFragment());
                         break;
                 }
@@ -73,15 +71,30 @@ public class MainActivity extends AppCompatActivity implements DatePickerFragmen
         transaction.commit();
     }
 
+    //用以更改日期的方法
+    public void changeData(){
+        newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
+    }
+
+    //用以更改时间的方法
+    private void changeTime() {
+        newAppointmentFragment.setTime(hourSelect,minuteSelect);
+    }
+
+    //重写TimeListener接口的saveDate方法
     @Override
-    public void dateSave(int year, int month, int day) {
+    public void saveDate(int year, int month, int day) {
         yearSelect  = year;
         monthSelect = month;
         daySelect   = day;
         changeData();
     }
 
-    public void changeData(){
-            newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
+    //重写TimeListener接口的saveTime方法
+    @Override
+    public void saveTime(int hour, int minute) {
+        hourSelect   = hour;
+        minuteSelect = minute;
+        changeTime();
     }
 }

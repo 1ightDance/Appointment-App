@@ -34,10 +34,11 @@ public class NewAppointmentFragment extends Fragment {
     @BindView(R.id.tv_activity_end_date)
     TextView tvActivityEndDate;
 
+    //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
     private int dateChange = 0;
+    private int timeChange = 0;
 
-    //获取日期选择器和时间选择器实例
-    private DatePickerFragment datePickerFragment = new DatePickerFragment();
+    //获取碎片实例
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
 
     public NewAppointmentFragment() {
@@ -64,24 +65,31 @@ public class NewAppointmentFragment extends Fragment {
     @OnClick({R.id.tv_activity_end_time, R.id.tv_activity_start_time, R.id.tv_activity_start_date, R.id.tv_activity_end_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_activity_end_time:
-                //展示碎片会话窗口（dialog）
-                timePickerFragment.show(getFragmentManager(),"TimePickerFragment");
-                break;
             case R.id.tv_activity_start_time:
-                timePickerFragment.show(getFragmentManager(),"TimePickerFragment");
+                //展示碎片会话窗口（dialog）
+                timePickerFragment.show(getFragmentManager(),"TimePicker");
+                dateChange = 1;
+                timeChange = 1;
+                break;
+            case R.id.tv_activity_end_time:
+                timePickerFragment.show(getFragmentManager(),"TimePicker");
+                dateChange = 2;
+                timeChange = 2;
                 break;
             case R.id.tv_activity_start_date:
-                datePickerFragment.show(getFragmentManager(),"DatePickerFragment");
+                timePickerFragment.show(getFragmentManager(),"DatePicker");
                 dateChange = 1;
+                timeChange = 1;
                 break;
             case R.id.tv_activity_end_date:
-                datePickerFragment.show(getFragmentManager(),"DatePickerFragment");
+                timePickerFragment.show(getFragmentManager(),"DatePicker");
                 dateChange = 2;
+                timeChange = 2;
                 break;
         }
     }
 
+    //判断更改哪个TextView显示的日期文本
     public void setDate(int yearSelect,int monthSelect,int daySelect){
         if (dateChange == 1){
             setStartDate(yearSelect,monthSelect,daySelect);
@@ -92,6 +100,18 @@ public class NewAppointmentFragment extends Fragment {
         dateChange = 0;
     }
 
+    //判断更改哪个TextView显示的时间文本
+    public void setTime(int hour,int minute){
+        if (timeChange == 1){
+            setStartTime(hour, minute);
+        }
+        if (timeChange == 2){
+            setEndTime(hour, minute);
+        }
+        timeChange = 0;
+    }
+
+    //更改方法
     public void setStartDate(int year,int month,int day){
         if (month < 10 && day >= 10) {
             tvActivityStartDate
@@ -131,10 +151,32 @@ public class NewAppointmentFragment extends Fragment {
     }
 
     public void setStartTime(int hour,int min){
-
+        if (hour <10 && min < 10){
+            tvActivityStartTime.setText("0" + hour + ":0" + min);
+        }
+        if (hour <10 && min >= 10){
+            tvActivityStartTime.setText("0" + hour + ":" + min);
+        }
+        if (hour >= 10 && min <10){
+            tvActivityStartTime.setText(hour + ":0"  + min);
+        }
+        if (hour >= 10 && min >=10){
+            tvActivityStartTime.setText(hour + ":" + min);
+        }
     }
 
     public void setEndTime(int hour,int min){
-
+        if (hour <10 && min < 10){
+            tvActivityEndTime.setText("0" + hour + ":0" + min);
+        }
+        if (hour <10 && min >= 10){
+            tvActivityEndTime.setText("0" + hour + ":" + min);
+        }
+        if (hour >= 10 && min <10){
+            tvActivityEndTime.setText(hour + ":0"  + min);
+        }
+        if (hour >= 10 && min >=10){
+            tvActivityEndTime.setText(hour + ":" + min);
+        }
     }
 }
