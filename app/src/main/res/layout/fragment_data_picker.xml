@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lightdance.appointment.fragments.DataPickerFragment">
+    tools:context="com.example.lightdance.appointment.fragments.DatePickerFragment">
 
     <DatePicker
         android:id="@+id/datePicker"

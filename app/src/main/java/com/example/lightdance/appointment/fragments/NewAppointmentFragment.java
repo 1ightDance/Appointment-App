@@ -1,6 +1,5 @@
 package com.example.lightdance.appointment.fragments;
 
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -23,8 +22,6 @@ import butterknife.Unbinder;
 
 public class NewAppointmentFragment extends Fragment {
 
-    @BindView(R.id.tv_activity_time)
-    TextView tvActivityTime;
     Unbinder unbinder;
     @BindView(R.id.tv_newappointment_title)
     TextView tvNewappointmentTitle;
@@ -32,18 +29,15 @@ public class NewAppointmentFragment extends Fragment {
     TextView tvActivityEndTime;
     @BindView(R.id.tv_activity_start_time)
     TextView tvActivityStartTime;
-    @BindView(R.id.tv_activity_start_data)
-    TextView tvActivityStartData;
-    @BindView(R.id.tv_activity_end_data)
-    TextView tvActivityEndData;
+    @BindView(R.id.tv_activity_start_date)
+    TextView tvActivityStartDate;
+    @BindView(R.id.tv_activity_end_date)
+    TextView tvActivityEndDate;
 
-    private Calendar calendar;
-    private int year;
-    private int month;
-    private int day;
+    private int dateChange = 0;
 
     //获取日期选择器和时间选择器实例
-    private DataPickerFragment dataPickerFragment = new DataPickerFragment();
+    private DatePickerFragment datePickerFragment = new DatePickerFragment();
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
 
     public NewAppointmentFragment() {
@@ -67,7 +61,7 @@ public class NewAppointmentFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.tv_activity_end_time, R.id.tv_activity_start_time, R.id.tv_activity_start_data, R.id.tv_activity_end_data})
+    @OnClick({R.id.tv_activity_end_time, R.id.tv_activity_start_time, R.id.tv_activity_start_date, R.id.tv_activity_end_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_activity_end_time:
@@ -77,12 +71,70 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.tv_activity_start_time:
                 timePickerFragment.show(getFragmentManager(),"TimePickerFragment");
                 break;
-            case R.id.tv_activity_start_data:
-                dataPickerFragment.show(getFragmentManager(),"DataPickerFragment");
+            case R.id.tv_activity_start_date:
+                datePickerFragment.show(getFragmentManager(),"DatePickerFragment");
+                dateChange = 1;
                 break;
-            case R.id.tv_activity_end_data:
-                dataPickerFragment.show(getFragmentManager(),"DataPickerFragment");
+            case R.id.tv_activity_end_date:
+                datePickerFragment.show(getFragmentManager(),"DatePickerFragment");
+                dateChange = 2;
                 break;
         }
+    }
+
+    public void setDate(int yearSelect,int monthSelect,int daySelect){
+        if (dateChange == 1){
+            setStartDate(yearSelect,monthSelect,daySelect);
+        }
+        if (dateChange == 2){
+            setEndDate(yearSelect,monthSelect,daySelect);
+        }
+        dateChange = 0;
+    }
+
+    public void setStartDate(int year,int month,int day){
+        if (month < 10 && day >= 10) {
+            tvActivityStartDate
+                    .setText(year + "年0" + month + "月" + day + "日");
+        }
+        if (day < 10 && month >= 10){
+            tvActivityStartDate
+                    .setText(year + "年" + month + "月0" + day + "日");
+        }
+        if (day < 10 && month < 10){
+            tvActivityStartDate
+                    .setText(year + "年0" + month + "月0" + day + "日");
+        }
+        if (day >= 10 && month >= 10){
+            tvActivityStartDate
+                    .setText(year + "年" + month + "月" + day + "日");
+        }
+    }
+
+    public void setEndDate(int year,int month,int day){
+        if (month < 10 && day >= 10) {
+            tvActivityEndDate
+                    .setText(year + "年0" + month + "月" + day + "日");
+        }
+        if (day < 10 && month >= 10){
+            tvActivityEndDate
+                    .setText(year + "年" + month + "月0" + day + "日");
+        }
+        if (day < 10 && month < 10){
+            tvActivityEndDate
+                    .setText(year + "年0" + month + "月0" + day + "日");
+        }
+        if (day >= 10 && month >= 10){
+            tvActivityEndDate
+                    .setText(year + "年" + month + "月" + day + "日");
+        }
+    }
+
+    public void setStartTime(int hour,int min){
+
+    }
+
+    public void setEndTime(int hour,int min){
+
     }
 }

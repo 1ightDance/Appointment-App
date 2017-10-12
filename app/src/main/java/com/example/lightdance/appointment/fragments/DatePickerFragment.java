@@ -1,6 +1,7 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.lightdance.appointment.R;
 
@@ -26,7 +26,7 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 //继承自会话碎片 使碎片以会话窗口的形式出现
-public class DataPickerFragment extends DialogFragment {
+public class DatePickerFragment extends DialogFragment {
 
 
     @BindView(R.id.datePicker)
@@ -40,10 +40,19 @@ public class DataPickerFragment extends DialogFragment {
     private int month;
     private int day;
 
-    public DataPickerFragment() {
+    private dateListener dateListener = null;
+
+    public DatePickerFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof dateListener){
+            dateListener = (dateListener) context;
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -60,11 +69,12 @@ public class DataPickerFragment extends DialogFragment {
         month = cal.get(Calendar.MONTH)+1;
         day   = cal.get(Calendar.DAY_OF_MONTH);
 
-        //datePicker初始化 设置初始日期
+        //datePicker初始化 设置初始日期 并添加监听
         datePicker.init(year, cal.get(Calendar.MONTH), day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Toast.makeText(getActivity(),"日期：" + year + "年" + (monthOfYear+1) + "月" + dayOfMonth + "日",Toast.LENGTH_SHORT).show();
+                month = monthOfYear + 1;
+                day   = dayOfMonth;
             }
         });
 
@@ -77,15 +87,19 @@ public class DataPickerFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.img_data_select)
-    public void onViewClicked() {
-        Toast.makeText(getActivity(),"日期：" + year + "年" + month + "月" + day + "日",Toast.LENGTH_SHORT).show();
-//        DataListener dataListener = (DataListener) getActivity();
-//        dataListener.DataSave(year,month,day);
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
-    public interface DataListener{
-        void DataSave(int year,int month,int day);
+    @OnClick(R.id.img_data_select)
+    public void onViewClicked() {
+        dateListener.dateSave(year,month,day);
+        dismiss();
+    }
+
+    public interface dateListener{
+        void dateSave(int year,int month,int day);
     }
 
 }
