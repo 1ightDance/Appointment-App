@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lightdance.appointment.activities.SignUpActivity">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="注册"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="31dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="学号："
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_student_num"
+        android:layout_marginRight="8dp"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_student_num"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/signup_user_student_num"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入学号"
+        android:layout_marginRight="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="29dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="电话："
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_phone_num"
+        android:layout_marginRight="8dp"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_phone_num"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/signup_user_phone_num"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:hint="留个手机号呗"
+        android:layout_marginRight="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="-3dp"
+        app:layout_constraintTop_toBottomOf="@+id/signup_user_student_num" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="姓名："
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_name"
+        android:layout_marginRight="8dp"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_name"
+        android:layout_marginTop="8dp"
+        android:id="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/signup_user_name"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:hint="你的名字"
+        android:layout_marginRight="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/signup_user_phone_num" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="密码："
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_password"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_password"
+        android:layout_marginTop="9dp"
+        android:id="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/signup_user_password"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="请输入密码"
+        android:layout_marginRight="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/signup_user_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="确认密码:"
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_ensure_password"
+        android:layout_marginRight="8dp"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_ensure_password"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView7" />
+
+    <EditText
+        android:id="@+id/signup_user_ensure_password"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="请确认密码"
+        android:layout_marginRight="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/signup_user_password" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="性别："
+        android:layout_marginLeft="-1dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/signup_user_sex_radiogroup"
+        android:layout_marginRight="8dp"
+        app:layout_constraintTop_toTopOf="@+id/signup_user_sex_radiogroup"
+        android:layout_marginTop="11dp"
+        app:layout_constraintHorizontal_bias="0.59" />
+
+    <RadioGroup
+        android:id="@+id/signup_user_sex_radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/signup_user_ensure_password"
+        android:layout_marginRight="123dp"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <RadioButton
+            android:id="@+id/signup_user_sex_man"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:checked="true"
+            android:text=" 男 "
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="227dp"
+            tools:layout_editor_absoluteY="309dp" />
+
+        <RadioButton
+            android:id="@+id/signup_user_sex_woman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="女"
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="92dp"
+            tools:layout_editor_absoluteY="325dp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/signup_finish"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="立即注册"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="62dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

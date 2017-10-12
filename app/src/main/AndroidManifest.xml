@@ -33,7 +33,10 @@
         <activity
             android:name=".activities.PersonalInformationActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"/>
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
