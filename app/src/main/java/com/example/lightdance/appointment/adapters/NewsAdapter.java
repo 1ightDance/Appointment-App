@@ -18,7 +18,7 @@ import java.util.List;
 //咨询适配器 继承自RecyclerView.Adapter 将泛型指定为NewsAdapter.ViewHolder
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
-    //创建一个数组全局变量用以存放咨询的数据
+    //创建一个数组全局变量用以存放资讯的数据
     private List<NewsBean> mNewsMsg;
 
     //定义内部类ViewHolder并继承RecyclerView.ViewHolder 需创建结构体
@@ -31,8 +31,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         //结构体
         public ViewHolder(View itemView) {
             super(itemView);
-            newsImg = (ImageView) itemView.findViewById(R.id.img_news_pic);
-            newsTitle = (TextView) itemView.findViewById(R.id.tv_news_title);
+            newsImg     = (ImageView) itemView.findViewById(R.id.img_news_pic);
+            newsTitle   = (TextView) itemView.findViewById(R.id.tv_news_title);
             newsContent = (TextView) itemView.findViewById(R.id.tv_news_content);
         }
     }

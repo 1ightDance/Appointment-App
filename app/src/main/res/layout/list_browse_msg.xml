@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true">
             <TextView
-                android:id="@+id/message_appointment_begintime"
+                android:id="@+id/message_appointment_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="10.5 19:30"/>

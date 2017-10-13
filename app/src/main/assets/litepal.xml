@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value='Users'></dbname>
-    <verson value='1'></verson>
+    <dbname value="Appointment"></dbname>
+    <verson value="1"></verson>
     <list>
         <!--声明映射模型，需要完整的类名-->
         <mapping class="com.example.lightdance.appointment.Model.BrowseMsgBean"/>
