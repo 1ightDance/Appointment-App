@@ -7,23 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BrowseFragment extends Fragment {
+public class BrowseFragment extends Fragment{
 
 //    //暂未考虑限制条件
 //    private String title;
 //    private String publishTime;
-//    private String beginTime;
+//    private String startTime;
 //    private String endTime;
 //    private String place;
 //    private String inviter;
 //    private String type;
 //    private int personNumber;
 //    private int inviterIconId;
+
+    //将数据库中存储用户发布的约人信息的数据库导出并赋值到List的实例中
+    private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
 
 
     public BrowseFragment() {
@@ -47,7 +55,7 @@ public class BrowseFragment extends Fragment {
 //                                  int personNumber, int inviterIconId) {
 //        this.title = title;
 //        this.publishTime = publishTime;
-//        this.beginTime = beginTime;
+//        this.startTime = starTime;
 //        this.endTime = endTime;
 //        this.place = place;
 //        this.inviter = inviter;
@@ -61,7 +69,7 @@ public class BrowseFragment extends Fragment {
 //        return title;
 //    }
 //
-//    public String getPublishTime() {
+//    public String getStarTime() {
 //        return publishTime;
 //    }
 //
