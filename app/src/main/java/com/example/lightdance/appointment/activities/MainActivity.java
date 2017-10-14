@@ -37,8 +37,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
         //TODO 重写changeFragment方法 目前存在BUG
         //已将广场放在最前，上面的newAppointmentFargment感觉可以去掉，
+        //不能删 后面还用到呢（黄旗）
         //然后咋把NewAppointmentFragment的方法@changeDate() @changeTime()放在这里了？（天舒）
-        changeFragment(new BrowseFragment());
+        //因为数据是从DialogFragment碎片传到MainActivity再传到NewAppointment的 所以这里有这两个方法（黄旗）
+        BrowseFragment browseFragment = new BrowseFragment();
+        changeFragment(browseFragment);
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
 
