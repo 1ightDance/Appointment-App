@@ -28,10 +28,10 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
-        TextView publishTime;
-        TextView startTime;
-        TextView endTime;
-        TextView place;
+//        TextView publishTime;
+//        TextView startTime;
+//        TextView endTime;
+//        TextView place;
         TextView content;
         TextView inviter;
         TextView personNumber;
@@ -42,10 +42,10 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             title        = (TextView) itemView.findViewById(R.id.tv_appointment_title);
-            publishTime  = (TextView) itemView.findViewById(R.id.tv_appointment_publishtime);
-            startTime    = (TextView) itemView.findViewById(R.id.tv_appointment_starttime);
-            endTime      = (TextView) itemView.findViewById(R.id.tv_appointment_endtime);
-            place        = (TextView) itemView.findViewById(R.id.tv_appointment_place);
+//            publishTime  = (TextView) itemView.findViewById(R.id.tv_appointment_publishtime);
+//            startTime    = (TextView) itemView.findViewById(R.id.tv_appointment_starttime);
+//            endTime      = (TextView) itemView.findViewById(R.id.tv_appointment_endtime);
+//            place        = (TextView) itemView.findViewById(R.id.tv_appointment_place);
             content      = (TextView) itemView.findViewById(R.id.tv_appointment_content);
             inviter      = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
             personNumber = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber);
@@ -74,14 +74,14 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         BrowseMsgBean msgAppointment = msgBeanList.get(position);
         holder
                 .title.setText(msgAppointment.getTitle());
-        holder
-                .publishTime.setText(msgAppointment.getPublishTime());
-        holder
-                .startTime.setText(msgAppointment.getStartTime());
-        holder
-                .endTime.setText(msgAppointment.getEndTime());
-        holder
-                .place.setText(msgAppointment.getPlace());
+//        holder
+//                .publishTime.setText(msgAppointment.getPublishTime());
+//        holder
+//                .startTime.setText(msgAppointment.getStartTime());
+//        holder
+//                .endTime.setText(msgAppointment.getEndTime());
+//        holder
+//                .place.setText(msgAppointment.getPlace());
         holder
                 .content.setText(msgAppointment.getContent());
         holder
