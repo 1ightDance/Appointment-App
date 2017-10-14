@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 
@@ -89,11 +88,10 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
                 .inviter.setText(msgAppointment.getInviter());
         holder
                 .personNumber.setText(msgAppointment.getPersonNumber());
-
-        Glide.with(mContext)
-                .load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
-        Glide.with(mContext)
-                .load(msgAppointment.getTypeIconId()).into(holder.type);
+        holder
+                .type.setImageResource(msgAppointment.getTypeIconId());
+        holder
+                .inviterIcon.setImageResource(msgAppointment.getInviterIconId());
     }
 
     //传入数据源长度

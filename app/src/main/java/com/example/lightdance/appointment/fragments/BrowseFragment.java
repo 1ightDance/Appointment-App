@@ -13,7 +13,8 @@ import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
-import java.util.ArrayList;
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class BrowseFragment extends Fragment {
     
-    private List<BrowseMsgBean> browseMsgBeen = new ArrayList<>();
+    private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -33,9 +34,9 @@ public class BrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
-
+        //初始化数据
         initAppointmentMsg();
-        
+        //绑定RecyclerView 并设置适配器
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_browse);
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 getActivity());
@@ -43,10 +44,10 @@ public class BrowseFragment extends Fragment {
         BrowserMsgAdapter adapter = new BrowserMsgAdapter(browseMsgBeen);
         recyclerView.setAdapter(adapter);
 
-
         return view;
     }
 
     private void initAppointmentMsg() {
+
     }
 }

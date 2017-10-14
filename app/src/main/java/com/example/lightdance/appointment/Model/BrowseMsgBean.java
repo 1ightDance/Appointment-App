@@ -17,7 +17,7 @@ public class BrowseMsgBean extends DataSupport{
     private String content;
     private String contactWay;
     private String inviter;
-    private int personNumber;
+    private String personNumber;
     private int inviterIconId;
     private int typeIconId;
     //msgId用作数据库主键
@@ -87,11 +87,11 @@ public class BrowseMsgBean extends DataSupport{
         this.inviter = inviter;
     }
 
-    public int getPersonNumber() {
+    public String getPersonNumber() {
         return personNumber;
     }
 
-    public void setPersonNumber(int personNumber) {
+    public void setPersonNumber(String personNumber) {
         this.personNumber = personNumber;
     }
 
