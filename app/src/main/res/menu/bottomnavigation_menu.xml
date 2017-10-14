@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_appointment"
-        android:checked="true"
-        android:icon="@drawable/note"
-        android:title="约吧" />
+
     <item
         android:id="@+id/menu_browse"
         android:icon="@drawable/more"
@@ -13,6 +9,11 @@
         android:id="@+id/menu_news"
         android:icon="@drawable/activity"
         android:title="资讯" />
+    <item
+        android:id="@+id/menu_appointment"
+        android:checked="true"
+        android:icon="@drawable/note"
+        android:title="约吧" />
     <item
         android:id="@+id/menu_me"
         android:icon="@drawable/me"
