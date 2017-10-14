@@ -67,9 +67,6 @@ public class NewAppointmentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_appointment, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        //创建数据库
-        Connector.getDatabase();
-
         return view;
     }
 
@@ -105,6 +102,8 @@ public class NewAppointmentFragment extends Fragment {
                 timeChange = 2;
                 break;
             case R.id.new_appointment_done:
+                //创建数据库
+                Connector.getDatabase();
                 //点击完成后 获取数据储存到数据库
                 BrowseMsgBean browseMsgBean = new BrowseMsgBean();
                 browseMsgBean.setTitle(editTextActivityTitle.getText().toString());
@@ -115,6 +114,7 @@ public class NewAppointmentFragment extends Fragment {
                 browseMsgBean.setPlace(editTextActivityPlace.getText().toString());
                 browseMsgBean.setContent(editTextActivityContent.getText().toString());
                 browseMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
+                browseMsgBean.save();
                 Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                 break;
         }

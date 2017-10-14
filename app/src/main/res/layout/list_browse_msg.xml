@@ -7,91 +7,203 @@
     app:cardCornerRadius="4dp"
     app:cardElevation="5dp"
     android:layout_margin="5dp">
-    <RelativeLayout
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/message_appointment_title"
+            android:id="@+id/tv_appointment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            tools:text="这里是标题" />
-        <LinearLayout
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:text="这里是标题"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" />
+
+
+        <TextView
+            android:id="@+id/tv_appointment_starttime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true">
-            <TextView
-                android:id="@+id/message_appointment_starttime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10.5 19:30"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="--"/>
-            <TextView
-                android:id="@+id/message_appointment_endtime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10.5 22:30"/>
-        </LinearLayout>
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_title"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="66dp"
+            tools:layout_conversion_absoluteX="222dp"
+            tools:layout_conversion_absoluteY="0dp"
+            tools:text="10.5 19:30"
+            app:layout_constraintRight_toLeftOf="@+id/textView4"
+            android:layout_marginRight="0dp"
+            app:layout_constraintVertical_bias="0.571" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:text="—"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_starttime"
+            app:layout_constraintRight_toLeftOf="@+id/tv_appointment_endtime"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_starttime"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="9dp"
+            tools:layout_conversion_absoluteX="293dp"
+            tools:layout_conversion_absoluteY="0dp"
+            app:layout_constraintVertical_bias="0.0"
+            android:id="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/tv_appointment_endtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_starttime"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_starttime"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="66dp"
+            tools:layout_conversion_absoluteX="307dp"
+            tools:layout_conversion_absoluteY="0dp"
+            tools:text="10.5 22:30" />
+
 
         <ImageView
-            android:id="@+id/message_appointment_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/message_appointment_title"
-            tools:src="@mipmap/ic_launcher"/>
+            android:id="@+id/img_appointment_type"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_appointment_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_appointment_title"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:src="@mipmap/ic_launcher" />
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/message_appointment_type"
-            android:layout_alignTop="@+id/message_appointment_type"
+            android:id="@+id/tv_appointment_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
             android:minLines="3"
-            tools:text="这里是一些关于该活动的描述性文字"
-            />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_appointment_type"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/img_appointment_type"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/img_appointment_type"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:text="这里是一些关于该活动的描述性文字" />
+
         <ImageView
-            android:id="@+id/message_appointment_inviterIcon"
+            android:id="@+id/img_appointment_inviterIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/message_appointment_type"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="8dp"
             android:scaleType="centerInside"
-            tools:src="@drawable/me"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_appointment_type"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:src="@drawable/me"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/img_appointment_type" />
+
         <TextView
-            android:id="@+id/message_appointment_inviter"
+            android:id="@+id/tv_appointment_inviter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/message_appointment_inviterIcon"
-            android:layout_alignTop="@+id/message_appointment_inviterIcon"
-            android:layout_marginLeft="5dp"
-            tools:text="天舒"/>
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/img_appointment_inviterIcon"
+            app:layout_constraintLeft_toRightOf="@+id/img_appointment_inviterIcon"
+            app:layout_constraintTop_toTopOf="@+id/img_appointment_inviterIcon"
+            app:layout_constraintVertical_bias="0.5"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:text="天舒" />
+
         <TextView
-            android:id="@+id/message_appointment_place"
+            android:id="@+id/tv_appointment_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/message_appointment_inviter"
-            android:layout_alignTop="@id/message_appointment_inviter"
-            android:layout_marginLeft="15dp"
-            tools:text="图书馆电子阅览室"/>
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_inviter"
+            app:layout_constraintLeft_toRightOf="@+id/tv_appointment_inviter"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_inviter"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:text="图书馆电子阅览室"
+            app:layout_constraintVertical_bias="0.0" />
+
         <TextView
-            android:id="@+id/message_appointment_personnumber"
+            android:id="@+id/tv_appointment_personnumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/message_appointment_place"
-            android:layout_alignTop="@id/message_appointment_place"
-            android:layout_marginLeft="15dp"
-            tools:text="3人"/>
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_place"
+            app:layout_constraintLeft_toRightOf="@+id/tv_appointment_place"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_place"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:text="3/8人"
+            app:layout_constraintVertical_bias="0.0" />
+
         <TextView
-            android:id="@+id/message_appointment_publishtime"
+            android:id="@+id/tv_appointment_publishtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/message_appointment_type"
-            android:layout_alignParentRight="true"
-            tools:text="2017.9.30"/>
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_appointment_personnumber"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_appointment_personnumber"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:text="2017.9.30" />
 
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

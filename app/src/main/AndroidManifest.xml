@@ -7,9 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <application>
-
-        <!-- 加一个name让litepal里功能正常运行 -->
+    <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -36,7 +34,7 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".activities.SignUpActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

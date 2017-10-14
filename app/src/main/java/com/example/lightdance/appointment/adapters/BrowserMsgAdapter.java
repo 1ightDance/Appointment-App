@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.bumptech.glide.Glide;
 import com.example.lightdance.appointment.R;
 
 import java.util.List;
@@ -27,37 +27,35 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     //内部类ViewHolder与视图进行连接
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private TextView publishTime;
-        private TextView startTime;
-        private TextView endTime;
-        private TextView place;
-        private TextView content;
-        private TextView contactWay;
-        private TextView inviter;
-        private TextView personNumber;
-        private ImageView type;
-        private ImageView inviterIcon;
+        TextView title;
+        TextView publishTime;
+        TextView startTime;
+        TextView endTime;
+        TextView place;
+        TextView content;
+        TextView inviter;
+        TextView personNumber;
+        ImageView type;
+        ImageView inviterIcon;
 
         //构造方法，将成员变量与界面组件一一对应
         public ViewHolder(View itemView) {
             super(itemView);
-            title        = (TextView) itemView.findViewById(R.id.message_appointment_title);
-            publishTime  = (TextView) itemView.findViewById(R.id.message_appointment_publishtime);
-            startTime    = (TextView) itemView.findViewById(R.id.message_appointment_starttime);
-            endTime      = (TextView) itemView.findViewById(R.id.message_appointment_endtime);
-            place        = (TextView) itemView.findViewById(R.id.message_appointment_place);
-            content      = (TextView) itemView.findViewById(R.id.tv_activity_content);
-            contactWay   = (TextView) itemView.findViewById(R.id.tv_activity_contact_way);
-            inviter      = (TextView) itemView.findViewById(R.id.message_appointment_inviter);
-            personNumber = (TextView) itemView.findViewById(R.id.message_appointment_personnumber);
-            type         = (ImageView) itemView.findViewById(R.id.message_appointment_type);
-            inviterIcon  = (ImageView) itemView.findViewById(R.id.message_appointment_inviterIcon);
+            title        = (TextView) itemView.findViewById(R.id.tv_appointment_title);
+            publishTime  = (TextView) itemView.findViewById(R.id.tv_appointment_publishtime);
+            startTime    = (TextView) itemView.findViewById(R.id.tv_appointment_starttime);
+            endTime      = (TextView) itemView.findViewById(R.id.tv_appointment_endtime);
+            place        = (TextView) itemView.findViewById(R.id.tv_appointment_place);
+            content      = (TextView) itemView.findViewById(R.id.tv_appointment_content);
+            inviter      = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
+            personNumber = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber);
+            type         = (ImageView) itemView.findViewById(R.id.img_appointment_type);
+            inviterIcon  = (ImageView) itemView.findViewById(R.id.img_appointment_inviterIcon);
         }
     }
 
     public BrowserMsgAdapter(List<BrowseMsgBean> messageAppointmentList) {
-        this.msgBeanList = messageAppointmentList;
+        msgBeanList = messageAppointmentList;
     }
 
     //重写从RecyclerView ADapter中继承来的三个方法
@@ -72,22 +70,29 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
     //数据与视图绑定
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(BrowserMsgAdapter.ViewHolder holder, int position) {
         BrowseMsgBean msgAppointment = msgBeanList.get(position);
-        holder.title.setText(msgAppointment.getTitle());
-        holder.publishTime.setText(msgAppointment.getPublishTime());
-        holder.startTime.setText(msgAppointment.getStartTime());
-        holder.endTime.setText(msgAppointment.getEndTime());
-        holder.place.setText(msgAppointment.getPlace());
-        holder.content.setText(msgAppointment.getContent());
-        holder.contactWay.setText(msgAppointment.getContactWay());
-        holder.inviter.setText(msgAppointment.getInviter());
-        holder.personNumber.setText(msgAppointment.getPersonNumber());
-        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
-        holder.type.setImageResource(msgAppointment.getTypeIconId());
+        holder
+                .title.setText(msgAppointment.getTitle());
+        holder
+                .publishTime.setText(msgAppointment.getPublishTime());
+        holder
+                .startTime.setText(msgAppointment.getStartTime());
+        holder
+                .endTime.setText(msgAppointment.getEndTime());
+        holder
+                .place.setText(msgAppointment.getPlace());
+        holder
+                .content.setText(msgAppointment.getContent());
+        holder
+                .inviter.setText(msgAppointment.getInviter());
+        holder
+                .personNumber.setText(msgAppointment.getPersonNumber());
 
-//        Glide.with(mContext).load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
-//        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
+        Glide.with(mContext)
+                .load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
+        Glide.with(mContext)
+                .load(msgAppointment.getTypeIconId()).into(holder.type);
     }
 
     //传入数据源长度
