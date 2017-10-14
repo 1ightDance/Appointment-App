@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     }
 
     //动态加载碎片的方法 TEST
-    private void changeFragment(Fragment fragment){
+    public void changeFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container,fragment);

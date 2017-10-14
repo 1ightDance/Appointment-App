@@ -1,7 +1,9 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,17 +13,28 @@ import android.view.ViewGroup;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.MainActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
+import static com.example.lightdance.appointment.R.id.toolbar;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BrowseFragment extends Fragment {
 
+    Unbinder unbinder;
+    @BindView(R.id.new_appointment)
+    FloatingActionButton fab;
     private boolean added = false;
 
     private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
@@ -36,6 +49,8 @@ public class BrowseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
         //加载预览数据
         previewDataLoading();
         //绑定RecyclerView 并设置适配器
@@ -46,12 +61,65 @@ public class BrowseFragment extends Fragment {
         BrowserMsgAdapter adapter = new BrowserMsgAdapter(browseMsgBeen);
         recyclerView.setAdapter(adapter);
 
+        recyclerView.setOnScrollListener(new HideScrollListener());
+
         return view;
+    }
+
+    @OnClick(R.id.new_appointment)
+    public void onViewClicked() {
+        MainActivity activity = (MainActivity) getActivity();
+        BrowseFragment browseFragment = new BrowseFragment();
+        activity.changeFragment(browseFragment);
+    }
+
+    class HideScrollListener extends RecyclerView.OnScrollListener {
+
+        private static final int HIDE_HEIGHT = 20;
+        private int scrolledInstance = 0;
+        private boolean toolbarVisible = true;
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if ((toolbarVisible && dy > 0) || !toolbarVisible && dy < 0) {
+                //recycler向上滚动时dy为正，向下滚动时dy为负数
+                scrolledInstance += dy;
+            }
+            if (scrolledInstance > HIDE_HEIGHT && toolbarVisible) {
+                //当recycler向上滑动距离超过设置的默认值并且toolbar可见时，隐藏toolbar和fab
+                onHide();
+                scrolledInstance = 0;
+                toolbarVisible = false;
+            } else if (scrolledInstance < -HIDE_HEIGHT && !toolbarVisible) {
+                //当recycler向下滑动距离超过设置的默认值并且toolbar不可见时，显示toolbar和fab
+                onShow();
+                scrolledInstance = 0;
+                toolbarVisible = true;
+            }
+        }
+    }
+
+    private void onHide() {
+        ObjectAnimator.ofFloat(toolbar, "translationY", 0, -0).setDuration(200).start();
+        ObjectAnimator.ofFloat(fab, "translationY", 0, fab.getHeight() + fab.getPaddingBottom())
+                .setDuration(200).start();
+    }
+
+    private void onShow() {
+        ObjectAnimator.ofFloat(toolbar, "translationY", -0, 0).setDuration(200).start();
+        ObjectAnimator.ofFloat(fab, "translationY", fab.getHeight() + fab.getPaddingBottom(), 0)
+                .setDuration(200).start();
     }
 
     private void previewDataLoading() {
         //判断是否加载过预览数据
-        if ( added == false) initAppointmentMsg();
+        if (added == false) initAppointmentMsg();
         added = true;
     }
 
@@ -128,5 +196,11 @@ public class BrowseFragment extends Fragment {
         user8.setPlace("中影星城都尚影院");
         user8.setPersonNumber("1/2人");
         user8.save();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
