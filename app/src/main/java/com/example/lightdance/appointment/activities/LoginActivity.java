@@ -15,6 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//该Activity用于匹配数据库用户名与密码进行登录，也可由此进入注册页面注册新账号，注册成功后会返回本Activity并自动填表
+
 public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.editext_account)
@@ -42,12 +44,27 @@ public class LoginActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_sign_up:
                 Intent intent = new Intent(LoginActivity.this ,com.example.lightdance.appointment.activities.SignUpActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
                 break;
             case R.id.btn_sign_in:
                 break;
             case R.id.tv_forgetpassword:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (RESULT_OK==resultCode){
+                    String newUserId = data.getStringExtra("userStudentNumber");
+                    String newUserPassword = data.getStringExtra("userPassword");
+                    editextAccount.setText(newUserId);
+                    edittxtPassword.setText(newUserPassword);
+                }
+                break;
+            default:
         }
     }
 }

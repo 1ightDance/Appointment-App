@@ -17,6 +17,7 @@ public class UserBean extends DataSupport {
     private String userPassword;
     private String userName;
     private String userNickName;
+    private String userCollege;        //新增用户学院字段
     private int userSex;
     private String userDescription;
     private String userPhoneNumber;
@@ -60,6 +61,14 @@ public class UserBean extends DataSupport {
 
     public int getUserIconId() {
         return userIconId;
+    }
+
+    public String getUserCollege() {
+        return userCollege;
+    }
+
+    public void setUserCollege(String userCollege) {
+        this.userCollege = userCollege;
     }
 
     public void setUserStudentNum(String userStudentNum) {
