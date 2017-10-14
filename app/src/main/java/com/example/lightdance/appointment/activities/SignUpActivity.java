@@ -1,6 +1,8 @@
 package com.example.lightdance.appointment.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioButton userSexWoman;
 
     private Button signUpFinish;
+    private SQLiteDatabase db=Connector.getDatabase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,13 @@ public class SignUpActivity extends AppCompatActivity {
                     newUser.setUserNickName("user"+userStudentNumber);
                     newUser.setUserDescription("nothing to show");
                     newUser.setUserIconId(R.drawable.me);
-                    Connector.getDatabase();
                     newUser.save();
+                    Toast.makeText(SignUpActivity.this,"注册成功！",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent();
+                    intent.putExtra("userStudentNumber",newUser.getUserStudentNum());
+                    intent.putExtra("userPassword",newUser.getUserPassword());
+                    setResult(RESULT_OK,intent);
+                    finish();
                 }
             }
         });
