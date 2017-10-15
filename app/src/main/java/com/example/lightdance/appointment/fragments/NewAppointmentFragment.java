@@ -47,12 +47,15 @@ public class NewAppointmentFragment extends Fragment {
     EditText editTextActivityContent;
     @BindView(R.id.editText_activity_contact_way)
     EditText editTextActivityContactWay;
+    @BindView(R.id.tv_activity_type_select)
+    TextView tvActivityTypeSelect;
 
     //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
     int timeChange = 0;
 
     //获取碎片实例
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
+    private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
 
     public NewAppointmentFragment() {
 
@@ -83,7 +86,8 @@ public class NewAppointmentFragment extends Fragment {
     }
 
     @OnClick({R.id.tv_activity_end_time, R.id.tv_activity_start_time, R.id.tv_activity_start_date,
-            R.id.tv_activity_end_date, R.id.new_appointment_done})
+            R.id.tv_activity_end_date, R.id.new_appointment_done, R.id.tv_activity_type_select,
+            R.id.imageView_activity_type_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_activity_start_time:
@@ -102,6 +106,18 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.tv_activity_end_date:
                 timeChange = 2;
                 timePickerFragment.show(getFragmentManager(), "DatePicker");
+                break;
+            case R.id.tv_activity_type_select:
+                appointmentTypeFragment
+                        .show(getFragmentManager(), "AppointmentTypeFragment");
+                appointmentTypeFragment.setOnTypeSelectListener(new AppointmentTypeFragment.OnTypeSelectListener() {
+                    @Override
+                    public void onSelect(String text) {
+                        tvActivityTypeSelect.setText(text);
+                    }
+                });
+                break;
+            case R.id.imageView_activity_type_next:
                 break;
             case R.id.new_appointment_done:
                 //创建数据库
@@ -129,7 +145,8 @@ public class NewAppointmentFragment extends Fragment {
         }
         if (timeChange == 2) {
             setEndDate(yearSelect, monthSelect, daySelect);
-        };
+        }
+        ;
     }
 
     //判断更改哪个TextView显示的时间文本

@@ -24,13 +24,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //noinspection GradleCompatible
-    //bottomNavigation，RecyclerView，cardView的依赖库
-    //    听说很厉害的图片加载库
-    //一个很方便的工具——黄油刀 用来快速实现FindViewById方法
-    //用LitePal操作数据库，书上讲很方便
-
-
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
@@ -42,7 +35,6 @@ dependencies {
     compile 'org.litepal.android:core:1.6.0'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.getbase:floatingactionbutton:1.10.1'
-
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
