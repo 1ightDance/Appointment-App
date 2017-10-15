@@ -59,6 +59,13 @@ public class NewAppointmentFragment extends Fragment {
 
     }
 
+    public static NewAppointmentFragment newInstance() {
+        NewAppointmentFragment fragment = new NewAppointmentFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

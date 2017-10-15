@@ -43,6 +43,12 @@ public class BrowseFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static BrowseFragment newInstance() {
+        BrowseFragment fragment = new BrowseFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,8 +75,7 @@ public class BrowseFragment extends Fragment {
     @OnClick(R.id.new_appointment)
     public void onViewClicked() {
         MainActivity activity = (MainActivity) getActivity();
-        BrowseFragment browseFragment = new BrowseFragment();
-        activity.changeFragment(browseFragment);
+        activity.changeFragment(3);
     }
 
     class HideScrollListener extends RecyclerView.OnScrollListener {

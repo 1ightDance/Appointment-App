@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -23,25 +22,22 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     private int daySelect;
     private int hourSelect;
     private int minuteSelect;
+    private int mCurrentPosition = -1;
 
     private BottomNavigationView bottomNavigationView;
-
-    private NewAppointmentFragment newAppointmentFragment;
+    Fragment mNewAppointmentFragment;
+    Fragment mBrowesrFragmrnt;
+    Fragment mPersonalCenterFragmrnt;
+    Fragment mNewsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        newAppointmentFragment = new NewAppointmentFragment();
 
         //TODO 重写changeFragment方法 目前存在BUG
-        //已将广场放在最前，上面的newAppointmentFargment感觉可以去掉，
-        //不能删 后面还用到呢（黄旗）
-        //然后咋把NewAppointmentFragment的方法@changeDate() @changeTime()放在这里了？（天舒）
-        //因为数据是从DialogFragment碎片传到MainActivity再传到NewAppointment的 所以这里有这两个方法（黄旗）
-        BrowseFragment browseFragment = new BrowseFragment();
-        changeFragment(browseFragment);
+        changeFragment(1);
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
 
@@ -49,17 +45,17 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_appointment:
-                        changeFragment(new NewAppointmentFragment());
-                        break;
                     case R.id.menu_browse:
-                        changeFragment(new BrowseFragment());
+                        changeFragment(1);
                         break;
                     case R.id.menu_news:
-                        changeFragment(new NewsFragment());
+                        changeFragment(2);
+                        break;
+                    case R.id.menu_appointment:
+                        changeFragment(3);
                         break;
                     case R.id.menu_me:
-                        changeFragment(new PersonalCenterFragment());
+                        changeFragment(4);
                         break;
                 }
                 return true;
@@ -69,20 +65,70 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     }
 
     //动态加载碎片的方法 TEST
-    public void changeFragment(Fragment fragment){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container,fragment);
+    public void changeFragment(int position){
+        if (position == mCurrentPosition){
+            return;
+        }
+        Fragment fragment = getFragment(position);
+        if (fragment == null){
+            return;
+        }
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction();
+
+        if (fragment.isAdded()) {
+            if (fragment.isHidden()) {
+                transaction.show(fragment)
+                        .hide(getFragment(mCurrentPosition));
+            }
+        } else {
+            if (mCurrentPosition != -1) {
+                transaction.add(R.id.container, fragment)
+                        .hide(getFragment(mCurrentPosition));
+            } else {
+                transaction.add(R.id.container, fragment);
+            }
+        }
         transaction.commit();
+        mCurrentPosition = position;
+    }
+
+    private Fragment getFragment(int position) {
+        switch (position) {
+            case 0:
+                if (mBrowesrFragmrnt == null) {
+                    mBrowesrFragmrnt = BrowseFragment.newInstance();
+                }
+                return mBrowesrFragmrnt;
+            case 1:
+                if (mNewsFragment == null) {
+                    mNewsFragment = NewsFragment.newInstance();
+                }
+                return mNewsFragment;
+            case 2:
+                if (mNewAppointmentFragment == null) {
+                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
+                }
+                return mNewAppointmentFragment;
+            case 3:
+                if (mPersonalCenterFragmrnt == null) {
+                    mPersonalCenterFragmrnt = PersonalCenterFragment.newInstance();
+                }
+                return mPersonalCenterFragmrnt;
+            default:
+                return null;
+        }
     }
 
     //用以更改日期的方法
     public void changeData(){
+        NewAppointmentFragment newAppointmentFragment = NewAppointmentFragment.newInstance();
         newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
     }
 
     //用以更改时间的方法
     private void changeTime() {
+        NewAppointmentFragment newAppointmentFragment = NewAppointmentFragment.newInstance();
         newAppointmentFragment.setTime(hourSelect,minuteSelect);
     }
 
