@@ -3,12 +3,12 @@ package com.example.lightdance.appointment.fragments;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +29,6 @@ import butterknife.Unbinder;
 public class NewAppointmentFragment extends Fragment {
 
     Unbinder unbinder;
-    @BindView(R.id.new_appointment_done)
-    FloatingActionButton newAppointmentDone;
     @BindView(R.id.editText_activity_place)
     EditText editTextActivityPlace;
     @BindView(R.id.editText_activity_title)
@@ -49,9 +47,12 @@ public class NewAppointmentFragment extends Fragment {
     EditText editTextActivityContactWay;
     @BindView(R.id.tv_activity_type_select)
     TextView tvActivityTypeSelect;
+    @BindView(R.id.scrollView_newappointment)
+    ScrollView scrollViewNewappointment;
 
     //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
     int timeChange = 0;
+    int typeData = 0;
 
     //获取碎片实例
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
@@ -115,27 +116,70 @@ public class NewAppointmentFragment extends Fragment {
                     public void onSelect(String text) {
                         tvActivityTypeSelect.setText(text);
                     }
+
+                    @Override
+                    public void sendId(int checkId) {
+                        sendTypeData(checkId);
+                    }
                 });
                 break;
             case R.id.imageView_activity_type_next:
                 break;
             case R.id.new_appointment_done:
-                //创建数据库
-                Connector.getDatabase();
-                //点击完成后 获取数据储存到数据库
-                BrowseMsgBean browseMsgBean = new BrowseMsgBean();
-                browseMsgBean.setTitle(editTextActivityTitle.getText().toString());
-                browseMsgBean.setStartTime(tvActivityStartDate.getText().toString()
-                        + "  " + tvActivityStartTime.getText().toString());
-                browseMsgBean.setEndTime(tvActivityEndDate.getText().toString()
-                        + "  " + tvActivityEndTime.getText().toString());
-                browseMsgBean.setPlace(editTextActivityPlace.getText().toString());
-                browseMsgBean.setContent(editTextActivityContent.getText().toString());
-                browseMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
-                browseMsgBean.save();
+                saveTypeData();
                 Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void sendTypeData(int checkId) {
+        switch (checkId){
+            case R.id.radioButton_brpg:
+                typeData = R.drawable.ic_brpg;
+                break;
+            case R.id.radioButton_dining:
+                typeData = R.drawable.ic_dining;
+                break;
+            case R.id.radioButton_game:
+                typeData = R.drawable.ic_game;
+                break;
+            case R.id.radioButton_movies:
+                typeData = R.drawable.ic_movies;
+                break;
+            case R.id.radioButton_others:
+                typeData = R.drawable.ic_others;
+                break;
+            case R.id.radioButton_singing:
+                typeData = R.drawable.ic_singing;
+                break;
+            case R.id.radioButton_sports:
+                typeData = R.drawable.ic_sports;
+                break;
+            case R.id.radioButton_study:
+                typeData = R.drawable.ic_study;
+                break;
+            case R.id.radioButton_travel:
+                typeData = R.drawable.ic_travel;
+                break;
+        }
+    }
+
+    //数据存储方法
+    private void saveTypeData() {
+        //创建数据库
+        Connector.getDatabase();
+        //点击完成后 获取数据储存到数据库
+        BrowseMsgBean browseMsgBean = new BrowseMsgBean();
+        browseMsgBean.setTitle(editTextActivityTitle.getText().toString());
+        browseMsgBean.setStartTime(tvActivityStartDate.getText().toString()
+                + "  " + tvActivityStartTime.getText().toString());
+        browseMsgBean.setEndTime(tvActivityEndDate.getText().toString()
+                + "  " + tvActivityEndTime.getText().toString());
+        browseMsgBean.setPlace(editTextActivityPlace.getText().toString());
+        browseMsgBean.setContent(editTextActivityContent.getText().toString());
+        browseMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
+        browseMsgBean.setTypeIconId(typeData);
+        browseMsgBean.save();
     }
 
     //判断更改哪个TextView显示的日期文本

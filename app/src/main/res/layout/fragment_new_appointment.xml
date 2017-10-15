@@ -264,7 +264,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_activity_contact_way"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginBottom="64dp" />
+                android:layout_marginBottom="80dp" />
 
             <TextView
                 android:id="@+id/tv_activity_contact_way"

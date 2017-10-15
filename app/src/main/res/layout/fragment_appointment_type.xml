@@ -13,28 +13,32 @@
             app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
             app:layout_constraintRight_toRightOf="@+id/radioGroup2"
             app:layout_constraintLeft_toLeftOf="@+id/radioGroup2"
-            android:id="@+id/radioGroup3">
+            android:id="@+id/radioGroup3"
+            android:layout_marginBottom="8dp">
 
             <RadioButton
                 android:id="@+id/radioButton_study"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="自习" />
+                android:text="自习"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_movies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="电影" />
+                android:text="电影"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_brpg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="桌游" />
+                android:text="桌游"
+                android:textSize="18sp" />
 
         </RadioGroup>
 
@@ -43,7 +47,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/radioGroup2"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/radioGroup1"
             android:layout_marginRight="0dp"
             app:layout_constraintRight_toRightOf="@+id/radioGroup1"
@@ -55,21 +59,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="电竞" />
+                android:text="电竞"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_singing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="唱歌" />
+                android:text="唱歌"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_sports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="运动" />
+                android:text="运动"
+                android:textSize="18sp" />
 
         </RadioGroup>
 
@@ -92,51 +99,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="吃饭" />
+                android:text="吃饭"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_travel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="旅行" />
+                android:text="旅行"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_others"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="其他" />
+                android:text="其他"
+                android:textSize="18sp" />
 
         </RadioGroup>
 
     <ImageView
         android:id="@+id/imageView_type_select"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
         android:background="@android:color/black"
-        app:srcCompat="@mipmap/ic_done_white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:srcCompat="@mipmap/ic_done_white" />
 
     <TextView
         android:id="@+id/tv_select_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="请选择发起的约人类型"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintLeft_toLeftOf="@+id/imageView_type_select"
-        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/imageView_type_select"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"

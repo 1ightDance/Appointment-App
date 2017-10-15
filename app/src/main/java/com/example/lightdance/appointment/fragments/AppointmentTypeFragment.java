@@ -50,12 +50,12 @@ public class AppointmentTypeFragment extends DialogFragment {
     @BindView(R.id.radioButton_others)
     RadioButton radioButtonOthers;
 
+    private OnTypeSelectListener listener;
     private int radioButtonId;
 
     public AppointmentTypeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,20 +79,22 @@ public class AppointmentTypeFragment extends DialogFragment {
 
     @OnClick(R.id.imageView_type_select)
     public void onViewClicked() {
+        //获取RadioButton的Text并赋值给s
         RadioButton b = ((RadioButton) getView().findViewById(radioButtonId));
         String s = b.getText().toString();
         listener.onSelect(s);
+        listener.sendId(b.getId());
         dismiss();
     }
-
-    private OnTypeSelectListener listener;
-
+    //给碎片提供OnTypeSelectListener类监听实例
     public void setOnTypeSelectListener(OnTypeSelectListener listener) {
         this.listener = listener;
     }
-
+    //自定义监听接口
     interface OnTypeSelectListener {
         void onSelect(String text);
+        //传递ID方法
+        void sendId(int checkId);
     }
 
     private class OnMyRadioGroupOneListener implements RadioGroup.OnCheckedChangeListener {

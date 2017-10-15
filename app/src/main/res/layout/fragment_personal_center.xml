@@ -57,7 +57,7 @@
                             tools:layout_editor_absoluteY="115dp"
                             tools:layout_editor_absoluteX="0dp" />
 
-                        <ImageView
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/user_avatar"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
