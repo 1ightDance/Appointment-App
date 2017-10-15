@@ -49,8 +49,7 @@ public class NewAppointmentFragment extends Fragment {
     EditText editTextActivityContactWay;
 
     //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
-    private int dateChange = 0;
-    private int timeChange = 0;
+    int timeChange = 0;
 
     //获取碎片实例
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
@@ -89,24 +88,20 @@ public class NewAppointmentFragment extends Fragment {
         switch (view.getId()) {
             case R.id.tv_activity_start_time:
                 //展示碎片会话窗口（dialog）
-                timePickerFragment.show(getFragmentManager(), "TimePicker");
-                dateChange = 1;
                 timeChange = 1;
+                timePickerFragment.show(getFragmentManager(), "TimePicker");
                 break;
             case R.id.tv_activity_end_time:
-                timePickerFragment.show(getFragmentManager(), "TimePicker");
-                dateChange = 2;
                 timeChange = 2;
+                timePickerFragment.show(getFragmentManager(), "TimePicker");
                 break;
             case R.id.tv_activity_start_date:
-                timePickerFragment.show(getFragmentManager(), "DatePicker");
-                dateChange = 1;
                 timeChange = 1;
+                timePickerFragment.show(getFragmentManager(), "DatePicker");
                 break;
             case R.id.tv_activity_end_date:
-                timePickerFragment.show(getFragmentManager(), "DatePicker");
-                dateChange = 2;
                 timeChange = 2;
+                timePickerFragment.show(getFragmentManager(), "DatePicker");
                 break;
             case R.id.new_appointment_done:
                 //创建数据库
@@ -129,13 +124,12 @@ public class NewAppointmentFragment extends Fragment {
 
     //判断更改哪个TextView显示的日期文本
     public void setDate(int yearSelect, int monthSelect, int daySelect) {
-        if (dateChange == 1) {
+        if (timeChange == 1) {
             setStartDate(yearSelect, monthSelect, daySelect);
         }
-        if (dateChange == 2) {
+        if (timeChange == 2) {
             setEndDate(yearSelect, monthSelect, daySelect);
-        }
-        dateChange = 0;
+        };
     }
 
     //判断更改哪个TextView显示的时间文本
