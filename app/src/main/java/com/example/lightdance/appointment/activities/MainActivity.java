@@ -95,22 +95,22 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
     private Fragment getFragment(int position) {
         switch (position) {
-            case 0:
+            case 1:
                 if (mBrowesrFragmrnt == null) {
                     mBrowesrFragmrnt = BrowseFragment.newInstance();
                 }
                 return mBrowesrFragmrnt;
-            case 1:
+            case 2:
                 if (mNewsFragment == null) {
                     mNewsFragment = NewsFragment.newInstance();
                 }
                 return mNewsFragment;
-            case 2:
+            case 3:
                 if (mNewAppointmentFragment == null) {
                     mNewAppointmentFragment = NewAppointmentFragment.newInstance();
                 }
                 return mNewAppointmentFragment;
-            case 3:
+            case 4:
                 if (mPersonalCenterFragmrnt == null) {
                     mPersonalCenterFragmrnt = PersonalCenterFragment.newInstance();
                 }
