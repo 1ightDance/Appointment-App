@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.MainActivity;
 
 import org.litepal.tablemanager.Connector;
 
@@ -128,6 +129,9 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.new_appointment_done:
                 saveTypeData();
                 Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
+                //发布成功后跳转至广场碎片
+                MainActivity activity = (MainActivity) getActivity();
+                activity.changeFragment(1);
                 break;
         }
     }
