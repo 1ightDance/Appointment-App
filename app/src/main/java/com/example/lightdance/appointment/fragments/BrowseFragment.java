@@ -36,6 +36,8 @@ public class BrowseFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.new_appointment)
     FloatingActionButton fab;
+    @BindView(R.id.recyclerview_browse)
+    RecyclerView recyclerView;
 
     private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
 
@@ -58,12 +60,11 @@ public class BrowseFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         //绑定RecyclerView 并设置适配器
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_browse);
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 getActivity());
         recyclerView.setLayoutManager(layoutManager);
         BrowserMsgAdapter adapter = new BrowserMsgAdapter(browseMsgBeen);
-        recyclerView.setAdapter(adapter);
+        this.recyclerView.setAdapter(adapter);
 
         recyclerView.setOnScrollListener(new HideScrollListener());
 

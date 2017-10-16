@@ -127,13 +127,26 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.imageView_activity_type_next:
                 break;
             case R.id.new_appointment_done:
-                saveTypeData();
+                saveData();
                 Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                 //发布成功后跳转至广场碎片
                 MainActivity activity = (MainActivity) getActivity();
                 activity.changeFragment(1);
+                clearData();
                 break;
         }
+    }
+
+    private void clearData() {
+        editTextActivityTitle.setText("");
+        tvActivityStartDate.setText("2017年01月01日");
+        tvActivityStartTime.setText("12:00");
+        tvActivityEndDate.setText("2017年12月31日");
+        tvActivityEndTime.setText("12:00");
+        editTextActivityPlace.setText("");
+        editTextActivityContent.setText("");
+        editTextActivityContactWay.setText("");
+        tvActivityTypeSelect.setText("未选择");
     }
 
     private void sendTypeData(int checkId) {
@@ -169,7 +182,7 @@ public class NewAppointmentFragment extends Fragment {
     }
 
     //数据存储方法
-    private void saveTypeData() {
+    private void saveData() {
         //创建数据库
         Connector.getDatabase();
         //点击完成后 获取数据储存到数据库
