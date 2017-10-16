@@ -27,4 +27,8 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="StartTheme" parent="AppTheme">
+        <item name="android:windowBackground">@mipmap/img_inflater</item>
+    </style>
+
 </resources>

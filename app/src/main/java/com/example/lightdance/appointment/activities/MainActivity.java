@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         mCurrentPosition = position;
     }
 
-    private Fragment getFragment(int position) {
+    public Fragment getFragment(int position) {
         switch (position) {
             case 1:
                 if (mBrowesrFragment == null) {
