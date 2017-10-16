@@ -56,6 +56,8 @@ public class PersonalCenterFragment extends Fragment {
     ImageView imgAboutNext;
     Unbinder unbinder;
 
+    private boolean isLogined = false;
+
     public PersonalCenterFragment() {
         // Required empty public constructor
     }
@@ -74,7 +76,14 @@ public class PersonalCenterFragment extends Fragment {
         //将碎片膨胀成视图(View)
         View view = inflater.inflate(R.layout.fragment_personal_center, container, false);
         unbinder = ButterKnife.bind(this, view);
+        checkIsLogined(isLogined);
         return view;
+    }
+
+    public void checkIsLogined(boolean logined) {
+            tvInformation.setClickable(logined);
+            tvNotice.setClickable(logined);
+            tvHistory.setClickable(logined);
     }
 
     @Override
@@ -100,6 +109,7 @@ public class PersonalCenterFragment extends Fragment {
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.img_infor_next:
+                intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.tv_history:
                 break;
