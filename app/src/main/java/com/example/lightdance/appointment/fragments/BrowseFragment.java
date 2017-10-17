@@ -11,11 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.MainActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
+import com.example.lightdance.appointment.dialogs.UserBriflyInfoDialog;
 
 import org.litepal.crud.DataSupport;
 
@@ -67,6 +70,22 @@ public class BrowseFragment extends Fragment {
         this.recyclerView.setAdapter(adapter);
 
         recyclerView.setOnScrollListener(new HideScrollListener());
+
+        //在这里实现Adapter的点击接口具体方法
+        adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                BrowseMsgBean clickedMsg = browseMsgBeen.get(position);
+                Toast.makeText(getActivity(),"hehe",Toast.LENGTH_SHORT).show();
+            }
+        });
+        adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
+            @Override
+            public void onClick(int position) {
+
+                Toast.makeText(getActivity(),"haha",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
