@@ -99,8 +99,10 @@ public class PersonalCenterFragment extends Fragment {
 
         switch (view.getId()) {
             case R.id.user_background:
+                intent = null;
                 break;
             case R.id.user_avatar:
+                intent = null;
                 break;
             case R.id.tv_user_name:
                 intent = new Intent(getActivity(), LoginActivity.class);
@@ -112,24 +114,34 @@ public class PersonalCenterFragment extends Fragment {
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.tv_history:
+                intent = null;
                 break;
             case R.id.img_history_next:
+                intent = null;
                 break;
             case R.id.tv_settings:
+                intent = null;
                 break;
             case R.id.img_settings_next:
+                intent = null;
                 break;
             case R.id.tv_notice:
+                intent = null;
                 break;
             case R.id.img_notice_next:
+                intent = null;
                 break;
             case R.id.tv_help:
+                intent = null;
                 break;
             case R.id.img_help_next:
+                intent = null;
                 break;
             case R.id.tv_about:
+                intent = null;
                 break;
             case R.id.img_about_next:
+                intent = null;
                 break;
         }
         startActivity(intent);

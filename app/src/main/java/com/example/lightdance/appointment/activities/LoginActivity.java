@@ -50,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.btn_sign_in:
                 isLogined = true;
-
+                Intent intent1 = new Intent(this,MainActivity.class);
+                startActivity(intent1);
                 isLogined = false;
                 break;
             case R.id.tv_forgetpassword:
