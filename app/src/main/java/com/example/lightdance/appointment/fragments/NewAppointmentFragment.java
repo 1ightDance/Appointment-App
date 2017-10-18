@@ -127,12 +127,14 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.imageView_activity_type_next:
                 break;
             case R.id.new_appointment_done:
-                saveData();
-                Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
-                //发布成功后跳转至广场碎片
-                MainActivity activity = (MainActivity) getActivity();
-                activity.changeFragment(1);
-                clearData();
+                if (!isDataIllegal()){
+                    saveData();
+                    Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
+                    //发布成功后跳转至广场碎片
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.changeFragment(1);
+                    clearData();
+                }
                 break;
         }
     }
@@ -179,6 +181,31 @@ public class NewAppointmentFragment extends Fragment {
                 typeData = R.drawable.ic_travel;
                 break;
         }
+    }
+
+    private boolean isDataIllegal(){
+        //缺少一个时间合法性检测
+        if (editTextActivityTitle.getText().toString().isEmpty()){
+            Toast.makeText(getContext(),"标题不可为空！",Toast.LENGTH_SHORT).show();
+            return true;//返回不合法
+        }else if (tvActivityTypeSelect.getText().toString().isEmpty()){
+            Toast.makeText(getContext(),"请选择活动类型！",Toast.LENGTH_SHORT).show();
+            return true;
+        }else if (editTextActivityPlace.getText().toString().isEmpty()){
+            Toast.makeText(getContext(),"请指定活动地点！",Toast.LENGTH_SHORT).show();
+            return true;
+        }else if (editTextActivityTitle.getText().toString().contains("约炮")){
+            Toast.makeText(getContext(),"禁止约炮！再约打死你",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if (editTextActivityContent.getText().toString().isEmpty()){
+            //或许加一个警告弹窗提醒他没写描述？
+            editTextActivityContent.setText("这家伙什么描述也没有留下");
+        }else if (editTextActivityContactWay.getText().toString().isEmpty()){
+            editTextActivityContactWay.setText("休想get我的联系方式");
+        }
+
+        return false;
     }
 
     //数据存储方法
@@ -289,4 +316,7 @@ public class NewAppointmentFragment extends Fragment {
             tvActivityEndTime.setText(hour + ":" + min);
         }
     }
+
+
 }
+

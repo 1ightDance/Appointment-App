@@ -88,7 +88,7 @@ public class BrowseFragment extends Fragment {
 //                inviterInfo.show(getChildFragmentManager(),"TAG1");
             }
         });
-        
+
         return view;
     }
 
