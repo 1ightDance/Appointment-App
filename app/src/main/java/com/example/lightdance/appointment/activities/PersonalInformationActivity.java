@@ -48,6 +48,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_userinfor_back:
+                finish();
                 break;
             case R.id.tv_userinfor_nickname:
                 break;
