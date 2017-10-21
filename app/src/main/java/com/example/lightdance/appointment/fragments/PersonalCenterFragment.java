@@ -1,7 +1,10 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -76,14 +79,25 @@ public class PersonalCenterFragment extends Fragment {
         //将碎片膨胀成视图(View)
         View view = inflater.inflate(R.layout.fragment_personal_center, container, false);
         unbinder = ButterKnife.bind(this, view);
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        isLogined = preferences.getBoolean("isLogined", false);
         checkIsLogined(isLogined);
         return view;
     }
 
+    //判断是否登录而更改个人中心碎片中选项可点击状态
     public void checkIsLogined(boolean logined) {
-            tvInformation.setClickable(logined);
-            tvNotice.setClickable(logined);
-            tvHistory.setClickable(logined);
+        if (logined == false) {
+            tvInformation.setTextColor(Color.parseColor("#ff757575"));
+            tvNotice.setTextColor(Color.parseColor("#ff757575"));
+            tvHistory.setTextColor(Color.parseColor("#ff757575"));
+        }
+        imgInforNext.setClickable(logined);
+        imgNoticeNext.setClickable(logined);
+        imgHistoryNext.setClickable(logined);
+        tvInformation.setClickable(logined);
+        tvNotice.setClickable(logined);
+        tvHistory.setClickable(logined);
     }
 
     @Override
@@ -106,6 +120,7 @@ public class PersonalCenterFragment extends Fragment {
                 break;
             case R.id.tv_user_name:
                 intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().finish();
                 break;
             case R.id.tv_information:
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);

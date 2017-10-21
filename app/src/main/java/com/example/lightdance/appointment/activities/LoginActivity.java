@@ -1,6 +1,7 @@
 package com.example.lightdance.appointment.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tv_forgetpassword)
     TextView tvForgetpassword;
 
-    private boolean isLogined = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +48,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.btn_sign_in:
-                isLogined = true;
+                SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
+                editor.putBoolean("isLogined",true);
+                editor.apply();
                 Intent intent1 = new Intent(this,MainActivity.class);
                 startActivity(intent1);
-                isLogined = false;
                 break;
             case R.id.tv_forgetpassword:
                 break;
@@ -72,10 +72,5 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             default:
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

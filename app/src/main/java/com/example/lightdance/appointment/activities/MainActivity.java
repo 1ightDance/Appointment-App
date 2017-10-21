@@ -233,4 +233,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         minuteSelect = minute;
         changeTime();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
