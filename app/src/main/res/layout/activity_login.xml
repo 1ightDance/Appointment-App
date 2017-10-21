@@ -12,21 +12,22 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_loginbg" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_loginbg"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_login" />
 
     <ImageView
         android:id="@+id/loginbg2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:adjustViewBounds="false"
         android:background="@drawable/bg_login"
         android:cropToPadding="false"
@@ -35,18 +36,22 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/loginbg"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp" />
 
     <TextView
         android:id="@+id/tv_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="账号"
-        android:textColor="?attr/colorPrimaryDark"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/loginbg2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -59,8 +64,6 @@
         android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="24dp"
         android:text="密码"
         android:textColor="@android:color/black"
@@ -73,8 +76,6 @@
         android:id="@+id/editext_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -84,13 +85,13 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_account"
         app:layout_constraintRight_toRightOf="@+id/loginbg2"
         app:layout_constraintTop_toTopOf="@+id/tv_account"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginEnd="16dp" />
 
     <EditText
         android:id="@+id/edittxt_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -101,7 +102,9 @@
         app:layout_constraintTop_toTopOf="@+id/tv_password"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="@+id/loginbg2"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp" />
 
     <Button
         android:id="@+id/btn_sign_up"
@@ -117,7 +120,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/loginbg2"
         app:layout_constraintLeft_toLeftOf="@+id/loginbg2"
         app:layout_constraintRight_toRightOf="@+id/loginbg2"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
     <Button
         android:id="@+id/btn_sign_in"
@@ -132,7 +137,9 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_sign_up"
         app:layout_constraintLeft_toLeftOf="@+id/loginbg2"
         app:layout_constraintRight_toRightOf="@+id/loginbg2"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
     <ImageView
         android:id="@+id/imageView_user_avatar"
@@ -144,7 +151,9 @@
         app:layout_constraintLeft_toLeftOf="@+id/loginbg2"
         app:layout_constraintRight_toRightOf="@+id/loginbg2"
         app:layout_constraintTop_toTopOf="@+id/loginbg2"
-        app:srcCompat="@mipmap/ic_user" />
+        app:srcCompat="@mipmap/ic_user"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp" />
 
     <TextView
         android:id="@+id/tv_forgetpassword"
@@ -158,6 +167,29 @@
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintRight_toRightOf="@+id/edittxt_password"
-        app:layout_constraintTop_toBottomOf="@+id/edittxt_password" />
+        app:layout_constraintTop_toBottomOf="@+id/edittxt_password"
+        android:layout_marginEnd="8dp" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_login_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.constraint.ConstraintLayout>

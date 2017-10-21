@@ -2,9 +2,11 @@ package com.example.lightdance.appointment.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +32,26 @@ public class LoginActivity extends AppCompatActivity {
     Button btnSignIn;
     @BindView(R.id.tv_forgetpassword)
     TextView tvForgetpassword;
+    @BindView(R.id.toolbar_login)
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        mToolbar.setTitle("登录");
+        mToolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        mToolbar.setNavigationIcon(R.mipmap.ic_back_white);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         tvForgetpassword.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
@@ -53,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
                 Intent intent1 = new Intent(this,MainActivity.class);
                 startActivity(intent1);
+                finish();
                 break;
             case R.id.tv_forgetpassword:
                 break;

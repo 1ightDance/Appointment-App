@@ -27,8 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.example.lightdance.appointment.R.id.toolbar;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -133,7 +131,7 @@ public class BrowseFragment extends Fragment {
     private void onHide() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;
-        ObjectAnimator.ofFloat(toolbar, "translationY", 0, -0).setDuration(200).start();
+//        ObjectAnimator.ofFloat(toolbar, "translationY", 0, -0).setDuration(200).start();
         ObjectAnimator.ofFloat(fab, "translationY", 0, fab.getHeight() + fab.getPaddingBottom() + marginBottom)
                 .setDuration(200).start();
     }
@@ -142,7 +140,7 @@ public class BrowseFragment extends Fragment {
     private void onShow() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;
-        ObjectAnimator.ofFloat(toolbar, "translationY", -0, 0).setDuration(200).start();
+//        ObjectAnimator.ofFloat(toolbar, "translationY", -0, 0).setDuration(200).start();
         ObjectAnimator.ofFloat(fab, "translationY", fab.getHeight() + fab.getPaddingBottom() + marginBottom, 0)
                 .setDuration(200).start();
     }
