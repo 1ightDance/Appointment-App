@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
+import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mBrowesrFragment;
     Fragment mPersonalCenterFragment;
     Fragment mNewsFragment;
+    Fragment mMessageFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,15 +200,20 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                 }
                 return mNewsFragment;
             case 3:
-                if (mNewAppointmentFragment == null) {
-                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
+                if (mMessageFragment == null) {
+                    mMessageFragment = MessageFragment.newInstance();
                 }
-                return mNewAppointmentFragment;
+                return mMessageFragment;
             case 4:
                 if (mPersonalCenterFragment == null) {
                     mPersonalCenterFragment = PersonalCenterFragment.newInstance();
                 }
                 return mPersonalCenterFragment;
+            case 5:
+                if (mNewAppointmentFragment == null){
+                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
+                }
+                return mNewAppointmentFragment;
             default:
                 return null;
         }
