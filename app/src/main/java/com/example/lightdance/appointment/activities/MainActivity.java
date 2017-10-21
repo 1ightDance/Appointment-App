@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -70,8 +71,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
     private void previewDataLoading() {
         //判断是否加载过预览数据
-        if (added == false) initAppointmentMsg();
-        added = true;
+        SharedPreferences sharedPreferences = getSharedPreferences("dataLoaded",MODE_PRIVATE);
+        added = sharedPreferences.getBoolean("isLoaded",false);
+        if (added == false) {
+            initAppointmentMsg();
+        }
     }
 
     private void initAppointmentMsg() {
@@ -147,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user8.setPlace("中影星城都尚影院");
         user8.setPersonNumber("1/2人");
         user8.save();
+        SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
+        editor.putBoolean("isLoaded",true);
+        editor.apply();
     }
 
     //动态加载碎片的方法 TEST
