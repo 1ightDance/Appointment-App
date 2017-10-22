@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 import com.example.lightdance.appointment.fragments.TimePickerFragment;
+import com.example.lightdance.appointment.fragments.WarningFragment;
 
 public class MainActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mPersonalCenterFragment;
     Fragment mNewsFragment;
     Fragment mMessageFragment;
+    Fragment mWarningFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
         //加载预览数据
         previewDataLoading();
-
-        changeFragment(1);
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
 
@@ -69,6 +70,22 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             }
 
         });
+
+        //判断是否登录 未登录则打开资讯 登录打开广场
+        SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
+        if (preferences.getBoolean("isLogined",false)) {
+            changeFragment(1);
+        }else
+        {
+            changeNavigationSelected(R.id.menu_news);
+            changeFragment(2);
+        }
+
+    }
+
+    //改变NavigationBar被选中Item的方法
+    public void changeNavigationSelected(int selectedId) {
+        bottomNavigationView.setSelectedItemId(R.id.menu_news);
     }
 
     //判断是否加载过预览数据
@@ -167,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         editor.apply();
     }
 
-    //动态加载碎片的方法 TEST
+    //动态加载碎片的方法
     public void changeFragment(int position){
         if (position == mCurrentPosition){
             return;
@@ -178,6 +195,26 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         }
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
+
+        //判断是否登录 是否显示广场碎片和消息碎片
+        if (position == 1){
+            SharedPreferences preferences = getSharedPreferences("loginData"
+                    , Context.MODE_PRIVATE);
+            boolean isLogined = preferences.getBoolean("isLogined", false);
+            if (isLogined == false) {
+                changeFragment(6);
+                return;
+            }
+        }
+        if (position == 3){
+            SharedPreferences preferences = getSharedPreferences("loginData"
+                    , Context.MODE_PRIVATE);
+            boolean isLogined = preferences.getBoolean("isLogined", false);
+            if (isLogined == false) {
+                changeFragment(6);
+                return;
+            }
+        }
 
         if (fragment.isAdded()) {
             if (fragment.isHidden()) {
@@ -196,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         mCurrentPosition = position;
     }
 
+    //获取碎片实例方法
     public Fragment getFragment(int position) {
         switch (position) {
             case 1:
@@ -223,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                     mNewAppointmentFragment = NewAppointmentFragment.newInstance();
                 }
                 return mNewAppointmentFragment;
+            case 6:
+                if (mWarningFragment == null){
+                    mWarningFragment = WarningFragment.newInstance();
+                }
+                return mWarningFragment;
             default:
                 return null;
         }

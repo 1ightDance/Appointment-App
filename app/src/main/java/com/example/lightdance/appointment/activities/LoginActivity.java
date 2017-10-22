@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        //toolbar
         mToolbar.setTitle("登录");
         mToolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         mToolbar.setNavigationIcon(R.mipmap.ic_back_white);
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         tvForgetpassword.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
+    //点击监听
     @OnClick({R.id.btn_sign_up, R.id.btn_sign_in, R.id.tv_forgetpassword})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -75,6 +77,14 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.tv_forgetpassword:
                 break;
         }
+    }
+
+    //重写Back键方法 从登录页返回MainActivity
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

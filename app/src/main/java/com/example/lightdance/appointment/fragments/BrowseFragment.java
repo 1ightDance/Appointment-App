@@ -72,14 +72,14 @@ public class BrowseFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 BrowseMsgBean clickedMsg = browseMsgBeen.get(position);
-                Toast.makeText(getActivity(),"会弹出约帖详情页",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "会弹出约帖详情页", Toast.LENGTH_SHORT).show();
             }
         });
         adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
             @Override
             public void onClick(int position) {
 
-                Toast.makeText(getActivity(),"会弹出发布人极简要信息",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "会弹出发布人极简要信息", Toast.LENGTH_SHORT).show();
 //                UserBriflyInfoDialog inviterInfo = new UserBriflyInfoDialog();
 //                inviterInfo.show(getChildFragmentManager(),"TAG1");
             }
