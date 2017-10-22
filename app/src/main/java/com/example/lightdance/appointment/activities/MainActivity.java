@@ -186,10 +186,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             }
         } else {
             if (mCurrentPosition != -1) {
-                transaction.add(R.id.history_container, fragment)
+                transaction.add(R.id.container, fragment)
                         .hide(getFragment(mCurrentPosition));
             } else {
-                transaction.add(R.id.history_container, fragment);
+                transaction.add(R.id.container, fragment);
             }
         }
         transaction.commit();
@@ -260,5 +260,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    // 改变NavigationBar被选中Item的方法
+    public void changeNavigationSelected(int selectedId) {
+        bottomNavigationView.setSelectedItemId(R.id.menu_news);
     }
 }

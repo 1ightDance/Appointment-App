@@ -126,7 +126,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             }else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2){
                 //TODO 几个用户id连在一起的话这样查绝逼有bug
                 String loginStudentId = preferences.getString("userStudentNumber",null);
-                msgHistoryList = DataSupport.where("participantsId like ?", "%" + loginStudentId + "%").find(BrowseMsgBean.class);
+//                msgHistoryList = DataSupport.where("participantsId like ?", "%" + loginStudentId + "%").find(BrowseMsgBean.class);
                 textView.setText("应约记录空空如也");
             }
             return rootView;
