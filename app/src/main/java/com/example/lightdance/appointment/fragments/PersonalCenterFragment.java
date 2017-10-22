@@ -90,7 +90,8 @@ public class PersonalCenterFragment extends Fragment {
         }
         if (logined == true){
             userAvatar.setImageResource(R.mipmap.headshot_2);
-            tvUserName.setText("教皇");
+            SharedPreferences preferences = getActivity().getSharedPreferences("loginData",Context.MODE_PRIVATE);
+            tvUserName.setText(preferences.getString("userName","点击登录"));
         }
         imgInforNext.setClickable(logined);
         imgHistoryNext.setClickable(logined);

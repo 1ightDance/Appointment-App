@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btn_sign_in:
                 SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
                 editor.putBoolean("isLogined",true);
+                editor.putString("userName","教皇");
                 editor.apply();
                 Intent intent1 = new Intent(this,MainActivity.class);
                 startActivity(intent1);
