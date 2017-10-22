@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("userName","李黄旗");
                 editor.putString("userSex","男");
                 editor.putString("userCollege","通信工程学院");
-                editor.putString("userStudentNumb","15083111");
+                editor.putString("userStudentNumber","15083111");
                 editor.apply();
                 Intent intent1 = new Intent(this,MainActivity.class);
                 startActivity(intent1);

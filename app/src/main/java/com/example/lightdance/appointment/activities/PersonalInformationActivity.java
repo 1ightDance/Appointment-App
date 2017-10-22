@@ -64,7 +64,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         tvUserinforName.setText(p.getString("userName","无"));
         tvUserinforSex.setText(p.getString("userSex","无"));
         tvUserinforCollege.setText(p.getString("userCollege","无"));
-        tvUserinforStudentnumb.setText(p.getString("userStudentNumb","无"));
+        tvUserinforStudentnumb.setText(p.getString("userStudentNumber","无"));
     }
 
     //XML中控件的点击监听
