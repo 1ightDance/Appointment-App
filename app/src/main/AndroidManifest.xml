@@ -35,6 +35,9 @@
         <activity
             android:name=".activities.SignUpActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.AppointmentHistoryActivity"
+            android:theme="@style/AppTheme" />
         <activity android:name=".activities.LauncherActivity"
             android:theme="@style/StartTheme">
             <intent-filter>

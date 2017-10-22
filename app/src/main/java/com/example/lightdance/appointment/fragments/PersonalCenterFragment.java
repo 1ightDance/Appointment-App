@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.AppointmentHistoryActivity;
 import com.example.lightdance.appointment.activities.LoginActivity;
 import com.example.lightdance.appointment.activities.PersonalInformationActivity;
 
@@ -126,10 +127,10 @@ public class PersonalCenterFragment extends Fragment {
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.tv_history:
-                intent = null;
+                intent = new Intent(getActivity(), AppointmentHistoryActivity.class);
                 break;
             case R.id.img_history_next:
-                intent = null;
+                intent = new Intent(getActivity(), AppointmentHistoryActivity.class);
                 break;
             case R.id.tv_settings:
                 intent = null;
