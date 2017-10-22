@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,19 @@ public class PersonalInformationActivity extends AppCompatActivity {
             }
         });
 
+        initInformation();
+
+    }
+
+    private void initInformation() {
+        SharedPreferences p = getSharedPreferences("loginData",MODE_PRIVATE);
+        tvUserinforNickname.setText(p.getString("nickName","无"));
+        imgUserinforAvatar.setImageResource(p.getInt("userAvatar",0));
+        editTextUserinforIntroduction.setText(p.getString("userIntroduction","空"));
+        tvUserinforName.setText(p.getString("userName","无"));
+        tvUserinforSex.setText(p.getString("userSex","无"));
+        tvUserinforCollege.setText(p.getString("userCollege","无"));
+        tvUserinforStudentnumb.setText(p.getString("userStudentNumb","无"));
     }
 
     //XML中控件的点击监听
