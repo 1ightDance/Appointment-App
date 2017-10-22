@@ -8,7 +8,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     private int hourSelect;
     private int minuteSelect;
     private int mCurrentPosition = -1;
+    private long firstTime = 0;
 
     private boolean added = false;
 
@@ -304,5 +307,27 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     // 改变NavigationBar被选中Item的方法
     public void changeNavigationSelected(int selectedId) {
         bottomNavigationView.setSelectedItemId(selectedId);
+    }
+
+    /* 若在NewAppointment碎片则back键实现返回效果
+    *  若在其他碎片 则back键实现双击退出应用程序
+    * */
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (mCurrentPosition == 5){
+            changeFragment(1);
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+            long secondTime = System.currentTimeMillis();
+            if (secondTime - firstTime > 2000) {
+                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;
+                return true;
+            } else {
+                System.exit(0);
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }
