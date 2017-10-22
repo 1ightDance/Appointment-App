@@ -56,7 +56,8 @@ public class WarningFragment extends Fragment {
         switch (view.getId()) {
             case R.id.tv_to_changefragment:
                 MainActivity activity = (MainActivity) getActivity();
-                activity.changeNavigationSelected(R.id.menu_news);
+                // 测试的注释
+                // activity.changeNavigationSelected(R.id.menu_news);
                 activity.changeFragment(2);
                 break;
             case R.id.tv_to_sighup:
