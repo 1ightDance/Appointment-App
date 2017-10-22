@@ -1,7 +1,10 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.AppointmentHistoryActivity;
 import com.example.lightdance.appointment.activities.LoginActivity;
 import com.example.lightdance.appointment.activities.PersonalInformationActivity;
 
@@ -42,10 +46,6 @@ public class PersonalCenterFragment extends Fragment {
     TextView tvSettings;
     @BindView(R.id.img_settings_next)
     ImageView imgSettingsNext;
-    @BindView(R.id.tv_notice)
-    TextView tvNotice;
-    @BindView(R.id.img_notice_next)
-    ImageView imgNoticeNext;
     @BindView(R.id.tv_help)
     TextView tvHelp;
     @BindView(R.id.img_help_next)
@@ -76,14 +76,26 @@ public class PersonalCenterFragment extends Fragment {
         //将碎片膨胀成视图(View)
         View view = inflater.inflate(R.layout.fragment_personal_center, container, false);
         unbinder = ButterKnife.bind(this, view);
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        isLogined = preferences.getBoolean("isLogined", false);
         checkIsLogined(isLogined);
         return view;
     }
 
+    //判断是否登录而更改个人中心碎片内容
     public void checkIsLogined(boolean logined) {
-            tvInformation.setClickable(logined);
-            tvNotice.setClickable(logined);
-            tvHistory.setClickable(logined);
+        if (logined == false) {
+            tvInformation.setTextColor(Color.parseColor("#ff757575"));
+            tvHistory.setTextColor(Color.parseColor("#ff757575"));
+        }
+        if (logined == true){
+            userAvatar.setImageResource(R.mipmap.headshot_2);
+            tvUserName.setText("教皇");
+        }
+        imgInforNext.setClickable(logined);
+        imgHistoryNext.setClickable(logined);
+        tvInformation.setClickable(logined);
+        tvHistory.setClickable(logined);
     }
 
     @Override
@@ -92,7 +104,7 @@ public class PersonalCenterFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.user_background, R.id.user_avatar, R.id.tv_user_name, R.id.tv_information, R.id.img_infor_next, R.id.tv_history, R.id.img_history_next, R.id.tv_settings, R.id.img_settings_next, R.id.tv_notice, R.id.img_notice_next, R.id.tv_help, R.id.img_help_next, R.id.tv_about, R.id.img_about_next})
+    @OnClick({R.id.user_background, R.id.user_avatar, R.id.tv_user_name, R.id.tv_information, R.id.img_infor_next, R.id.tv_history, R.id.img_history_next, R.id.tv_settings, R.id.img_settings_next, R.id.tv_help, R.id.img_help_next, R.id.tv_about, R.id.img_about_next})
     public void onViewClicked(View view) {
 
         Intent intent = null;
@@ -106,6 +118,7 @@ public class PersonalCenterFragment extends Fragment {
                 break;
             case R.id.tv_user_name:
                 intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().finish();
                 break;
             case R.id.tv_information:
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
@@ -114,21 +127,15 @@ public class PersonalCenterFragment extends Fragment {
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 break;
             case R.id.tv_history:
-                intent = null;
+                intent = new Intent(getActivity(), AppointmentHistoryActivity.class);
                 break;
             case R.id.img_history_next:
-                intent = null;
+                intent = new Intent(getActivity(), AppointmentHistoryActivity.class);
                 break;
             case R.id.tv_settings:
                 intent = null;
                 break;
             case R.id.img_settings_next:
-                intent = null;
-                break;
-            case R.id.tv_notice:
-                intent = null;
-                break;
-            case R.id.img_notice_next:
                 intent = null;
                 break;
             case R.id.tv_help:
