@@ -167,6 +167,7 @@
                 android:layout_marginTop="15dp"
                 android:backgroundTint="?android:attr/colorBackgroundCacheHint"
                 android:editable="true"
+                android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="top"
                 android:hint="这个人很懒，什么都没留下......"
