@@ -106,7 +106,10 @@ public class PersonalCenterFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.user_background, R.id.user_avatar, R.id.tv_user_name, R.id.tv_information, R.id.img_infor_next, R.id.tv_history, R.id.img_history_next, R.id.tv_settings, R.id.img_settings_next, R.id.tv_help, R.id.img_help_next, R.id.tv_about, R.id.img_about_next})
+    @OnClick({R.id.user_background, R.id.user_avatar, R.id.tv_user_name, R.id.tv_information
+            , R.id.img_infor_next, R.id.tv_history, R.id.img_history_next, R.id.tv_settings
+            , R.id.img_settings_next, R.id.tv_help, R.id.img_help_next, R.id.tv_about
+            , R.id.img_about_next, R.id.img_count_setting})
     public void onViewClicked(View view) {
 
         Intent intent = null;
@@ -157,6 +160,16 @@ public class PersonalCenterFragment extends Fragment {
                 break;
             case R.id.img_about_next:
                 intent = null;
+                break;
+            case R.id.img_count_setting:
+                if (isLogined){
+                    startActivity(new Intent(getActivity(), LogoutActivity.class));
+                    getActivity().finish();
+                    break;
+                }else{
+                    intent = new Intent(getActivity(), LoginActivity.class);
+                    getActivity().finish();
+                }
                 break;
         }
         if (intent == null){

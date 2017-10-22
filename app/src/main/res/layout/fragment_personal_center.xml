@@ -278,6 +278,16 @@
                             app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
                         <ImageView
+                            android:id="@+id/img_count_setting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@mipmap/ic_count_setting" />
+
+                        <ImageView
                             android:id="@+id/img_about_next"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
