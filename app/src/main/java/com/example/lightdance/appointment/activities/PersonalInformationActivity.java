@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +18,8 @@ import butterknife.OnClick;
 public class PersonalInformationActivity extends AppCompatActivity {
 
     //利用黄油刀完成的FindViewById
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_userinfor)
     Toolbar toolbar;
-    @BindView(R.id.img_userinfor_back)
-    ImageView imgUserinforBack;
     @BindView(R.id.tv_userinfor_nickname)
     TextView tvUserinforNickname;
     @BindView(R.id.img_userinfor_avatar)
@@ -41,15 +40,23 @@ public class PersonalInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
         ButterKnife.bind(this);
+
+        toolbar.setTitle("个人信息");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        toolbar.setNavigationIcon(R.mipmap.ic_back_white);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     //XML中控件的点击监听
-    @OnClick({R.id.img_userinfor_back, R.id.tv_userinfor_nickname, R.id.img_userinfor_avatar, R.id.tv_userinfor_name, R.id.tv_userinfor_sex, R.id.tv_userinfor_college, R.id.tv_userinfor_studentnumb})
+    @OnClick({ R.id.tv_userinfor_nickname, R.id.img_userinfor_avatar, R.id.tv_userinfor_name, R.id.tv_userinfor_sex, R.id.tv_userinfor_college, R.id.tv_userinfor_studentnumb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.img_userinfor_back:
-                finish();
-                break;
             case R.id.tv_userinfor_nickname:
                 break;
             case R.id.img_userinfor_avatar:

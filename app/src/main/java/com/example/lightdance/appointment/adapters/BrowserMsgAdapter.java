@@ -1,18 +1,14 @@
 package com.example.lightdance.appointment.adapters;
 
-import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
-import com.example.lightdance.appointment.dialogs.UserBriflyInfoDialog;
 
 import java.util.List;
 
@@ -22,21 +18,19 @@ import java.util.List;
 
 public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.ViewHolder> {
 
-    private Context mContext;
-
     //存放每一条信息的数组
     private List<BrowseMsgBean> msgBeanList;
 
-    private OnItemClickListener msgOnclickListener=null;
-    private OnInviterClickListener inviterOnClickListener=null;
+    private OnItemClickListener msgOnclickListener = null;
+    private OnInviterClickListener inviterOnClickListener = null;
 
 
     //可以传监听事件的接口,一个对应整条item,另一个对应用户名
-    public static interface OnItemClickListener{
+    public static interface OnItemClickListener {
         void onClick(int position);
     }
 
-    public static interface OnInviterClickListener{
+    public static interface OnInviterClickListener {
         void onClick(int position);
     }
 
@@ -53,13 +47,14 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
 
         TextView title;
-//        TextView publishTime;
+        //        TextView publishTime;
 //        TextView startTime;
 //        TextView endTime;
 //        TextView place;
         TextView content;
         TextView inviter;
-        TextView personNumber;
+        TextView personNumberNeed;
+        TextView personNumberHave;
         ImageView type;
         ImageView inviterIcon;
 
@@ -69,16 +64,17 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             browserMsgView = itemView;
-            title        = (TextView) itemView.findViewById(R.id.tv_appointment_title);
+            title = (TextView) itemView.findViewById(R.id.tv_appointment_title);
 //            publishTime  = (TextView) itemView.findViewById(R.id.tv_appointment_publishtime);
 //            startTime    = (TextView) itemView.findViewById(R.id.tv_appointment_starttime);
 //            endTime      = (TextView) itemView.findViewById(R.id.tv_appointment_endtime);
 //            place        = (TextView) itemView.findViewById(R.id.tv_appointment_place);
-            content      = (TextView) itemView.findViewById(R.id.tv_appointment_content);
-            inviter      = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
-            personNumber = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber);
-            type         = (ImageView) itemView.findViewById(R.id.img_appointment_type);
-            inviterIcon  = (ImageView) itemView.findViewById(R.id.img_appointment_inviterIcon);
+            content = (TextView) itemView.findViewById(R.id.tv_appointment_content);
+            inviter = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
+            personNumberNeed = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_need);
+            personNumberHave = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_have);
+            type = (ImageView) itemView.findViewById(R.id.img_appointment_type);
+            inviterIcon = (ImageView) itemView.findViewById(R.id.img_appointment_inviterIcon);
         }
     }
 
@@ -87,8 +83,8 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     }
 
 
-     //重写从RecyclerView ADapter中继承来的三个方法
-     //传入布局文件 并膨胀为视图暂存在holder中
+    //重写从RecyclerView ADapter中继承来的三个方法
+    //传入布局文件 并膨胀为视图暂存在holder中
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,7 +92,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
                 .inflate(R.layout.list_browse_msg, parent, false);
 
         //@param holder书上这个地方加了final字段，但是没懂为什么
-        ViewHolder holder=new ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
 
         return holder;
     }
@@ -104,7 +100,8 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     //数据与视图绑定
 
 
-    /**关于为item的子控件设置监听（回调思想）：
+    /**
+     * 关于为item的子控件设置监听（回调思想）：
      * 不推荐在这里获取fragment然后调用FragmentManager方法从而弹出DialogFragment，类之间的耦合度应该越低越好，不要随意持有对方实例
      * 在这里不可以直接对item中控件设置监听，而应使用回调方法，OnclickListener为什么是一个接口原因就在这里
      * 我们定义两个点击监听器的接口，并在这里创建（实现）该接口的私有成员变量，分别用来监听对item和item里发布者昵称的点击事件
@@ -120,26 +117,17 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     @Override
     public void onBindViewHolder(final BrowserMsgAdapter.ViewHolder holder, int position) {
         BrowseMsgBean msgAppointment = msgBeanList.get(position);
-        holder
-                .title.setText(msgAppointment.getTitle());
-//        holder
-//                .publishTime.setText(msgAppointment.getPublishTime());
-//        holder
-//                .startTime.setText(msgAppointment.getStartTime());
-//        holder
-//                .endTime.setText(msgAppointment.getEndTime());
-//        holder
-//                .place.setText(msgAppointment.getPlace());
-        holder
-                .content.setText(msgAppointment.getContent());
-        holder
-                .inviter.setText(msgAppointment.getInviter( ));
-        holder
-                .personNumber.setText(msgAppointment.getPersonNumber());
-        holder
-                .type.setImageResource(msgAppointment.getTypeIconId());
-        holder
-                .inviterIcon.setImageResource(msgAppointment.getInviterIconId());
+        holder.title.setText(msgAppointment.getTitle());
+//        holder.publishTime.setText(msgAppointment.getPublishTime());
+//        holder.startTime.setText(msgAppointment.getStartTime());
+//        holder.endTime.setText(msgAppointment.getEndTime());
+//        holder.place.setText(msgAppointment.getPlace());
+        holder.content.setText(msgAppointment.getContent());
+        holder.inviter.setText(msgAppointment.getInviter());
+        holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
+        holder.personNumberHave.setText(msgAppointment.getPersonNumberHave());
+        holder.type.setImageResource(msgAppointment.getTypeIconId());
+        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +152,6 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     public int getItemCount() {
         return msgBeanList.size();
     }
-
 
 
 }

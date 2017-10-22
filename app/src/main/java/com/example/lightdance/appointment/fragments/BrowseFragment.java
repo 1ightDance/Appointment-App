@@ -14,11 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
-import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.MainActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
-import com.example.lightdance.appointment.dialogs.UserBriflyInfoDialog;
 
 import org.litepal.crud.DataSupport;
 
@@ -28,8 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.example.lightdance.appointment.R.id.toolbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,10 +90,11 @@ public class BrowseFragment extends Fragment {
 
     @OnClick(R.id.new_appointment)
     public void onViewClicked() {
-        MainActivity activity = (MainActivity) getActivity();
-        activity.changeFragment(3);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.changeFragment(5);
     }
 
+    //动态隐藏FloatingActionBar判断方法
     class HideScrollListener extends RecyclerView.OnScrollListener {
 
         private static final int HIDE_HEIGHT = 20;
@@ -130,18 +127,20 @@ public class BrowseFragment extends Fragment {
         }
     }
 
+    //动态隐藏FloatingActionBar方法
     private void onHide() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;
-        ObjectAnimator.ofFloat(toolbar, "translationY", 0, -0).setDuration(200).start();
+//        ObjectAnimator.ofFloat(toolbar, "translationY", 0, -0).setDuration(200).start();
         ObjectAnimator.ofFloat(fab, "translationY", 0, fab.getHeight() + fab.getPaddingBottom() + marginBottom)
                 .setDuration(200).start();
     }
 
+    //动态显示FloatingActionBar方法
     private void onShow() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;
-        ObjectAnimator.ofFloat(toolbar, "translationY", -0, 0).setDuration(200).start();
+//        ObjectAnimator.ofFloat(toolbar, "translationY", -0, 0).setDuration(200).start();
         ObjectAnimator.ofFloat(fab, "translationY", fab.getHeight() + fab.getPaddingBottom() + marginBottom, 0)
                 .setDuration(200).start();
     }

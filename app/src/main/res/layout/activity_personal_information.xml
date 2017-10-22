@@ -7,30 +7,19 @@
     tools:context="com.example.lightdance.appointment.activities.PersonalInformationActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_userinfor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
         android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/img_userinfor_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_arrow_back_white" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -40,7 +29,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_userinfor">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -131,12 +120,11 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/holo_green_dark"
                 app:layout_constraintHorizontal_bias="0.963"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_userinfor_divider1"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/headshot_2" />
 
             <ImageView
                 android:id="@+id/img_userinfor_divider2"
@@ -181,7 +169,7 @@
                 android:editable="true"
                 android:ems="10"
                 android:gravity="top"
-                android:hint="简单介绍一下自己吧！"
+                android:hint="这个人很懒，什么都没留下......"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
                 android:scrollbarAlwaysDrawHorizontalTrack="false"
@@ -247,7 +235,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="8dp"
-                android:text="某某某"
+                android:text="李黄旗"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_userinfor_whatname"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -293,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:text="男/女"
+                android:text="男"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_userinfor_whatsex"
@@ -384,7 +372,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:text="150*****"
+                android:text="15083111"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_userinfor_whatstudentnumb"
                 app:layout_constraintHorizontal_bias="1.0"
