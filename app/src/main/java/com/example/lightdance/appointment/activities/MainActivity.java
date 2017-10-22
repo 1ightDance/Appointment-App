@@ -71,8 +71,15 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
         });
 
-        changeFragment(2);
-        changeNavigationSelected(R.id.menu_news);
+        //判断是否登录 未登录则打开资讯 登录打开广场
+        SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
+        if (preferences.getBoolean("isLogined",false)) {
+            changeFragment(1);
+        }else
+        {
+            changeNavigationSelected(R.id.menu_news);
+            changeFragment(2);
+        }
 
     }
 
