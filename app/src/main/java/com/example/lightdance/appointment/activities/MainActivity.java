@@ -223,10 +223,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             }
         } else {
             if (mCurrentPosition != -1) {
-                transaction.add(R.id.container, fragment)
+                transaction.add(R.id.history_container, fragment)
                         .hide(getFragment(mCurrentPosition));
             } else {
-                transaction.add(R.id.container, fragment);
+                transaction.add(R.id.history_container, fragment);
             }
         }
         transaction.commit();
