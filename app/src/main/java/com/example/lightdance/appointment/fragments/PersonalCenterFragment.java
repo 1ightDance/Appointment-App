@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentHistoryActivity;
 import com.example.lightdance.appointment.activities.LoginActivity;
+import com.example.lightdance.appointment.activities.LogoutActivity;
 import com.example.lightdance.appointment.activities.PersonalInformationActivity;
 
 import butterknife.BindView;
@@ -91,7 +92,7 @@ public class PersonalCenterFragment extends Fragment {
         if (logined == true){
             userAvatar.setImageResource(R.mipmap.headshot_2);
             SharedPreferences preferences = getActivity().getSharedPreferences("loginData",Context.MODE_PRIVATE);
-            tvUserName.setText(preferences.getString("userName","点击登录"));
+            tvUserName.setText(preferences.getString("nickName","点击登录"));
         }
         imgInforNext.setClickable(logined);
         imgHistoryNext.setClickable(logined);
@@ -118,8 +119,14 @@ public class PersonalCenterFragment extends Fragment {
                 intent = null;
                 break;
             case R.id.tv_user_name:
-                intent = new Intent(getActivity(), LoginActivity.class);
-                getActivity().finish();
+                if (isLogined){
+                    startActivity(new Intent(getActivity(), LogoutActivity.class));
+                    getActivity().finish();
+                    break;
+                }else{
+                    intent = new Intent(getActivity(), LoginActivity.class);
+                    getActivity().finish();
+                }
                 break;
             case R.id.tv_information:
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
@@ -152,6 +159,10 @@ public class PersonalCenterFragment extends Fragment {
                 intent = null;
                 break;
         }
-        startActivity(intent);
+        if (intent == null){
+            return;
+        }else{
+            startActivity(intent);
+        }
     }
 }

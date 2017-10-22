@@ -19,11 +19,6 @@
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateUnchanged|adjustPan">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".activities.LoginActivity"
@@ -38,13 +33,18 @@
         <activity
             android:name=".activities.AppointmentHistoryActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.LauncherActivity"
+        <activity
+            android:name=".activities.LauncherActivity"
             android:theme="@style/StartTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.LogoutActivity"
+            android:theme="@style/AppTheme">
         </activity>
     </application>
 
