@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         });
     }
 
+    //判断是否加载过预览数据
     private void previewDataLoading() {
-        //判断是否加载过预览数据
         SharedPreferences sharedPreferences = getSharedPreferences("dataLoaded",MODE_PRIVATE);
         added = sharedPreferences.getBoolean("isLoaded",false);
         if (added == false) {
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         }
     }
 
+    //加载广场预览数据方法
     private void initAppointmentMsg() {
         BrowseMsgBean user1 = new BrowseMsgBean();
         user1.setTitle("双休日图书馆6楼讨论室自习");
@@ -88,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user1.setInviterIconId(R.mipmap.headshot_1);
         user1.setInviter("花落的速度");
         user1.setPlace("双休日图书馆6楼");
-        user1.setPersonNumber("1/4人");
+        user1.setPersonNumberHave("1");
+        user1.setPersonNumberNeed("4");
         user1.save();
         BrowseMsgBean user2 = new BrowseMsgBean();
         user2.setTitle("周六晚上五餐三楼狼人杀");
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user2.setInviterIconId(R.mipmap.headshot_2);
         user2.setInviter("教皇");
         user2.setPlace("五餐三楼");
-        user2.setPersonNumber("3/12人");
+        user2.setPersonNumberHave("3");
+        user2.setPersonNumberNeed("12");
         user2.save();
         BrowseMsgBean user3 = new BrowseMsgBean();
         user3.setTitle("20号晚上弗雷德密室逃脱");
@@ -106,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user3.setInviterIconId(R.mipmap.headshot_3);
         user3.setInviter("caozh");
         user3.setPlace("杭电生活区东门集合一起出发");
-        user3.setPersonNumber("6/10人");
+        user3.setPersonNumberHave("6");
+        user3.setPersonNumberNeed("10");
         user3.save();
         BrowseMsgBean user4 = new BrowseMsgBean();
         user4.setTitle("云南自由行");
@@ -115,7 +119,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user4.setInviterIconId(R.mipmap.headshot_4);
         user4.setInviter("大毛");
         user4.setPlace("云南昆明");
-        user4.setPersonNumber("1/8人");
+        user4.setPersonNumberHave("1");
+        user4.setPersonNumberNeed("8");
         user4.save();
         BrowseMsgBean user5 = new BrowseMsgBean();
         user5.setTitle("世纪难题——减肥");
@@ -124,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user5.setInviterIconId(R.mipmap.headshot_5);
         user5.setInviter("蛋白质");
         user5.setPlace("杭电东操场");
-        user5.setPersonNumber("1/2人");
+        user5.setPersonNumberHave("1");
+        user5.setPersonNumberNeed("2");
         user5.save();
         BrowseMsgBean user6 = new BrowseMsgBean();
         user6.setTitle("约饭");
@@ -133,7 +139,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user6.setInviterIconId(R.mipmap.headshot_6);
         user6.setInviter("吉瑞斯的指环");
         user6.setPlace("1餐门口17：30集合一起过去");
-        user6.setPersonNumber("1/8人");
+        user6.setPersonNumberHave("1");
+        user6.setPersonNumberNeed("8");
         user6.save();
         BrowseMsgBean user7 = new BrowseMsgBean();
         user7.setTitle("寻参加完宁波造音节返校同路小伙伴");
@@ -142,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user7.setInviterIconId(R.mipmap.headshot_7);
         user7.setInviter("契鸽");
         user7.setPlace("宁波火车站");
-        user7.setPersonNumber("1/4人");
+        user7.setPersonNumberHave("1");
+        user7.setPersonNumberNeed("4");
         user7.save();
         BrowseMsgBean user8 = new BrowseMsgBean();
         user8.setTitle("约22号电影《羞羞的铁拳》");
@@ -151,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user8.setInviterIconId(R.mipmap.headshot_8);
         user8.setInviter("ZhengHQ");
         user8.setPlace("中影星城都尚影院");
-        user8.setPersonNumber("1/2人");
+        user8.setPersonNumberHave("1");
+        user8.setPersonNumberNeed("2");
         user8.save();
         SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
         editor.putBoolean("isLoaded",true);
@@ -221,13 +230,13 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
 
     //用以更改日期的方法
     public void changeData(){
-        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(3);
+        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(5);
         newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
     }
 
     //用以更改时间的方法
     private void changeTime() {
-        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(3);
+        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(5);
         newAppointmentFragment.setTime(hourSelect,minuteSelect);
     }
 

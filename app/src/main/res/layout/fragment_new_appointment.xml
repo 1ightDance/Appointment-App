@@ -5,66 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/new_appointment_done"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_newappointment"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:src="@drawable/done"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
 
     <ScrollView
         android:id="@+id/scrollView_newappointment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_newappointment"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_newappointment_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="约一波"
-                android:textColor="@android:color/black"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.501"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/tv_activity_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="0dp"
                 android:text="活动时间："
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="@+id/editText_activity_title"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_activity_type" />
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_activity_personnumb"
+                android:layout_marginLeft="0dp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_activity_personnumb"
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
                 android:id="@+id/tv_activity_place"
@@ -102,14 +87,14 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:text="活动名称："
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_newappointment_title" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/editText_activity_title"
@@ -143,12 +128,13 @@
                 android:id="@+id/tv_activity_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="27dp"
                 android:text="开始时间"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/tv_activity_time"
-                app:layout_constraintTop_toBottomOf="@+id/tv_activity_time" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_activity_time"
+                android:layout_marginLeft="-6dp" />
 
             <TextView
                 android:id="@+id/tv_activity_end_time"
@@ -262,9 +248,7 @@
                 app:layout_constraintLeft_toLeftOf="@+id/tv_activity_contact_way"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_activity_contact_way"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginBottom="80dp" />
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
                 android:id="@+id/tv_activity_contact_way"
@@ -281,10 +265,7 @@
                 android:id="@+id/tv_activity_type_select"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="0dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="0dp"
                 android:textAlignment="viewEnd"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
@@ -294,25 +275,89 @@
                 app:layout_constraintRight_toLeftOf="@+id/imageView_activity_type_next"
                 app:layout_constraintTop_toTopOf="@+id/tv_activity_type"
                 app:layout_constraintVertical_bias="0.0"
-                android:text="未选择"/>
+                android:text="未选择"
+                android:layout_marginEnd="8dp" />
 
             <ImageView
                 android:id="@+id/imageView_activity_type_next"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginBottom="0dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="0dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_activity_type"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_activity_type"
-                app:srcCompat="@mipmap/ic_keyboard_arrow_right_black" />
+                app:srcCompat="@mipmap/ic_keyboard_arrow_right_black"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:id="@+id/tv_activity_personnumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="24dp"
+                android:text="活动人数："
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_activity_type"
+                app:layout_constraintTop_toBottomOf="@+id/tv_activity_type_select" />
+
+            <cn.carbswang.android.numberpickerview.library.NumberPickerView
+                android:id="@+id/numberPicker"
+                android:layout_width="88dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_activity_personnumb"
+                app:layout_constraintRight_toRightOf="@+id/imageView_activity_type_next"
+                app:layout_constraintTop_toTopOf="@+id/tv_activity_personnumb"
+                app:npv_DividerColor="#000000"
+                app:npv_HintText="人"
+                app:npv_ShowCount="3"
+                app:npv_TextColorHint="#000000"
+                app:npv_TextColorSelected="#000000"
+                app:npv_TextSizeSelected="18sp"
+                app:npv_TextSizeNormal="14sp"
+                app:npv_TextColorNormal="#aaa"
+                app:layout_constraintLeft_toRightOf="@+id/textView2"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintVertical_bias="0.511"
+                app:layout_constraintHorizontal_bias="1.0" />
+
+            <Button
+                android:id="@+id/btn_newappointment_done"
+                style="@android:style/Widget.Holo.Button.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="16dp"
+                android:elevation="4dp"
+                android:text="完成"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/editText_activity_contact_way"
+                app:layout_constraintRight_toRightOf="@+id/editText_activity_contact_way"
+                app:layout_constraintTop_toBottomOf="@+id/editText_activity_contact_way" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:text="（包括自己）"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_activity_personnumb"
+                app:layout_constraintLeft_toRightOf="@+id/tv_activity_personnumb"
+                app:layout_constraintTop_toTopOf="@+id/tv_activity_personnumb" />
 
             <TextView
                 android:id="@+id/tv_activity_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
                 android:layout_marginTop="16dp"
                 android:text="活动类型："
                 android:textColor="@android:color/black"
