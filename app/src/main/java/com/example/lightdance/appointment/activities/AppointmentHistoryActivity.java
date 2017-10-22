@@ -114,9 +114,10 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             historyRecyclerView = (RecyclerView)rootView.findViewById(R.id.section_recyclerview);
             historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
             String loginNickName = preferences.getString("nickName",null);
+            String loginStudentId = preferences.getString("userStudentNumber",null);
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 //TODO 暂时这样代替，会改数据库取数据的逻辑
-                msgHistoryList = DataSupport.where("inviter == ?",loginNickName ).find(BrowseMsgBean.class);
+                msgHistoryList = DataSupport.where("inviter == ?",loginNickName).find(BrowseMsgBean.class);
                 BrowserMsgAdapter adapter = new BrowserMsgAdapter(msgHistoryList);
                 this.historyRecyclerView.setAdapter(adapter);
                 //如果为空，显示这样的字段
@@ -125,8 +126,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
                 }
             }else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2){
                 //TODO 几个用户id连在一起的话这样查绝逼有bug
-                String loginStudentId = preferences.getString("userStudentNumber",null);
-//                msgHistoryList = DataSupport.where("participantsId like ?", "%" + loginStudentId + "%").find(BrowseMsgBean.class);
+                msgHistoryList = DataSupport.where("participantsId like ?", "%" + loginStudentId + "%").find(BrowseMsgBean.class);
                 textView.setText("应约记录空空如也");
             }
             return rootView;
