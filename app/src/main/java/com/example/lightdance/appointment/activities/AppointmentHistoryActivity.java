@@ -113,10 +113,10 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             historyRecyclerView = (RecyclerView)rootView.findViewById(R.id.section_recyclerview);
             historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
-            String loginNickName = preferences.getString("userName",null);
+            String loginNickName = preferences.getString("nickName",null);
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 //TODO 暂时这样代替，会改数据库取数据的逻辑
-                msgHistoryList = DataSupport.where("userNickName == ?",loginNickName ).find(BrowseMsgBean.class);
+                msgHistoryList = DataSupport.where("inviter == ?",loginNickName ).find(BrowseMsgBean.class);
                 BrowserMsgAdapter adapter = new BrowserMsgAdapter(msgHistoryList);
                 this.historyRecyclerView.setAdapter(adapter);
                 //如果为空，显示这样的字段
