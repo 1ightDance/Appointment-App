@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.fragments.AppointmentDetailFragment;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mNewsFragment;
     Fragment mMessageFragment;
     Fragment mWarningFragment;
+    Fragment mAppointmentDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,7 +266,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                     mWarningFragment = WarningFragment.newInstance();
                 }
                 return mWarningFragment;
-
+            case 7:
+                if (mAppointmentDetailFragment == null){
+                    mAppointmentDetailFragment = AppointmentDetailFragment.newInstance();
+                }
+                return mAppointmentDetailFragment;
             default:
                 return null;
         }
