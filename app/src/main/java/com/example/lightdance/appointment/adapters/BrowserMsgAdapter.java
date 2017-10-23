@@ -38,6 +38,8 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         this.inviterOnClickListener = inviterOnClickListener;
     }
 
+    // TODO 设置点击发起人头像弹出该用户信息
+
     public void setItemOnclickListener(OnItemClickListener msgOnclickListener) {
         this.msgOnclickListener = msgOnclickListener;
     }

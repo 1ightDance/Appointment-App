@@ -16,7 +16,6 @@ import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
-import com.example.lightdance.appointment.fragments.InviterInfoFragment;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
@@ -319,11 +318,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                     mWarningFragment = WarningFragment.newInstance();
                 }
                 return mWarningFragment;
-            case 7:
-                if (mInviterInfoFragment == null){
-                    mInviterInfoFragment = InviterInfoFragment.newInstance();
-                }
-                return mInviterInfoFragment;
             default:
                 return null;
         }
@@ -393,10 +387,5 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             }
         }
         return super.onKeyUp(keyCode, event);
-    }
-
-    public void getPublisherMsg(int id,String name,String introduction){
-        InviterInfoFragment inviterInfoFragment = (InviterInfoFragment) getFragment(7);
-        inviterInfoFragment.setMsg(id,name,introduction);
     }
 }

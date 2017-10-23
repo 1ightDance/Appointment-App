@@ -12,12 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.MainActivity;
+import com.example.lightdance.appointment.activities.UserInfoActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
 import org.litepal.crud.DataSupport;
@@ -81,17 +81,9 @@ public class BrowseFragment extends Fragment {
         adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
             @Override
             public void onClick(int position) {
-
-                InviterInfoFragment inviterInfoFragment = new InviterInfoFragment();
-                inviterInfoFragment.show(getFragmentManager(),"InviterInfoFragment");
-
-                Toast.makeText(getActivity(),"会弹出发布人极简要信息",Toast.LENGTH_SHORT).show();
-                BrowseMsgBean clickedMsg = DataSupport.find(BrowseMsgBean.class,position+1);
-                String inviter = clickedMsg.getInviter();
-                String introduction = "这里还没建数据库啊";
-                int inviterAvatar = clickedMsg.getInviterIconId();
-                MainActivity activity = (MainActivity) getActivity();
-                activity.getPublisherMsg(inviterAvatar,inviter,introduction);
+                Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                intent.putExtra("position",position+1);
+                startActivity(intent);
             }
         });
 
