@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
-import com.example.lightdance.appointment.fragments.AppointmentDetailFragment;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
+import com.example.lightdance.appointment.fragments.InviterInfoFragment;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mMessageFragment;
     Fragment mWarningFragment;
     Fragment mAppointmentDetailFragment;
+    Fragment mInviterInfoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,10 +268,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                 }
                 return mWarningFragment;
             case 7:
-                if (mAppointmentDetailFragment == null){
-                    mAppointmentDetailFragment = AppointmentDetailFragment.newInstance();
+                if (mInviterInfoFragment == null){
+                    mInviterInfoFragment = InviterInfoFragment.newInstance();
                 }
-                return mAppointmentDetailFragment;
+                return mInviterInfoFragment;
             default:
                 return null;
         }
@@ -320,8 +321,13 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     * */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mCurrentPosition == 5||mCurrentPosition == 7){
+        if (mCurrentPosition == 5){
             changeFragment(1);
+            return true;
+        }
+        if (mCurrentPosition == 7){
+            changeFragment(1);
+            getFragment(7).onDestroy();
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
@@ -337,9 +343,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         return super.onKeyUp(keyCode, event);
     }
 
-    public void getClikedMsg(BrowseMsgBean browseMsgBean){
-        AppointmentDetailFragment fragment =(AppointmentDetailFragment)getFragment(7);
-        fragment.setClickedMsg(browseMsgBean);
+    public void getPublisherMsg(int id,String name,String introduction){
+        InviterInfoFragment inviterInfoFragment = (InviterInfoFragment) getFragment(7);
+        inviterInfoFragment.setMsg(id,name,introduction);
     }
-
 }

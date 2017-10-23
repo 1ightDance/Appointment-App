@@ -2,6 +2,7 @@ package com.example.lightdance.appointment.fragments;
 
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.MainActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
@@ -71,20 +73,18 @@ public class BrowseFragment extends Fragment {
         adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                BrowseMsgBean clickedMsg = DataSupport.find(BrowseMsgBean.class,position+1);
-//                BrowseMsgBean clickedMsg = browseMsgBeen.get(position);
-                MainActivity activity = (MainActivity) getActivity();
-                activity.changeFragment(7);
-                activity.getClikedMsg(clickedMsg);
+                Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                intent.putExtra("position",position+1);
+                startActivity(intent);
             }
         });
         adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
             @Override
             public void onClick(int position) {
 
+
                 Toast.makeText(getActivity(),"会弹出发布人极简要信息",Toast.LENGTH_SHORT).show();
-//                UserBriflyInfoDialog inviterInfo = new UserBriflyInfoDialog();
-//                inviterInfo.show(getChildFragmentManager(),"TAG1");
+                
             }
         });
 
@@ -153,4 +153,5 @@ public class BrowseFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }

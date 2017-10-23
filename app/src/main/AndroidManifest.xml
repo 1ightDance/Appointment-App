@@ -18,8 +18,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateUnchanged|adjustPan">
-        </activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -44,8 +43,8 @@
         </activity>
         <activity
             android:name=".activities.LogoutActivity"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activities.AppointmentDetailActivity"></activity>
     </application>
 
 </manifest>
