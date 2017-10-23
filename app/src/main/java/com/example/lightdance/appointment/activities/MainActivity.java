@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.InviterInfoFragment;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     private int mCurrentPosition = -1;
     private long firstTime = 0;
 
-    private boolean added = false;
+    private boolean squareDataAdded = false;
+    private boolean userMsgAdded = false;
 
     private BottomNavigationView bottomNavigationView;
     Fragment mNewAppointmentFragment;
@@ -92,10 +94,60 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     //判断是否加载过预览数据
     private void previewDataLoading() {
         SharedPreferences sharedPreferences = getSharedPreferences("dataLoaded",MODE_PRIVATE);
-        added = sharedPreferences.getBoolean("isLoaded",false);
-        if (added == false) {
+        squareDataAdded = sharedPreferences.getBoolean("squareDataLoaded",false);
+        userMsgAdded = sharedPreferences.getBoolean("userMsgLoaded",false);
+        if (squareDataAdded == false) {
             initAppointmentMsg();
         }
+        if (userMsgAdded == false){
+            initUserMsg();
+        }
+    }
+
+    private void initUserMsg() {
+        UserBean user1 = new UserBean();
+        user1.setUserNickName("花落的速度");
+        user1.setUserDescription("第一个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user1.setUserIconId(R.mipmap.headshot_1);
+        user1.save();
+        UserBean user2 = new UserBean();
+        user2.setUserNickName("教皇");
+        user2.setUserDescription("第二个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user2.setUserIconId(R.mipmap.headshot_2);
+        user2.save();
+        UserBean user3 = new UserBean();
+        user3.setUserNickName("caozh");
+        user3.setUserDescription("第三个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user3.setUserIconId(R.mipmap.headshot_3);
+        user3.save();
+        UserBean user4 = new UserBean();
+        user4.setUserNickName("大毛");
+        user4.setUserDescription("第四个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user4.setUserIconId(R.mipmap.headshot_4);
+        user4.save();
+        UserBean user5 = new UserBean();
+        user5.setUserNickName("蛋白质");
+        user5.setUserDescription("第五个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user5.setUserIconId(R.mipmap.headshot_5);
+        user5.save();
+        UserBean user6 = new UserBean();
+        user6.setUserNickName("吉瑞斯的指环");
+        user6.setUserDescription("第六个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user6.setUserIconId(R.mipmap.headshot_6);
+        user6.save();
+        UserBean user7 = new UserBean();
+        user7.setUserNickName("契鸽");
+        user7.setUserDescription("第七个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user7.setUserIconId(R.mipmap.headshot_7);
+        user7.save();
+        UserBean user8 = new UserBean();
+        user8.setUserNickName("ZhengHQ");
+        user8.setUserDescription("第八个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user8.setUserIconId(R.mipmap.headshot_8);
+        user8.save();
+        SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
+        editor.putBoolean("userMsgLoaded",true);
+        editor.apply();
     }
 
     //加载广场预览数据方法
@@ -181,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user8.setPersonNumberNeed("2");
         user8.save();
         SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
-        editor.putBoolean("isLoaded",true);
+        editor.putBoolean("squareDataLoaded",true);
         editor.apply();
     }
 

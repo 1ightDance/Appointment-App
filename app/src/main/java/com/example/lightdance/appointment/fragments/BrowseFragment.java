@@ -82,9 +82,16 @@ public class BrowseFragment extends Fragment {
             @Override
             public void onClick(int position) {
 
+                InviterInfoFragment inviterInfoFragment = new InviterInfoFragment();
+                inviterInfoFragment.show(getFragmentManager(),"InviterInfoFragment");
 
                 Toast.makeText(getActivity(),"会弹出发布人极简要信息",Toast.LENGTH_SHORT).show();
-                
+                BrowseMsgBean clickedMsg = DataSupport.find(BrowseMsgBean.class,position+1);
+                String inviter = clickedMsg.getInviter();
+                String introduction = "这里还没建数据库啊";
+                int inviterAvatar = clickedMsg.getInviterIconId();
+                MainActivity activity = (MainActivity) getActivity();
+                activity.getPublisherMsg(inviterAvatar,inviter,introduction);
             }
         });
 
