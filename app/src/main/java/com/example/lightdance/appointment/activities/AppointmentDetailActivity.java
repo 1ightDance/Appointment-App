@@ -1,8 +1,11 @@
 package com.example.lightdance.appointment.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     TextView tvDetailedInfoDescription;
     @BindView(R.id.tv_detailed_info_connection)
     TextView tvDetailedInfoConnection;
+    @BindView(R.id.toolbar_appointmentdetail)
+    Toolbar mToolbar;
+
 
     private BrowseMsgBean clickedMsg;
 
@@ -37,6 +43,19 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_detail);
         ButterKnife.bind(this);
+
+        //toolbar
+        mToolbar.setTitle("活动详情");
+        mToolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        mToolbar.setNavigationIcon(R.mipmap.ic_back_white);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppointmentDetailActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
