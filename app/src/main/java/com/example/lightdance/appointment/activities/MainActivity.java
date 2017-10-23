@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     * */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mCurrentPosition == 5){
+        if (mCurrentPosition == 5||mCurrentPosition == 7){
             changeFragment(1);
             return true;
         }
@@ -336,4 +336,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         }
         return super.onKeyUp(keyCode, event);
     }
+
+    public void getClikedMsg(BrowseMsgBean browseMsgBean){
+        AppointmentDetailFragment fragment =(AppointmentDetailFragment)getFragment(7);
+        fragment.setClickedMsg(browseMsgBean);
+    }
+
 }

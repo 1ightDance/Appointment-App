@@ -71,8 +71,11 @@ public class BrowseFragment extends Fragment {
         adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                BrowseMsgBean clickedMsg = browseMsgBeen.get(position);
-                Toast.makeText(getActivity(),"会弹出约帖详情页",Toast.LENGTH_SHORT).show();
+                BrowseMsgBean clickedMsg = DataSupport.find(BrowseMsgBean.class,position+1);
+//                BrowseMsgBean clickedMsg = browseMsgBeen.get(position);
+                MainActivity activity = (MainActivity) getActivity();
+                activity.changeFragment(7);
+                activity.getClikedMsg(clickedMsg);
             }
         });
         adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
