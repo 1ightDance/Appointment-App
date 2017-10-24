@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +61,10 @@ public class BrowseFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         //绑定RecyclerView 并设置适配器
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getActivity());
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(
+//                getActivity());
+        StaggeredGridLayoutManager layoutManager = new
+                StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         BrowserMsgAdapter adapter = new BrowserMsgAdapter(browseMsgBeen);
         this.recyclerView.setAdapter(adapter);

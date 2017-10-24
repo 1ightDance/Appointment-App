@@ -55,9 +55,9 @@ public class MessageFragment extends Fragment {
     }
 
     private void initMessageData() {
-        MessageBean msg1 = new MessageBean(R.mipmap.ic_logo,"12:25","消息通知","尊敬的用户您好！您应约的#周六晚狼人杀#由于发起人个人原因已取消，对您造成的干扰非常抱歉！");
+        MessageBean msg1 = new MessageBean(R.mipmap.ic_mode_edit_white,"12:25","消息通知","尊敬的用户您好！您应约的#周六晚狼人杀#由于发起人个人原因已取消，对您造成的干扰非常抱歉！");
         messageBeanList.add(msg1);
-        MessageBean msg2 = new MessageBean(R.mipmap.ic_logo,"10:32","消息通知","您已成功应约#周六晚狼人杀#，请准时出席。如遇情况变更，我们将会第一时间通知到您。");
+        MessageBean msg2 = new MessageBean(R.mipmap.ic_mode_edit_white,"10:32","消息通知","您已成功应约#周六晚狼人杀#，请准时出席。如遇情况变更，我们将会第一时间通知到您。");
         messageBeanList.add(msg2);
     }
 

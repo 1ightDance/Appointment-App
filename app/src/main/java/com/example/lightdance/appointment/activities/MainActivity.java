@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mNewsFragment;
     Fragment mMessageFragment;
     Fragment mWarningFragment;
-    Fragment mAppointmentDetailFragment;
-    Fragment mInviterInfoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,42 +104,43 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     private void initUserMsg() {
         UserBean user1 = new UserBean();
         user1.setUserNickName("花落的速度");
-        user1.setUserDescription("第一个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user1.setUserDescription("一个人知道自己为什么而活，就可以忍受任何一种生活。");
         user1.setUserIconId(R.mipmap.headshot_1);
         user1.save();
         UserBean user2 = new UserBean();
         user2.setUserNickName("教皇");
-        user2.setUserDescription("第二个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user2.setUserDescription("人有时只需静静地看，悲伤也成享受。");
         user2.setUserIconId(R.mipmap.headshot_2);
         user2.save();
         UserBean user3 = new UserBean();
         user3.setUserNickName("caozh");
-        user3.setUserDescription("第三个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user3.setUserDescription("人性本凉薄，又何介，谁比谁更多。   \n" +
+                "心，若没有栖息的地方，到哪里都是流浪……");
         user3.setUserIconId(R.mipmap.headshot_3);
         user3.save();
         UserBean user4 = new UserBean();
         user4.setUserNickName("大毛");
-        user4.setUserDescription("第四个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user4.setUserDescription("诗人用云雾塑造形象，他也是废墟中捏弄残灰的王。");
         user4.setUserIconId(R.mipmap.headshot_4);
         user4.save();
         UserBean user5 = new UserBean();
         user5.setUserNickName("蛋白质");
-        user5.setUserDescription("第五个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user5.setUserDescription("年轻时，你做了一个决定，要把自己的生命献给爱情。 后来，你没死，年轻替你抵了命。");
         user5.setUserIconId(R.mipmap.headshot_5);
         user5.save();
         UserBean user6 = new UserBean();
         user6.setUserNickName("吉瑞斯的指环");
-        user6.setUserDescription("第六个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user6.setUserDescription("深情若是一桩悲剧 必定以死来句读");
         user6.setUserIconId(R.mipmap.headshot_6);
         user6.save();
         UserBean user7 = new UserBean();
         user7.setUserNickName("契鸽");
-        user7.setUserDescription("第七个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user7.setUserDescription("每一个不曾起舞的日子，都是对生命的辜负。");
         user7.setUserIconId(R.mipmap.headshot_7);
         user7.save();
         UserBean user8 = new UserBean();
         user8.setUserNickName("ZhengHQ");
-        user8.setUserDescription("第八个人的自我简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊简介啊");
+        user8.setUserDescription("我是你路上最后的一个过客，最后的一个春天，最后的一场雪，最后的一次求生的战争。——保尔·艾吕雅");
         user8.setUserIconId(R.mipmap.headshot_8);
         user8.save();
         SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
@@ -158,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user1.setInviterIconId(R.mipmap.headshot_1);
         user1.setInviter("花落的速度");
         user1.setPlace("双休日图书馆6楼");
+        user1.setStartTime("2017/10/14 14:00");
+        user1.setEndTime("2017/10/18 19:30");
+        user1.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user1.setPersonNumberHave("1");
         user1.setPersonNumberNeed("4");
         user1.save();
@@ -168,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user2.setInviterIconId(R.mipmap.headshot_2);
         user2.setInviter("教皇");
         user2.setPlace("五餐三楼");
+        user2.setStartTime("2017/10/14 14:00");
+        user2.setEndTime("2017/10/18 19:30");
+        user2.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user2.setPersonNumberHave("3");
         user2.setPersonNumberNeed("12");
         user2.save();
@@ -178,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user3.setInviterIconId(R.mipmap.headshot_3);
         user3.setInviter("caozh");
         user3.setPlace("杭电生活区东门集合一起出发");
+        user3.setStartTime("2017/10/14 14:00");
+        user3.setEndTime("2017/10/18 19:30");
+        user3.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user3.setPersonNumberHave("6");
         user3.setPersonNumberNeed("10");
         user3.save();
@@ -186,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user4.setTypeIconId(R.drawable.ic_travel);
         user4.setContent("有计划去云南旅游的或者想出去旅游但不知道去哪里的朋友嘛？运动会期间会有至少四天假期，可以出去玩一玩~跟我一起说走就走吧！费用自行承担，装备自行准备");
         user4.setInviterIconId(R.mipmap.headshot_4);
+        user4.setStartTime("2017/10/14 14:00");
+        user4.setEndTime("2017/10/18 19:30");
+        user4.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user4.setInviter("大毛");
         user4.setPlace("云南昆明");
         user4.setPersonNumberHave("1");
@@ -198,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user5.setInviterIconId(R.mipmap.headshot_5);
         user5.setInviter("蛋白质");
         user5.setPlace("杭电东操场");
+        user5.setStartTime("2017/10/14 14:00");
+        user5.setEndTime("2017/10/18 19:30");
+        user5.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user5.setPersonNumberHave("1");
         user5.setPersonNumberNeed("2");
         user5.save();
@@ -208,6 +222,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user6.setInviterIconId(R.mipmap.headshot_6);
         user6.setInviter("吉瑞斯的指环");
         user6.setPlace("1餐门口17：30集合一起过去");
+        user6.setStartTime("2017/10/14 14:00");
+        user6.setEndTime("2017/10/18 19:30");
+        user6.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user6.setPersonNumberHave("1");
         user6.setPersonNumberNeed("8");
         user6.save();
@@ -218,6 +235,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user7.setInviterIconId(R.mipmap.headshot_7);
         user7.setInviter("契鸽");
         user7.setPlace("宁波火车站");
+        user7.setStartTime("2017/10/14 14:00");
+        user7.setEndTime("2017/10/18 19:30");
+        user7.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user7.setPersonNumberHave("1");
         user7.setPersonNumberNeed("4");
         user7.save();
@@ -228,6 +248,9 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user8.setInviterIconId(R.mipmap.headshot_8);
         user8.setInviter("ZhengHQ");
         user8.setPlace("中影星城都尚影院");
+        user8.setStartTime("2017/10/14 14:00");
+        user8.setEndTime("2017/10/18 19:30");
+        user8.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user8.setPersonNumberHave("1");
         user8.setPersonNumberNeed("2");
         user8.save();

@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/black"
+                android:background="@color/colorPrimary"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/timePicker"
                 app:layout_constraintRight_toRightOf="@+id/timePicker"
