@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     //加载广场预览数据方法
     private void initAppointmentMsg() {
         BrowseMsgBean user1 = new BrowseMsgBean();
-        user1.setTitle("双休日图书馆6楼讨论室自习");
+        user1.setTitle("图书馆6楼自习");
         user1.setTypeIconId(R.drawable.ic_study);
         user1.setContent("emmmmmm...希望能找几个人一起自习 互相监督！互相进步！自己自习总是坚持不下来");
         user1.setInviterIconId(R.mipmap.headshot_1);
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user1.setPersonNumberNeed("4");
         user1.save();
         BrowseMsgBean user2 = new BrowseMsgBean();
-        user2.setTitle("周六晚上五餐三楼狼人杀");
+        user2.setTitle("这周周六晚上五餐三楼狼人杀！！！");
         user2.setTypeIconId(R.drawable.ic_brpg);
         user2.setContent("狼人杀杀起来啊！牌我自备！人均至少消费的那一杯算我头上，你们只管来！先到先得 12人局 顺便交波朋友");
         user2.setInviterIconId(R.mipmap.headshot_2);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
         user2.setPersonNumberNeed("12");
         user2.save();
         BrowseMsgBean user3 = new BrowseMsgBean();
-        user3.setTitle("20号晚上弗雷德密室逃脱");
+        user3.setTitle("弗雷德密室逃脱");
         user3.setTypeIconId(R.drawable.ic_game);
         user3.setContent("喜欢紧张刺激的密室逃脱 但是身边朋友都没兴趣 想来约一波兴趣相投的朋友一起去（门票费自理）");
         user3.setInviterIconId(R.mipmap.headshot_3);
