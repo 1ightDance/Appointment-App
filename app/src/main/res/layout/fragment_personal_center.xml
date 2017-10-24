@@ -114,11 +114,12 @@
                 android:id="@+id/img_infor_next"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="0dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_information"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_information"
-                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@mipmap/ic_next_black" />
 
             <ImageView
@@ -159,11 +160,11 @@
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_marginBottom="0dp"
+                android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_history"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_history"
-                app:srcCompat="@mipmap/ic_next_black"
-                android:layout_marginRight="8dp" />
+                app:srcCompat="@mipmap/ic_next_black" />
 
             <ImageView
                 android:id="@+id/divider3"
@@ -215,11 +216,11 @@
                 android:id="@+id/img_settings_next"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
+                android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_settings"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_settings"
-                app:srcCompat="@mipmap/ic_next_black"
-                android:layout_marginRight="8dp" />
+                app:srcCompat="@mipmap/ic_next_black" />
 
             <TextView
                 android:id="@+id/tv_help"
@@ -242,13 +243,13 @@
                 android:id="@+id/img_help_next"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
+                android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_help"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_help"
-                app:srcCompat="@mipmap/ic_next_black"
-                android:layout_marginRight="8dp" />
+                app:srcCompat="@mipmap/ic_next_black" />
 
             <ImageView
                 android:id="@+id/divider5"
