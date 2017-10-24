@@ -27,15 +27,15 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_appointmentdetail"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView2"
@@ -64,11 +64,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="0dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="16dp"
                 android:text="对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述对该活动的详细描述"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/textView2"
                 app:layout_constraintRight_toRightOf="@+id/tv_detailed_info_endtime"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -77,23 +77,25 @@
                 android:id="@+id/detailed_info_take_part_in"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="104dp"
+                android:background="@drawable/bg_btn"
+                android:elevation="4dp"
                 android:text="应约"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/circleImageView3"
                 app:layout_constraintRight_toRightOf="@+id/tv_detailed_info_connection"
-                app:layout_constraintTop_toBottomOf="@+id/circleImageView3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/detailed_info_participant" />
 
             <TextView
                 android:id="@+id/tv_detailed_info_starttime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="16dp"
                 android:text="2017.10.20 12:00"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
@@ -104,16 +106,16 @@
                 android:id="@+id/tv_detailed_info_connection"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="16dp"
                 android:text="这里放着联系方式这里放着联系方式这里放着联系方式这里放着联系方式这里放着联系方式这里放着联系方式"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="0dp"
                 app:layout_constraintLeft_toLeftOf="@+id/textView4"
+                android:layout_marginRight="0dp"
                 app:layout_constraintRight_toRightOf="@+id/tv_detailed_info_description"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -160,10 +162,8 @@
                 android:id="@+id/tv_detailed_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
                 android:text="标题标题标题标题"
                 android:textColor="@android:color/black"
@@ -177,6 +177,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="16dp"
                 android:text="联系方式："
                 android:textColor="@android:color/black"
@@ -194,8 +195,8 @@
                 android:src="@mipmap/headshot_5"
                 app:layout_constraintBottom_toBottomOf="@+id/circleImageView2"
                 app:layout_constraintLeft_toRightOf="@+id/circleImageView2"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintTop_toBottomOf="@+id/detailed_info_participant" />
+                app:layout_constraintTop_toBottomOf="@+id/detailed_info_participant"
+                app:layout_constraintVertical_bias="0.0" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleImageView2"
@@ -207,8 +208,8 @@
                 android:src="@mipmap/headshot_1"
                 app:layout_constraintBottom_toBottomOf="@+id/circleImageView3"
                 app:layout_constraintLeft_toRightOf="@+id/circleImageView3"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintTop_toBottomOf="@+id/detailed_info_participant" />
+                app:layout_constraintTop_toBottomOf="@+id/detailed_info_participant"
+                app:layout_constraintVertical_bias="0.0" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleImageView3"
