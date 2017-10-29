@@ -45,7 +45,8 @@
             android:name=".activities.LogoutActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.AppointmentDetailActivity" />
-        <activity android:name=".activities.UserInfoActivity"></activity>
+        <activity android:name=".activities.UserInfoActivity" />
+        <activity android:name=".activities.BrowserActivity"></activity>
     </application>
 
 </manifest>

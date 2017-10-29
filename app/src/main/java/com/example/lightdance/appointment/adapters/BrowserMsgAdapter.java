@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 
@@ -23,14 +25,15 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
     private OnItemClickListener msgOnclickListener = null;
     private OnInviterClickListener inviterOnClickListener = null;
+    Context mContext;
 
 
     //可以传监听事件的接口,一个对应整条item,另一个对应用户名
-    public static interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onClick(int position);
     }
 
-    public static interface OnInviterClickListener {
+    public interface OnInviterClickListener {
         void onClick(int position);
     }
 
@@ -49,7 +52,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
 
         TextView title;
-        //        TextView publishTime;
+//        TextView publishTime;
 //        TextView startTime;
 //        TextView endTime;
 //        TextView place;
@@ -80,8 +83,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         }
     }
 
-    public BrowserMsgAdapter(List<BrowseMsgBean> messageAppointmentList) {
+    public BrowserMsgAdapter(Context mContext,List<BrowseMsgBean> messageAppointmentList) {
         msgBeanList = messageAppointmentList;
+        this.mContext = mContext;
     }
 
 
@@ -123,6 +127,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     @Override
     public void onBindViewHolder(final BrowserMsgAdapter.ViewHolder holder, int position) {
         BrowseMsgBean msgAppointment = msgBeanList.get(position);
+        // TODO 更改图片加载方式 Glide
         holder.title.setText(msgAppointment.getTitle());
 //        holder.publishTime.setText(msgAppointment.getPublishTime());
 //        holder.startTime.setText(msgAppointment.getStartTime());
@@ -132,8 +137,10 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         holder.inviter.setText(msgAppointment.getInviter());
         holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
         holder.personNumberHave.setText(msgAppointment.getPersonNumberHave());
-        holder.type.setImageResource(msgAppointment.getTypeIconId());
-        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
+//        holder.type.setImageResource(msgAppointment.getTypeIconId());
+        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
+//        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
+        Glide.with(mContext).load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

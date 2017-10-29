@@ -55,6 +55,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
         NewsBean newsBean = mNewsMsg.get(position);
+        // TODO 更改图片加载方式 Glide
         holder.newsImg.setImageResource(newsBean.getImgId());
         holder.newsTitle.setText(newsBean.getNewsTitle());
         holder.newsContent.setText(newsBean.getNewsContent());

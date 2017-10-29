@@ -15,12 +15,12 @@ import android.widget.Toast;
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
-import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 import com.example.lightdance.appointment.fragments.TimePickerFragment;
+import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
 public class MainActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     Fragment mNewsFragment;
     Fragment mMessageFragment;
     Fragment mWarningFragment;
+    Fragment mTypeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,10 +313,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     public Fragment getFragment(int position) {
         switch (position) {
             case 1:
-                if (mBrowesrFragment == null) {
-                    mBrowesrFragment = BrowseFragment.newInstance();
+                if (mTypeFragment == null) {
+                    mTypeFragment = TypeFragment.newInstance();
                 }
-                return mBrowesrFragment;
+                return mTypeFragment;
             case 2:
                 if (mNewsFragment == null) {
                     mNewsFragment = NewsFragment.newInstance();

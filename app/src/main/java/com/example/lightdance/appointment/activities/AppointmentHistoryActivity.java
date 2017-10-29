@@ -118,7 +118,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 //TODO 暂时这样代替，会改数据库取数据的逻辑
                 msgHistoryList = DataSupport.where("inviter == ?",loginNickName).find(BrowseMsgBean.class);
-                BrowserMsgAdapter adapter = new BrowserMsgAdapter(msgHistoryList);
+                BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),msgHistoryList);
                 this.historyRecyclerView.setAdapter(adapter);
                 //如果为空，显示这样的字段
                 if (msgHistoryList.isEmpty()){

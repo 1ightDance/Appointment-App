@@ -35,6 +35,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MessageBean messageBean = mMessage.get(position);
+        // TODO 更改图片加载方式 Glide
         holder.senderAvatar.setImageResource(messageBean.getSenderAvatarImgId());
         holder.senderName.setText(messageBean.getSenderName());
         holder.sendTime.setText(messageBean.getSendTime());

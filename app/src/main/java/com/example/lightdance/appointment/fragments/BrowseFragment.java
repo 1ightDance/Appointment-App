@@ -61,12 +61,10 @@ public class BrowseFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         //绑定RecyclerView 并设置适配器
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(
-//                getActivity());
         StaggeredGridLayoutManager layoutManager = new
                 StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        BrowserMsgAdapter adapter = new BrowserMsgAdapter(browseMsgBeen);
+        BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),browseMsgBeen);
         this.recyclerView.setAdapter(adapter);
 
         recyclerView.setOnScrollListener(new HideScrollListener());
