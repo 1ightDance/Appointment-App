@@ -332,11 +332,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
                     mPersonalCenterFragment = PersonalCenterFragment.newInstance();
                 }
                 return mPersonalCenterFragment;
-            case 5:
-                if (mNewAppointmentFragment == null){
-                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
-                }
-                return mNewAppointmentFragment;
+//            case 5:
+//                if (mNewAppointmentFragment == null){
+//                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
+//                }
+//                return mNewAppointmentFragment;
             case 6:
                 if (mWarningFragment == null){
                     mWarningFragment = WarningFragment.newInstance();
@@ -393,11 +393,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (mCurrentPosition == 5){
             changeFragment(1);
-            return true;
-        }
-        if (mCurrentPosition == 7){
-            changeFragment(1);
-            getFragment(7).onDestroy();
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {

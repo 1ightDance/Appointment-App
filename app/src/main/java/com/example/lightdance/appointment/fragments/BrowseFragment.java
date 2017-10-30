@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
-import com.example.lightdance.appointment.activities.MainActivity;
+import com.example.lightdance.appointment.activities.BrowserActivity;
 import com.example.lightdance.appointment.activities.UserInfoActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
@@ -92,8 +92,8 @@ public class BrowseFragment extends Fragment {
 
     @OnClick(R.id.new_appointment)
     public void onViewClicked() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.changeFragment(5);
+        BrowserActivity activity = (BrowserActivity) getActivity();
+        activity.changeFragment(2);
     }
 
     //动态隐藏FloatingActionBar判断方法
