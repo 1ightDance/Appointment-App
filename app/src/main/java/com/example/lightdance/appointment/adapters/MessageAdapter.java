@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.lightdance.appointment.Model.MessageBean;
 import com.example.lightdance.appointment.R;
 
@@ -19,9 +21,11 @@ import java.util.List;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     private List<MessageBean> mMessage;
+    Context mContext;
 
-    public MessageAdapter(List<MessageBean> mMessage) {
+    public MessageAdapter(Context mContext,List<MessageBean> mMessage) {
         this.mMessage = mMessage;
+        this.mContext = mContext;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MessageBean messageBean = mMessage.get(position);
-        // TODO 更改图片加载方式 Glide
+        Glide.with(mContext).load(messageBean.getSenderAvatarImgId()).into(holder.senderAvatar);
         holder.senderAvatar.setImageResource(messageBean.getSenderAvatarImgId());
         holder.senderName.setText(messageBean.getSenderName());
         holder.sendTime.setText(messageBean.getSendTime());

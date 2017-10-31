@@ -46,7 +46,7 @@ public class MessageFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_message);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
-        MessageAdapter adapter = new MessageAdapter(messageBeanList);
+        MessageAdapter adapter = new MessageAdapter(getActivity(),messageBeanList);
         recyclerView.setAdapter(adapter);
 
         initMessageData();
