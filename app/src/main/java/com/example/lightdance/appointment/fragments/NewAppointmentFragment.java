@@ -276,7 +276,6 @@ public class NewAppointmentFragment extends Fragment {
         if (timeChange == 2) {
             setEndDate(yearSelect, monthSelect, daySelect);
         }
-        ;
     }
 
     //判断更改哪个TextView显示的时间文本
@@ -293,39 +292,31 @@ public class NewAppointmentFragment extends Fragment {
     //更改方法
     public void setStartDate(int year, int month, int day) {
         if (month < 10 && day >= 10) {
-            tvActivityStartDate
-                    .setText(year + "年0" + month + "月" + day + "日");
+            tvActivityStartDate.setText(year + "年0" + month + "月" + day + "日");
         }
         if (day < 10 && month >= 10) {
-            tvActivityStartDate
-                    .setText(year + "年" + month + "月0" + day + "日");
+            tvActivityStartDate.setText(year + "年" + month + "月0" + day + "日");
         }
         if (day < 10 && month < 10) {
-            tvActivityStartDate
-                    .setText(year + "年0" + month + "月0" + day + "日");
+            tvActivityStartDate.setText(year + "年0" + month + "月0" + day + "日");
         }
         if (day >= 10 && month >= 10) {
-            tvActivityStartDate
-                    .setText(year + "年" + month + "月" + day + "日");
+            tvActivityStartDate.setText(year + "年" + month + "月" + day + "日");
         }
     }
 
     public void setEndDate(int year, int month, int day) {
         if (month < 10 && day >= 10) {
-            tvActivityEndDate
-                    .setText(year + "年0" + month + "月" + day + "日");
+            tvActivityEndDate.setText(year + "年0" + month + "月" + day + "日");
         }
         if (day < 10 && month >= 10) {
-            tvActivityEndDate
-                    .setText(year + "年" + month + "月0" + day + "日");
+            tvActivityEndDate.setText(year + "年" + month + "月0" + day + "日");
         }
         if (day < 10 && month < 10) {
-            tvActivityEndDate
-                    .setText(year + "年0" + month + "月0" + day + "日");
+            tvActivityEndDate.setText(year + "年0" + month + "月0" + day + "日");
         }
         if (day >= 10 && month >= 10) {
-            tvActivityEndDate
-                    .setText(year + "年" + month + "月" + day + "日");
+            tvActivityEndDate.setText(year + "年" + month + "月" + day + "日");
         }
     }
 

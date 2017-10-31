@@ -16,20 +16,13 @@ import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.MessageFragment;
-import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
 import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
-import com.example.lightdance.appointment.fragments.TimePickerFragment;
 import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
-public class MainActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
+public class MainActivity extends AppCompatActivity{
 
-    private int yearSelect;
-    private int monthSelect;
-    private int daySelect;
-    private int hourSelect;
-    private int minuteSelect;
     private int mCurrentPosition = -1;
     private long firstTime = 0;
 
@@ -345,35 +338,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerFragmen
             default:
                 return null;
         }
-    }
-
-    //用以更改日期的方法
-    public void changeData(){
-        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(5);
-        newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
-    }
-
-    //用以更改时间的方法
-    private void changeTime() {
-        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(5);
-        newAppointmentFragment.setTime(hourSelect,minuteSelect);
-    }
-
-    //重写TimeListener接口的saveDate方法
-    @Override
-    public void saveDate(int year, int month, int day) {
-        yearSelect  = year;
-        monthSelect = month;
-        daySelect   = day;
-        changeData();
-    }
-
-    //重写TimeListener接口的saveTime方法
-    @Override
-    public void saveTime(int hour, int minute) {
-        hourSelect   = hour;
-        minuteSelect = minute;
-        changeTime();
     }
 
     @Override

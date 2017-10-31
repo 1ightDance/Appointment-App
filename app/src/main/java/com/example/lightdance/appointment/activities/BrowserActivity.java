@@ -9,9 +9,15 @@ import android.view.KeyEvent;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
+import com.example.lightdance.appointment.fragments.TimePickerFragment;
 
-public class BrowserActivity extends AppCompatActivity {
+public class BrowserActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
 
+    private int yearSelect;
+    private int monthSelect;
+    private int daySelect;
+    private int hourSelect;
+    private int minuteSelect;
     private int mCurrentPosition = -1;
     Fragment mNewAppointmentFragment;
     Fragment mBrowseFragment;
@@ -81,5 +87,34 @@ public class BrowserActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    //重写TimeListener接口的saveDate方法
+    @Override
+    public void saveDate(int year, int month, int day) {
+        yearSelect  = year;
+        monthSelect = month;
+        daySelect   = day;
+        changeData();
+    }
+
+    //重写TimeListener接口的saveTime方法
+    @Override
+    public void saveTime(int hour, int minute) {
+        hourSelect   = hour;
+        minuteSelect = minute;
+        changeTime();
+    }
+
+    //用以更改日期的方法
+    public void changeData(){
+        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
+        newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
+    }
+
+    //用以更改时间的方法
+    private void changeTime() {
+        NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
+        newAppointmentFragment.setTime(hourSelect,minuteSelect);
     }
 }
