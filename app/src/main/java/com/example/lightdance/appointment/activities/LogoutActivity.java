@@ -32,6 +32,7 @@ public class LogoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LogoutActivity.this,MainActivity.class));
+                finish();
             }
         });
 
@@ -58,6 +59,7 @@ public class LogoutActivity extends AppCompatActivity {
         super.onBackPressed();
 
         startActivity(new Intent(LogoutActivity.this,MainActivity.class));
+        finish();
 
     }
 }
