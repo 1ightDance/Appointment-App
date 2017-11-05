@@ -21,6 +21,8 @@ import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
+import cn.bmob.v3.Bmob;
+
 public class MainActivity extends AppCompatActivity{
 
     private int mCurrentPosition = -1;
@@ -30,8 +32,6 @@ public class MainActivity extends AppCompatActivity{
     private boolean userMsgAdded = false;
 
     private BottomNavigationView bottomNavigationView;
-    Fragment mNewAppointmentFragment;
-    Fragment mBrowesrFragment;
     Fragment mPersonalCenterFragment;
     Fragment mNewsFragment;
     Fragment mMessageFragment;
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //初始化Bmob SDK
+        Bmob.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
 
         //加载预览数据
         previewDataLoading();
