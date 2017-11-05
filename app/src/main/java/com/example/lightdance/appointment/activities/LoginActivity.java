@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -42,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_login)
     Toolbar mToolbar;
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,11 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btn_sign_in:
                 String studentNum = editextAccount.getText().toString();
                 String passWord   = edittxtPassword.getText().toString();
+                progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog.setTitle("请稍等");
+                progressDialog.setMessage("正在登录...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 isMatch(studentNum,passWord);
                 break;
             case R.id.tv_forgetpassword:
@@ -90,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             public void done(List<UserBean> list, BmobException e) {
                 if (list.isEmpty()){
                     Toast.makeText(LoginActivity.this,"该账号不存在",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     return;
                 }
                 String passWord = list.get(0).getUserPassword();
@@ -116,11 +125,13 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("userCollege",userCollege);
                     editor.putString("userStudentNumber",editStudentNum);
                     editor.apply();
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
                     Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent1);
                     finish();
                 }else{
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
                 }
             }
