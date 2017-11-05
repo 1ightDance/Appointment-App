@@ -11,12 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 //该Activity用于匹配数据库用户名与密码进行登录，也可由此进入注册页面注册新账号，注册成功后会返回本Activity并自动填表
 
@@ -66,23 +73,58 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.btn_sign_in:
-                SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
-                editor.putBoolean("isLogined",true);
-                editor.putString("nickName","教皇");
-                editor.putInt("userAvatar",R.mipmap.headshot_2);
-                editor.putString("userIntroduction","狼人杀路人王，你怕了吗？");
-                editor.putString("userName","李黄旗");
-                editor.putString("userSex","男");
-                editor.putString("userCollege","通信工程学院");
-                editor.putString("userStudentNumber","15083111");
-                editor.apply();
-                Intent intent1 = new Intent(this,MainActivity.class);
-                startActivity(intent1);
-                finish();
+                String studentNum = editextAccount.getText().toString();
+                String passWord   = edittxtPassword.getText().toString();
+                isMatch(studentNum,passWord);
                 break;
             case R.id.tv_forgetpassword:
                 break;
         }
+    }
+
+    public void isMatch(final String editStudentNum, final String editPassWord){
+        BmobQuery<UserBean> query = new BmobQuery<UserBean>();
+        query.addWhereEqualTo("userStudentNum",editStudentNum);
+        query.findObjects(new FindListener<UserBean>() {
+            @Override
+            public void done(List<UserBean> list, BmobException e) {
+                String passWord = list.get(0).getUserPassword();
+                String nickName = list.get(0).getUserNickName();
+                int userAvatar = list.get(0).getUserIconId();
+                String userIntroduction = list.get(0).getUserDescription();
+                String userName = list.get(0).getUserName();
+                int gender1 = list.get(0).getUserSex();
+                String gender = null;
+                if (gender1 == 1){
+                    gender = "男";
+                }if (gender1 == 0){
+                    gender = "女";
+                }
+                String userCollege = list.get(0).getUserCollege();
+                if (list.isEmpty()){
+                    Toast.makeText(LoginActivity.this,"该账号不存在",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (passWord .equals(editPassWord)){
+                    SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
+                    editor.putBoolean("isLogined",true);
+                    editor.putString("nickName",nickName);
+                    editor.putInt("userAvatar",userAvatar);
+                    editor.putString("userIntroduction",userIntroduction);
+                    editor.putString("userName",userName);
+                    editor.putString("userSex",gender);
+                    editor.putString("userCollege",userCollege);
+                    editor.putString("userStudentNumber",editStudentNum);
+                    editor.apply();
+                    Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
+                    Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent1);
+                    finish();
+                }else{
+                    Toast.makeText(LoginActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //重写Back键方法 从登录页返回MainActivity

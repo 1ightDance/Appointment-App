@@ -1,6 +1,6 @@
 package com.example.lightdance.appointment.Model;
 
-import org.litepal.crud.DataSupport;
+import cn.bmob.v3.BmobObject;
 
 /**
  * Created by LightDance on 2017/10/11.
@@ -8,7 +8,7 @@ import org.litepal.crud.DataSupport;
  * 之后会通过调用学校数据库实现，目前先用注册方式进行存储
  */
 
-public class UserBean extends DataSupport {
+public class UserBean extends BmobObject {
 
     private static final int MAN=1;
     private static final int WOMAN=0;

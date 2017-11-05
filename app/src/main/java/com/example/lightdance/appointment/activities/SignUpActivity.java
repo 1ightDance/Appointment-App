@@ -19,6 +19,9 @@ import com.example.lightdance.appointment.R;
 
 import org.litepal.tablemanager.Connector;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+
 public class SignUpActivity extends AppCompatActivity {
     private static final int MAN=1;
     private static final int WOMAN=0;
@@ -30,7 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText userPhoneNumber;
 
     //用于获取性别并保存在int型里面
-    private int userSex;
+    private int userSex = 1;
     private RadioGroup userSexRadioGroup;
     private RadioButton userSexMan;
     private RadioButton userSexWoman;
@@ -74,10 +77,22 @@ public class SignUpActivity extends AppCompatActivity {
                     newUser.setUserStudentNum(userStudentNumber.getText().toString());
                     newUser.setUserPhoneNumber(userPhoneNumber.getText().toString());
                     newUser.setUserSex(userSex);
-                    newUser.setUserNickName("user"+userStudentNumber);
-                    newUser.setUserDescription("nothing to show");
-                    newUser.setUserIconId(R.drawable.me);
-                    newUser.save();
+                    newUser.setUserNickName(userName.getText().toString());
+                    newUser.setUserDescription("这个人很懒，什么都没说");
+                    newUser.setUserCollege("未填");
+                    newUser.setUserIconId(R.mipmap.ic_user);
+                    newUser.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if(e==null){
+                                Toast.makeText(SignUpActivity.this,"服务器端数据存储成功 ObjectId = " + s
+                                        ,Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(SignUpActivity.this,"服务器端数据存储失败：" + e.getMessage()
+                                        ,Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                     Toast.makeText(SignUpActivity.this,"注册成功！",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
                     intent.putExtra("userStudentNumber",newUser.getUserStudentNum());
