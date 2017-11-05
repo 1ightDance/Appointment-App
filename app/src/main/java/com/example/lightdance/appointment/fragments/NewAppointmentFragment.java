@@ -1,5 +1,7 @@
 package com.example.lightdance.appointment.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.BrowserActivity;
 
@@ -24,6 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
@@ -166,7 +170,6 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.btn_newappointment_done:
                 if (!isDataIllegal()) {
                     saveData();
-                    Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                     BrowserActivity activity = (BrowserActivity) getActivity();
                     activity.changeFragment(1);
                     clearData();
@@ -251,21 +254,33 @@ public class NewAppointmentFragment extends Fragment {
         //创建数据库
         Connector.getDatabase();
         //点击完成后 获取数据储存到数据库
-        BrowseMsgBean browseMsgBean = new BrowseMsgBean();
-        browseMsgBean.setTitle(editTextActivityTitle.getText().toString());
-        browseMsgBean.setStartTime(tvActivityStartDate.getText().toString()
+        BrowserMsgBean browserMsgBean = new BrowserMsgBean();
+        browserMsgBean.setTitle(editTextActivityTitle.getText().toString());
+        browserMsgBean.setStartTime(tvActivityStartDate.getText().toString()
                 + "  " + tvActivityStartTime.getText().toString());
-        browseMsgBean.setEndTime(tvActivityEndDate.getText().toString()
+        browserMsgBean.setEndTime(tvActivityEndDate.getText().toString()
                 + "  " + tvActivityEndTime.getText().toString());
-        browseMsgBean.setPlace(editTextActivityPlace.getText().toString());
-        browseMsgBean.setContent(editTextActivityContent.getText().toString());
-        browseMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
-        browseMsgBean.setTypeIconId(typeData);
-        browseMsgBean.setPersonNumberNeed(personNumb);
-        browseMsgBean.setPersonNumberHave("1");
-        browseMsgBean.setInviterIconId(R.mipmap.headshot_2);
-        browseMsgBean.setInviter("教皇");
-        browseMsgBean.save();
+        browserMsgBean.setPlace(editTextActivityPlace.getText().toString());
+        browserMsgBean.setContent(editTextActivityContent.getText().toString());
+        browserMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
+        browserMsgBean.setTypeIconId(typeData);
+        browserMsgBean.setPersonNumberNeed(personNumb);
+        browserMsgBean.setPersonNumberHave("1");
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        int  inviterIconId = preferences.getInt("userAvatar",R.mipmap.ic_user);
+        String inviter = preferences.getString("nickName","BUG");
+        browserMsgBean.setInviterIconId(inviterIconId);
+        browserMsgBean.setInviter(inviter);
+        browserMsgBean.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //判断更改哪个TextView显示的日期文本
