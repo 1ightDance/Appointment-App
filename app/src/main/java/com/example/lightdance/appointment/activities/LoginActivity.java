@@ -88,6 +88,10 @@ public class LoginActivity extends AppCompatActivity {
         query.findObjects(new FindListener<UserBean>() {
             @Override
             public void done(List<UserBean> list, BmobException e) {
+                if (list.isEmpty()){
+                    Toast.makeText(LoginActivity.this,"该账号不存在",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String passWord = list.get(0).getUserPassword();
                 String nickName = list.get(0).getUserNickName();
                 int userAvatar = list.get(0).getUserIconId();
@@ -101,10 +105,6 @@ public class LoginActivity extends AppCompatActivity {
                     gender = "女";
                 }
                 String userCollege = list.get(0).getUserCollege();
-                if (list.isEmpty()){
-                    Toast.makeText(LoginActivity.this,"该账号不存在",Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (passWord .equals(editPassWord)){
                     SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
                     editor.putBoolean("isLogined",true);
