@@ -80,7 +80,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="0dp"
-        android:hint="学号/手机号/邮箱"
+        android:hint="请输入学号"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/tv_account"
         app:layout_constraintHorizontal_bias="0.0"
