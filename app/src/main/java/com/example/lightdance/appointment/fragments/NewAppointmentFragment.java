@@ -225,7 +225,7 @@ public class NewAppointmentFragment extends Fragment {
                 break;
             case R.id.radioButton_others:
                 typeData = R.drawable.ic_others;
-                typeCode = 666;
+                typeCode = 9;
                 break;
             case R.id.radioButton_singing:
                 typeData = R.drawable.ic_singing;

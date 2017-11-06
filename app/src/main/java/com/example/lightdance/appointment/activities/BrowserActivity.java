@@ -1,10 +1,12 @@
 package com.example.lightdance.appointment.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.BrowseFragment;
@@ -19,6 +21,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     private int hourSelect;
     private int minuteSelect;
     private int mCurrentPosition = -1;
+    private int typeCode = 0;
     Fragment mNewAppointmentFragment;
     Fragment mBrowseFragment;
 
@@ -31,8 +34,15 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
 //        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.add(R.id.container_browser, browseFragment);
 //        transaction.commit();
-        changeFragment(1);
-
+        Intent intent = getIntent();
+        typeCode = intent.getIntExtra("typeCode",0);
+        if (typeCode == 0){
+            Toast.makeText(this,"选择的活动类型的数据传输出现错误",Toast.LENGTH_LONG).show();
+        }else {
+            BrowseFragment browseFragment = (BrowseFragment) getFragment(1);
+            browseFragment.sendSelectType(typeCode);
+            changeFragment(1);
+        }
     }
 
     public void changeFragment(int position){

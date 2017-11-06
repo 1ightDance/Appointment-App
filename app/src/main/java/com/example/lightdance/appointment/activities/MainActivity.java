@@ -12,7 +12,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.MessageFragment;
@@ -22,6 +22,8 @@ import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
         Bmob.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
 
         //加载预览数据
-        previewDataLoading();
+//        previewDataLoading();
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
 
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity{
 
     //加载广场预览数据方法
     private void initAppointmentMsg() {
-        BrowseMsgBean user1 = new BrowseMsgBean();
+        BrowserMsgBean user1 = new BrowserMsgBean();
         user1.setTitle("图书馆6楼自习");
         user1.setTypeIconId(R.drawable.ic_study);
         user1.setContent("emmmmmm...希望能找几个人一起自习 互相监督！互相进步！自己自习总是坚持不下来");
@@ -157,10 +159,16 @@ public class MainActivity extends AppCompatActivity{
         user1.setStartTime("2017/10/14 14:00");
         user1.setEndTime("2017/10/18 19:30");
         user1.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user1.setPersonNumberHave("1");
+        user1.setPersonNumberHave(1);
         user1.setPersonNumberNeed("4");
-        user1.save();
-        BrowseMsgBean user2 = new BrowseMsgBean();
+        user1.setTypeCode(1);
+        user1.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user2 = new BrowserMsgBean();
         user2.setTitle("这周周六晚上五餐三楼狼人杀！！！");
         user2.setTypeIconId(R.drawable.ic_brpg);
         user2.setContent("狼人杀杀起来啊！牌我自备！人均至少消费的那一杯算我头上，你们只管来！先到先得 12人局 顺便交波朋友");
@@ -170,10 +178,16 @@ public class MainActivity extends AppCompatActivity{
         user2.setStartTime("2017/10/14 14:00");
         user2.setEndTime("2017/10/18 19:30");
         user2.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user2.setPersonNumberHave("3");
+        user2.setPersonNumberHave(3);
         user2.setPersonNumberNeed("12");
-        user2.save();
-        BrowseMsgBean user3 = new BrowseMsgBean();
+        user2.setTypeCode(3);
+        user2.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user3 = new BrowserMsgBean();
         user3.setTitle("弗雷德密室逃脱");
         user3.setTypeIconId(R.drawable.ic_game);
         user3.setContent("喜欢紧张刺激的密室逃脱 但是身边朋友都没兴趣 想来约一波兴趣相投的朋友一起去（门票费自理）");
@@ -183,10 +197,15 @@ public class MainActivity extends AppCompatActivity{
         user3.setStartTime("2017/10/14 14:00");
         user3.setEndTime("2017/10/18 19:30");
         user3.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user3.setPersonNumberHave("6");
+        user3.setPersonNumberHave(6);
         user3.setPersonNumberNeed("10");
-        user3.save();
-        BrowseMsgBean user4 = new BrowseMsgBean();
+        user3.setTypeCode(4);
+        user3.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }});
+        BrowserMsgBean user4 = new BrowserMsgBean();
         user4.setTitle("云南自由行");
         user4.setTypeIconId(R.drawable.ic_travel);
         user4.setContent("有计划去云南旅游的或者想出去旅游但不知道去哪里的朋友嘛？运动会期间会有至少四天假期，可以出去玩一玩~跟我一起说走就走吧！费用自行承担，装备自行准备");
@@ -196,10 +215,16 @@ public class MainActivity extends AppCompatActivity{
         user4.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
         user4.setInviter("大毛");
         user4.setPlace("云南昆明");
-        user4.setPersonNumberHave("1");
+        user4.setPersonNumberHave(1);
         user4.setPersonNumberNeed("8");
-        user4.save();
-        BrowseMsgBean user5 = new BrowseMsgBean();
+        user4.setTypeCode(8);
+        user4.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user5 = new BrowserMsgBean();
         user5.setTitle("世纪难题——减肥");
         user5.setTypeIconId(R.drawable.ic_sports);
         user5.setContent("求一起减肥的胖友跑步，每周五六日晚跑一个小时，恶劣天气除外 有兴趣的戳进来加我Q。。。");
@@ -209,10 +234,16 @@ public class MainActivity extends AppCompatActivity{
         user5.setStartTime("2017/10/14 14:00");
         user5.setEndTime("2017/10/18 19:30");
         user5.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user5.setPersonNumberHave("1");
+        user5.setPersonNumberHave(1);
         user5.setPersonNumberNeed("2");
-        user5.save();
-        BrowseMsgBean user6 = new BrowseMsgBean();
+        user5.setTypeCode(6);
+        user5.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user6 = new BrowserMsgBean();
         user6.setTitle("约饭");
         user6.setTypeIconId(R.drawable.ic_dining);
         user6.setContent("本人有一张高沙胖哥俩满500可享5折的优惠券，自己吃不到500，独乐乐不如众乐乐顺便交朋友，费用AA");
@@ -222,10 +253,16 @@ public class MainActivity extends AppCompatActivity{
         user6.setStartTime("2017/10/14 14:00");
         user6.setEndTime("2017/10/18 19:30");
         user6.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user6.setPersonNumberHave("1");
+        user6.setPersonNumberHave(1);
         user6.setPersonNumberNeed("8");
-        user6.save();
-        BrowseMsgBean user7 = new BrowseMsgBean();
+        user6.setTypeCode(7);
+        user6.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user7 = new BrowserMsgBean();
         user7.setTitle("寻参加完宁波造音节返校同路小伙伴");
         user7.setTypeIconId(R.drawable.ic_others);
         user7.setContent("找造音节结束接着赶回学校的嘻哈爱好者同路，到杭州后也比较晚了，可以拼车回学校，费用AA");
@@ -235,10 +272,16 @@ public class MainActivity extends AppCompatActivity{
         user7.setStartTime("2017/10/14 14:00");
         user7.setEndTime("2017/10/18 19:30");
         user7.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user7.setPersonNumberHave("1");
+        user7.setPersonNumberHave(1);
         user7.setPersonNumberNeed("4");
-        user7.save();
-        BrowseMsgBean user8 = new BrowseMsgBean();
+        user7.setTypeCode(9);
+        user7.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
+        BrowserMsgBean user8 = new BrowserMsgBean();
         user8.setTitle("约22号电影《羞羞的铁拳》");
         user8.setTypeIconId(R.drawable.ic_movies);
         user8.setContent("本来和室友一起买了22号《羞羞的铁拳》，但是室友临时有事，转让电影票 价格可小刀");
@@ -248,9 +291,15 @@ public class MainActivity extends AppCompatActivity{
         user8.setStartTime("2017/10/14 14:00");
         user8.setEndTime("2017/10/18 19:30");
         user8.setContactWay("可以加我的qq1173038073 验证信息填“约吧”");
-        user8.setPersonNumberHave("1");
+        user8.setPersonNumberHave(1);
         user8.setPersonNumberNeed("2");
-        user8.save();
+        user8.setTypeCode(2);
+        user8.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+            }
+        });
         SharedPreferences.Editor editor = getSharedPreferences("dataLoaded",MODE_PRIVATE).edit();
         editor.putBoolean("squareDataLoaded",true);
         editor.apply();

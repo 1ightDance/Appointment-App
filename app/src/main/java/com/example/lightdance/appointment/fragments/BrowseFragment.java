@@ -2,6 +2,7 @@ package com.example.lightdance.appointment.fragments;
 
 
 import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -12,8 +13,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.BrowserActivity;
@@ -28,6 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +47,9 @@ public class BrowseFragment extends Fragment {
     RecyclerView recyclerView;
 
     private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
+    private List<BrowserMsgBean> browserMsgBeen;
+    private int typeCode = 0;
+    private ProgressDialog progressDialog;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -60,34 +69,56 @@ public class BrowseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        //绑定RecyclerView 并设置适配器
-        StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),browseMsgBeen);
-        this.recyclerView.setAdapter(adapter);
-
-        recyclerView.setOnScrollListener(new HideScrollListener());
-
-        //在这里实现Adapter的点击接口具体方法
-        adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
-                intent.putExtra("position",position+1);
-                startActivity(intent);
-            }
-        });
-        adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getActivity(), UserInfoActivity.class);
-                intent.putExtra("position",position+1);
-                startActivity(intent);
-            }
-        });
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("请稍等");
+        progressDialog.setMessage("加载中...");
+        progressDialog.show();
+        initBrowserData();
 
         return view;
+    }
+
+    private void initBrowserData() {
+        BmobQuery<BrowserMsgBean> query = new BmobQuery<BrowserMsgBean>();
+        query.addWhereEqualTo("typeCode",typeCode);
+        query.setLimit(20);
+        query.findObjects(new FindListener<BrowserMsgBean>() {
+            @Override
+            public void done(List<BrowserMsgBean> list, BmobException e) {
+                if (e == null){
+                    browserMsgBeen = list;
+                    //绑定RecyclerView 并设置适配器
+                    StaggeredGridLayoutManager layoutManager = new
+                            StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+                    recyclerView.setLayoutManager(layoutManager);
+                    BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),browserMsgBeen);
+                    recyclerView.setAdapter(adapter);
+                    progressDialog.dismiss();
+
+                    recyclerView.setOnScrollListener(new HideScrollListener());
+
+                    //在这里实现Adapter的点击接口具体方法
+                    adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
+                        @Override
+                        public void onClick(int position) {
+                            Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                            intent.putExtra("position",position+1);
+                            startActivity(intent);
+                        }
+                    });
+                    adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
+                        @Override
+                        public void onClick(int position) {
+                            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                            intent.putExtra("position",position+1);
+                            startActivity(intent);
+                        }
+                    });
+                }else{
+                    Toast.makeText(getActivity(),"查询失败 "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @OnClick(R.id.new_appointment)
@@ -151,6 +182,10 @@ public class BrowseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void sendSelectType(int typeCode){
+        this.typeCode = typeCode;
     }
 
 }

@@ -35,6 +35,7 @@ public class TypeFragment extends Fragment {
     Unbinder unbinder;
 
     private List<TypeBean> typeList = new ArrayList<>();
+    private int typeCode = 0;
 
     public TypeFragment() {
         // Required empty public constructor
@@ -65,7 +66,9 @@ public class TypeFragment extends Fragment {
         adapter.setTypeItemOnclickListener(new TypeAdapter.OnTypeItemClickListener() {
             @Override
             public void onClick(int position) {
+                typeCode = position+1;
                 Intent intent = new Intent(getActivity(), BrowserActivity.class);
+                intent.putExtra("typeCode",typeCode);
                 startActivity(intent);
             }
         });

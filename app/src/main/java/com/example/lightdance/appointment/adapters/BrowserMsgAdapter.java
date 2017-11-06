@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.ViewHolder> {
 
     //存放每一条信息的数组
-    private List<BrowseMsgBean> msgBeanList;
+    private List<BrowserMsgBean> msgBeanList;
 
     private OnItemClickListener msgOnclickListener = null;
     private OnInviterClickListener inviterOnClickListener = null;
@@ -83,7 +83,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         }
     }
 
-    public BrowserMsgAdapter(Context mContext,List<BrowseMsgBean> messageAppointmentList) {
+    public BrowserMsgAdapter(Context mContext,List<BrowserMsgBean> messageAppointmentList) {
         msgBeanList = messageAppointmentList;
         this.mContext = mContext;
     }
@@ -126,7 +126,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
      */
     @Override
     public void onBindViewHolder(final BrowserMsgAdapter.ViewHolder holder, int position) {
-        BrowseMsgBean msgAppointment = msgBeanList.get(position);
+        BrowserMsgBean msgAppointment = msgBeanList.get(position);
         // TODO 更改图片加载方式 Glide
         holder.title.setText(msgAppointment.getTitle());
 //        holder.publishTime.setText(msgAppointment.getPublishTime());
@@ -136,7 +136,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         holder.content.setText(msgAppointment.getContent());
         holder.inviter.setText(msgAppointment.getInviter());
         holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
-        holder.personNumberHave.setText(msgAppointment.getPersonNumberHave());
+        holder.personNumberHave.setText(String.valueOf(msgAppointment.getPersonNumberHave()));
 //        holder.type.setImageResource(msgAppointment.getTypeIconId());
         Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
 //        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
@@ -156,8 +156,6 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
             }
         });
-
-
     }
 
     //传入数据源长度

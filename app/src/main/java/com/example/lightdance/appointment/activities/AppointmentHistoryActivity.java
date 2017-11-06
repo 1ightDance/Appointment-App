@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.R;
-import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
 import org.litepal.crud.DataSupport;
 
@@ -117,9 +116,9 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             String loginStudentId = preferences.getString("userStudentNumber",null);
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 //TODO 暂时这样代替，会改数据库取数据的逻辑
-                msgHistoryList = DataSupport.where("inviter == ?",loginNickName).find(BrowseMsgBean.class);
-                BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),msgHistoryList);
-                this.historyRecyclerView.setAdapter(adapter);
+//                msgHistoryList = DataSupport.where("inviter == ?",loginNickName).find(BrowseMsgBean.class);
+//                BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),msgHistoryList);
+//                this.historyRecyclerView.setAdapter(adapter);
                 //如果为空，显示这样的字段
                 if (msgHistoryList.isEmpty()){
                     textView.setText("发布记录空空如也");
