@@ -20,8 +20,6 @@ import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.BrowserActivity;
 
-import org.litepal.tablemanager.Connector;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,7 +63,9 @@ public class NewAppointmentFragment extends Fragment {
     //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
     int timeChange = 0;
     int typeData = 0;
+    int typeCode = 0;
     private String personNumb = null;
+    private int personNum = 0;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
     private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
@@ -104,6 +104,7 @@ public class NewAppointmentFragment extends Fragment {
             @Override
             public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
                 personNumb = numb[newVal];
+                personNum = getData(personNumb);
             }
         });
 
@@ -120,6 +121,20 @@ public class NewAppointmentFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private int getData(String personNumb) {
+        String[] numb = new String[101];
+        numb[100] = "无限制";
+        for (int i = 0;i<100;i++){
+            numb[i] = "" + (i+1);
+            if (personNumb.equals(numb[i])){
+                personNum = i+1;
+            }else{
+                personNum = 666;
+            }
+        }
+        return personNum;
     }
 
     @Override
@@ -170,9 +185,6 @@ public class NewAppointmentFragment extends Fragment {
             case R.id.btn_newappointment_done:
                 if (!isDataIllegal()) {
                     saveData();
-                    BrowserActivity activity = (BrowserActivity) getActivity();
-                    activity.changeFragment(1);
-                    clearData();
                 }
                 break;
         }
@@ -189,6 +201,7 @@ public class NewAppointmentFragment extends Fragment {
         editTextActivityContent.setText("");
         editTextActivityContactWay.setText("");
         tvActivityTypeSelect.setText("未选择");
+        numberPickerView.setValue(0);
     }
 
     //传送选择的活动类型的数据
@@ -196,30 +209,39 @@ public class NewAppointmentFragment extends Fragment {
         switch (checkId) {
             case R.id.radioButton_brpg:
                 typeData = R.drawable.ic_brpg;
+                typeCode = 3;
                 break;
             case R.id.radioButton_dining:
                 typeData = R.drawable.ic_dining;
+                typeCode = 7;
                 break;
             case R.id.radioButton_game:
                 typeData = R.drawable.ic_game;
+                typeCode = 4;
                 break;
             case R.id.radioButton_movies:
                 typeData = R.drawable.ic_movies;
+                typeCode = 2;
                 break;
             case R.id.radioButton_others:
                 typeData = R.drawable.ic_others;
+                typeCode = 666;
                 break;
             case R.id.radioButton_singing:
                 typeData = R.drawable.ic_singing;
+                typeCode = 5;
                 break;
             case R.id.radioButton_sports:
                 typeData = R.drawable.ic_sports;
+                typeCode = 6;
                 break;
             case R.id.radioButton_study:
                 typeData = R.drawable.ic_study;
+                typeCode = 1;
                 break;
             case R.id.radioButton_travel:
                 typeData = R.drawable.ic_travel;
+                typeCode = 8;
                 break;
         }
     }
@@ -251,9 +273,7 @@ public class NewAppointmentFragment extends Fragment {
 
     //数据存储方法
     private void saveData() {
-        //创建数据库
-        Connector.getDatabase();
-        //点击完成后 获取数据储存到数据库
+        //点击完成后 获取数据储存到后台
         BrowserMsgBean browserMsgBean = new BrowserMsgBean();
         browserMsgBean.setTitle(editTextActivityTitle.getText().toString());
         browserMsgBean.setStartTime(tvActivityStartDate.getText().toString()
@@ -264,9 +284,13 @@ public class NewAppointmentFragment extends Fragment {
         browserMsgBean.setContent(editTextActivityContent.getText().toString());
         browserMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
         browserMsgBean.setTypeIconId(typeData);
+        browserMsgBean.setTypeCode(typeCode);
         browserMsgBean.setPersonNumberNeed(personNumb);
-        browserMsgBean.setPersonNumberHave("1");
+        browserMsgBean.setPersonNumberHave(1);
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+//        String[] strings = new String[personNum];
+//        strings[0] = preferences.getString("userStudentNum","这里出现了个BUG");
+//        browserMsgBean.setParticipantsStudentNum(strings);
         int  inviterIconId = preferences.getInt("userAvatar",R.mipmap.ic_user);
         String inviter = preferences.getString("nickName","BUG");
         browserMsgBean.setInviterIconId(inviterIconId);
@@ -276,8 +300,11 @@ public class NewAppointmentFragment extends Fragment {
             public void done(String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
+                    BrowserActivity activity = (BrowserActivity) getActivity();
+                    activity.changeFragment(1);
+                    clearData();
                 }else{
-                    Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -307,31 +334,31 @@ public class NewAppointmentFragment extends Fragment {
     //更改方法
     public void setStartDate(int year, int month, int day) {
         if (month < 10 && day >= 10) {
-            tvActivityStartDate.setText(year + "年0" + month + "月" + day + "日");
+            tvActivityStartDate.setText(year + "-0" + month + "-" + day);
         }
         if (day < 10 && month >= 10) {
-            tvActivityStartDate.setText(year + "年" + month + "月0" + day + "日");
+            tvActivityStartDate.setText(year + "-" + month + "-0" + day);
         }
         if (day < 10 && month < 10) {
-            tvActivityStartDate.setText(year + "年0" + month + "月0" + day + "日");
+            tvActivityStartDate.setText(year + "-0" + month + "-0" + day);
         }
         if (day >= 10 && month >= 10) {
-            tvActivityStartDate.setText(year + "年" + month + "月" + day + "日");
+            tvActivityStartDate.setText(year + "-" + month + "-" + day);
         }
     }
 
     public void setEndDate(int year, int month, int day) {
         if (month < 10 && day >= 10) {
-            tvActivityEndDate.setText(year + "年0" + month + "月" + day + "日");
+            tvActivityEndDate.setText(year + "-0" + month + "-" + day);
         }
         if (day < 10 && month >= 10) {
-            tvActivityEndDate.setText(year + "年" + month + "月0" + day + "日");
+            tvActivityEndDate.setText(year + "-" + month + "-0" + day);
         }
         if (day < 10 && month < 10) {
-            tvActivityEndDate.setText(year + "年0" + month + "月0" + day + "日");
+            tvActivityEndDate.setText(year + "-0" + month + "-0" + day);
         }
         if (day >= 10 && month >= 10) {
-            tvActivityEndDate.setText(year + "年" + month + "月" + day + "日");
+            tvActivityEndDate.setText(year + "-" + month + "-" + day);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.lightdance.appointment.Model;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by pope on 2017/11/5.
@@ -8,8 +9,7 @@ import cn.bmob.v3.BmobObject;
 
 public class BrowserMsgBean extends BmobObject {
 
-    private String title;
-    private String publishTime;
+    private BmobDate publishTime;
     private String startTime;
     private String endTime;
     private String place;
@@ -17,37 +17,46 @@ public class BrowserMsgBean extends BmobObject {
     private String contactWay;
     private String inviter;
     private String personNumberNeed;
-    private String personNumberHave;
+    private int personNumNeed;
+    private int personNumberHave;
     private String participantsId;
-
-    public int getParticipantsIconId() {
-        return participantsIconId;
-    }
-
-    public void setParticipantsIconId(int participantsIconId) {
-        this.participantsIconId = participantsIconId;
-    }
-
+    private String title;
     private int participantsIconId;
     private int inviterIconId;
     private int typeIconId;
-    //msgId用作数据库主键
-    private int msgId;
+    private int typeCode;
+    private String[] participantsStudentNum;
 
-    public String getTitle() {
-        return title;
+    public int getPersonNumNeed() {
+        return personNumNeed;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPersonNumNeed(int personNumNeed) {
+        this.personNumNeed = personNumNeed;
     }
 
-    public String getPublishTime() {
-        return publishTime;
+    public int getPersonNumberHave() {
+        return personNumberHave;
     }
 
-    public void setPublishTime(String publishTime) {
-        this.publishTime = publishTime;
+    public void setPersonNumberHave(int personNumHave) {
+        this.personNumberHave = personNumHave;
+    }
+
+    public String[] getParticipantsStudentNum() {
+        return participantsStudentNum;
+    }
+
+    public void setParticipantsStudentNum(String[] participantsStudentNum) {
+        this.participantsStudentNum = participantsStudentNum;
+    }
+
+    public int getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(int typeCode) {
+        this.typeCode = typeCode;
     }
 
     public String getStartTime() {
@@ -64,6 +73,30 @@ public class BrowserMsgBean extends BmobObject {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public BmobDate getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(BmobDate publishTime) {
+        this.publishTime = publishTime;
+    }
+
+    public int getParticipantsIconId() {
+        return participantsIconId;
+    }
+
+    public void setParticipantsIconId(int participantsIconId) {
+        this.participantsIconId = participantsIconId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPlace() {
@@ -102,20 +135,12 @@ public class BrowserMsgBean extends BmobObject {
         return personNumberNeed;
     }
 
-    public String getPersonNumberHave() {
-        return personNumberHave;
-    }
-
     public String getParticipantsId() {
         return participantsId;
     }
 
     public void setParticipantsId(String participantsId) {
         this.participantsId = participantsId;
-    }
-
-    public void setPersonNumberHave(String personNumberHave) {
-        this.personNumberHave = personNumberHave;
     }
 
     public void setPersonNumberNeed(String personNumberNeed) {
@@ -138,13 +163,4 @@ public class BrowserMsgBean extends BmobObject {
     public void setTypeIconId(int typeIconId) {
         this.typeIconId = typeIconId;
     }
-
-    public int getMsgId() {
-        return msgId;
-    }
-
-    public void setMsgId(int msgId) {
-        this.msgId = msgId;
-    }
-
 }

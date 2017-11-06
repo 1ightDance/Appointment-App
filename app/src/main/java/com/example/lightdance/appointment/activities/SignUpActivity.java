@@ -95,8 +95,8 @@ public class SignUpActivity extends AppCompatActivity {
                     });
                     Toast.makeText(SignUpActivity.this,"注册成功！",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
-                    intent.putExtra("userStudentNumber",newUser.getUserStudentNum());
-                    intent.putExtra("userPassword",newUser.getUserPassword());
+                    intent.putExtra("userStudentNumber",userStudentNumber.getText().toString());
+                    intent.putExtra("userPassword",userPassword.getText().toString());
                     setResult(RESULT_OK,intent);
                     finish();
                 }
