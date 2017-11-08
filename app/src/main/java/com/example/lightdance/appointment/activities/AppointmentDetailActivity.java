@@ -2,6 +2,7 @@ package com.example.lightdance.appointment.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private List<MemberBean> memberBeanList;
+    private String objectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String objectId = intent.getStringExtra("objectId");
+        objectId = intent.getStringExtra("objectId");
 
         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
@@ -114,7 +116,29 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.detailed_info_take_part_in:
-                Toast.makeText(this, "尚未开发", Toast.LENGTH_SHORT).show();
+                BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                    @Override
+                    public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                        if (e == null){
+                            List<MemberBean> memberBeanList = browserMsgBean.getMembers();
+                            int s = memberBeanList.size();
+                            SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
+                            String userObjectId = preferences.getString("userBeanId","错误啦啊啊啊~");
+                            for(int i=0;i<s;i++){
+                                String s1 = memberBeanList.get(i).getMemberUserBeanId();
+                                if (s1.equals(userObjectId)){
+                                    Toast.makeText(AppointmentDetailActivity.this,"别闹..你都已经参加了",Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+                            }
+                        }else{
+                            Toast.makeText(AppointmentDetailActivity.this,"错误 e="+e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
                 break;
         }
     }
