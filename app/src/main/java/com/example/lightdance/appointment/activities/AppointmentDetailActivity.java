@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.MemberBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.adapters.ParticipantAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +44,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     private ProgressDialog progressDialog;
+    private List<MemberBean> memberBeanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +75,31 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
             @Override
             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                initMsg(browserMsgBean);
+                loadMsg(browserMsgBean);
+                loadParticipant(browserMsgBean.getMembers());
             }
         });
     }
 
+    private void loadParticipant(List<MemberBean> members) {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_detailed_info);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        memberBeanList = members;
+        ParticipantAdapter adapter = new ParticipantAdapter(this,memberBeanList);
+        recyclerView.setAdapter(adapter);
+        progressDialog.dismiss();
+    }
 
-    public void initMsg(BrowserMsgBean browserMsgBean) {
+
+    public void loadMsg(BrowserMsgBean browserMsgBean) {
         tvDetailedInfoTitle.setText(browserMsgBean.getTitle());
         tvDetailedInfoPlace.setText(browserMsgBean.getPlace());
         tvDetailedInfoStarttime.setText(browserMsgBean.getStartTime());
         tvDetailedInfoEndtime.setText(browserMsgBean.getEndTime());
         tvDetailedInfoDescription.setText(browserMsgBean.getContent());
         tvDetailedInfoConnection.setText(browserMsgBean.getContactWay());
-        progressDialog.dismiss();
     }
 
     @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in,R.id.textView18})

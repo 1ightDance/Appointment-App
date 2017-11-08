@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                 String passWord = list.get(0).getUserPassword();
                 String nickName = list.get(0).getUserNickName();
                 int userAvatar = list.get(0).getUserIconId();
+                String userBeanId = list.get(0).getObjectId();
                 String userIntroduction = list.get(0).getUserDescription();
                 String userName = list.get(0).getUserName();
                 int gender1 = list.get(0).getUserSex();
@@ -116,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 String userCollege = list.get(0).getUserCollege();
                 if (passWord .equals(editPassWord)){
                     SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
+                    editor.putString("userBeanId",userBeanId);
                     editor.putBoolean("isLogined",true);
                     editor.putString("nickName",nickName);
                     editor.putInt("userAvatar",userAvatar);

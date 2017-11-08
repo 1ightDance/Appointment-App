@@ -1,5 +1,7 @@
 package com.example.lightdance.appointment.Model;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
@@ -25,7 +27,16 @@ public class BrowserMsgBean extends BmobObject {
     private int inviterIconId;
     private int typeIconId;
     private int typeCode;
+    private List<MemberBean> members;
     private String[] participantsStudentNum;
+
+    public List<MemberBean> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<MemberBean> members) {
+        this.members = members;
+    }
 
     public int getPersonNumNeed() {
         return personNumNeed;

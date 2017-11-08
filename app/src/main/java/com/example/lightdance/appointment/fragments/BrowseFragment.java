@@ -15,15 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.BrowserActivity;
 import com.example.lightdance.appointment.activities.UserInfoActivity;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -47,7 +44,6 @@ public class BrowseFragment extends Fragment {
     @BindView(R.id.recyclerview_browse)
     RecyclerView recyclerView;
 
-    private List<BrowseMsgBean> browseMsgBeen = DataSupport.findAll(BrowseMsgBean.class);
     private List<BrowserMsgBean> browserMsgBeen;
     private int typeCode = 0;
     private ProgressDialog progressDialog;
@@ -80,7 +76,7 @@ public class BrowseFragment extends Fragment {
     }
 
     private void initBrowserData() {
-        BmobQuery<BrowserMsgBean> query = new BmobQuery<BrowserMsgBean>();
+        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.addWhereEqualTo("typeCode",typeCode);
         query.setLimit(20);
         query.findObjects(new FindListener<BrowserMsgBean>() {

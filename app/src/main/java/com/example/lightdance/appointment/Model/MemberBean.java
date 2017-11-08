@@ -6,8 +6,17 @@ package com.example.lightdance.appointment.Model;
 
 public class MemberBean {
 
+    private String memberUserBeanId;
     private int memberAvatar;
     private String memberNickname;
+
+    public String getMemberUserBeanId() {
+        return memberUserBeanId;
+    }
+
+    public void setMemberUserBeanId(String memberUserBeanId) {
+        this.memberUserBeanId = memberUserBeanId;
+    }
 
     public int getMemberAvatar() {
         return memberAvatar;

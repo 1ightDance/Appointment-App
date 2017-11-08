@@ -17,8 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.MemberBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.BrowserActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -293,8 +297,16 @@ public class NewAppointmentFragment extends Fragment {
 //        browserMsgBean.setParticipantsStudentNum(strings);
         int  inviterIconId = preferences.getInt("userAvatar",R.mipmap.ic_user);
         String inviter = preferences.getString("nickName","BUG");
+        String userBeanId = preferences.getString("userBeanId","BUG");
         browserMsgBean.setInviterIconId(inviterIconId);
         browserMsgBean.setInviter(inviter);
+        List<MemberBean> memberBeanList = new ArrayList<>();
+        MemberBean memberBean = new MemberBean();
+        memberBean.setMemberUserBeanId(userBeanId);
+        memberBean.setMemberAvatar(inviterIconId);
+        memberBean.setMemberNickname(inviter);
+        memberBeanList.add(memberBean);
+        browserMsgBean.setMembers(memberBeanList);
         browserMsgBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
