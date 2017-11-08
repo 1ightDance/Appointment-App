@@ -34,6 +34,7 @@ import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,9 +102,16 @@ public class BrowseFragment extends Fragment {
                     adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
-                            Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
-                            intent.putExtra("position",position+1);
-                            startActivity(intent);
+                            final String objectId = browserMsgBeen.get(position).getObjectId();
+                            BmobQuery<BrowserMsgBean> query = new BmobQuery<BrowserMsgBean>();
+                            query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                                @Override
+                                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                    Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                                    intent.putExtra("objectId",objectId);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     });
                     adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {

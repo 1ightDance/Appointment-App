@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,14 +10,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
+import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
-
-import org.litepal.crud.DataSupport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 public class AppointmentDetailActivity extends AppCompatActivity {
 
@@ -35,14 +37,18 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_appointmentdetail)
     Toolbar mToolbar;
 
-
-    private BrowseMsgBean clickedMsg;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_detail);
         ButterKnife.bind(this);
+
+        progressDialog = new ProgressDialog(AppointmentDetailActivity.this);
+        progressDialog.setTitle("请稍等");
+        progressDialog.setMessage("加载中...");
+        progressDialog.show();
 
         //toolbar
         mToolbar.setTitle("活动详情");
@@ -51,21 +57,20 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AppointmentDetailActivity.this,MainActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
 
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position",0);
-        if (position == 0){
-            Toast.makeText(this,"数据错误",Toast.LENGTH_SHORT).show();
-        }else{
-            clickedMsg = DataSupport.find(BrowseMsgBean.class,position);
-        }
-        initMsg(clickedMsg);
+        String objectId = intent.getStringExtra("objectId");
 
+        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+            @Override
+            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                initMsg(browserMsgBean);
+            }
+        });
     }
 
     @OnClick(R.id.detailed_info_take_part_in)
@@ -73,13 +78,14 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         Toast.makeText(this,"尚未开发",Toast.LENGTH_SHORT).show();
     }
 
-    public void initMsg(BrowseMsgBean browseMsgBean) {
-        tvDetailedInfoTitle.setText(browseMsgBean.getTitle());
-        tvDetailedInfoPlace.setText(browseMsgBean.getPlace());
-        tvDetailedInfoStarttime.setText(browseMsgBean.getStartTime());
-        tvDetailedInfoEndtime.setText(browseMsgBean.getEndTime());
-        tvDetailedInfoDescription.setText(browseMsgBean.getContent());
-        tvDetailedInfoConnection.setText(browseMsgBean.getContactWay());
+    public void initMsg(BrowserMsgBean browserMsgBean) {
+        tvDetailedInfoTitle.setText(browserMsgBean.getTitle());
+        tvDetailedInfoPlace.setText(browserMsgBean.getPlace());
+        tvDetailedInfoStarttime.setText(browserMsgBean.getStartTime());
+        tvDetailedInfoEndtime.setText(browserMsgBean.getEndTime());
+        tvDetailedInfoDescription.setText(browserMsgBean.getContent());
+        tvDetailedInfoConnection.setText(browserMsgBean.getContactWay());
+        progressDialog.dismiss();
     }
 
 }
