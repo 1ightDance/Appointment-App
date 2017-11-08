@@ -75,15 +75,7 @@ public class MainActivity extends AppCompatActivity{
 
         });
 
-        //判断是否登录 未登录则打开资讯 登录打开广场
-        SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
-        if (preferences.getBoolean("isLogined",false)) {
-            changeFragment(1);
-        }else
-        {
-            changeNavigationSelected(R.id.menu_news);
-            changeFragment(2);
-        }
+        changeFragment(1);
 
     }
 
@@ -317,16 +309,6 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
 
-        //判断是否登录 是否显示广场碎片和消息碎片
-        if (position == 1){
-            SharedPreferences preferences = getSharedPreferences("loginData"
-                    , Context.MODE_PRIVATE);
-            boolean isLogined = preferences.getBoolean("isLogined", false);
-            if (isLogined == false) {
-                changeFragment(6);
-                return;
-            }
-        }
         if (position == 3){
             SharedPreferences preferences = getSharedPreferences("loginData"
                     , Context.MODE_PRIVATE);
@@ -377,11 +359,6 @@ public class MainActivity extends AppCompatActivity{
                     mPersonalCenterFragment = PersonalCenterFragment.newInstance();
                 }
                 return mPersonalCenterFragment;
-//            case 5:
-//                if (mNewAppointmentFragment == null){
-//                    mNewAppointmentFragment = NewAppointmentFragment.newInstance();
-//                }
-//                return mNewAppointmentFragment;
             case 6:
                 if (mWarningFragment == null){
                     mWarningFragment = WarningFragment.newInstance();

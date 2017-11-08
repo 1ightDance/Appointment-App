@@ -1,7 +1,9 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.lightdance.appointment.Model.TypeBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.BrowserActivity;
+import com.example.lightdance.appointment.activities.MainActivity;
 import com.example.lightdance.appointment.adapters.TypeAdapter;
 
 import java.util.ArrayList;
@@ -66,10 +69,17 @@ public class TypeFragment extends Fragment {
         adapter.setTypeItemOnclickListener(new TypeAdapter.OnTypeItemClickListener() {
             @Override
             public void onClick(int position) {
-                typeCode = position+1;
-                Intent intent = new Intent(getActivity(), BrowserActivity.class);
-                intent.putExtra("typeCode",typeCode);
-                startActivity(intent);
+                SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+                if (preferences.getBoolean("isLogined",false)) {
+                    typeCode = position+1;
+                    Intent intent = new Intent(getActivity(), BrowserActivity.class);
+                    intent.putExtra("typeCode",typeCode);
+                    startActivity(intent);
+                }else
+                {
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.changeFragment(6);
+                }
             }
         });
 

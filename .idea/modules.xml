@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Appointment.iml" filepath="$PROJECT_DIR$/Appointment.iml" />
+      <module fileurl="file://D:\ASPROJECT\Appointment-App\Appointment.iml" filepath="D:\ASPROJECT\Appointment-App\Appointment.iml" />
       <module fileurl="file://$PROJECT_DIR$/Appointment-App.iml" filepath="$PROJECT_DIR$/Appointment-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
