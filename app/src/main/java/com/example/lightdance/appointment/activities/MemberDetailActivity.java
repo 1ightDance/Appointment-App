@@ -1,6 +1,5 @@
 package com.example.lightdance.appointment.activities;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +15,22 @@ import com.example.lightdance.appointment.adapters.MemberAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MemberDetailActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar2)
     Toolbar mToolbar;
 
     // TODO 将从后台获取到的成员数据存储到该List中
-    private List<MemberBean> memberBeen = new ArrayList<>();
+    private List<MemberBean> memberBean = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_detail);
+        ButterKnife.bind(this);
 
         //toolbar
         mToolbar.setTitle("参与成员");
@@ -35,8 +39,6 @@ public class MemberDetailActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MemberDetailActivity.this,AppointmentDetailActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -44,7 +46,7 @@ public class MemberDetailActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_member_detail);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
-        MemberAdapter adapter = new MemberAdapter(this,memberBeen);
+        MemberAdapter adapter = new MemberAdapter(this, memberBean);
         recyclerView.setAdapter(adapter);
 
     }

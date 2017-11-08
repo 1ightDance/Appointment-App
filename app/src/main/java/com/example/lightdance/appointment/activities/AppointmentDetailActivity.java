@@ -73,10 +73,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.detailed_info_take_part_in)
-    public void onViewClicked() {
-        Toast.makeText(this,"尚未开发",Toast.LENGTH_SHORT).show();
-    }
 
     public void initMsg(BrowserMsgBean browserMsgBean) {
         tvDetailedInfoTitle.setText(browserMsgBean.getTitle());
@@ -88,4 +84,20 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         progressDialog.dismiss();
     }
 
+    @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in,R.id.textView18})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.recyclerView_detailed_info:
+                Intent intent = new Intent(this,MemberDetailActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.textView18:
+                Intent intent1 = new Intent(this,MemberDetailActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.detailed_info_take_part_in:
+                Toast.makeText(this, "尚未开发", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }
