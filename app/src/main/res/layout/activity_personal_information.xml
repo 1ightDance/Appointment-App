@@ -112,7 +112,7 @@
                 app:layout_constraintRight_toLeftOf="@+id/img_userinfor_avatar"
                 app:layout_constraintTop_toTopOf="@+id/img_userinfor_avatar" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_userinfor_avatar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -125,7 +125,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_userinfor_divider1"
-                app:srcCompat="@mipmap/headshot_2" />
+                tools:src="@mipmap/headshot_2" />
 
             <ImageView
                 android:id="@+id/img_userinfor_divider2"
