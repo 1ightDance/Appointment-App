@@ -26,6 +26,7 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class AppointmentDetailActivity extends AppCompatActivity {
 
@@ -45,8 +46,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     private ProgressDialog progressDialog;
-    private List<MemberBean> memberBeanList;
     private String objectId;
+    private String userNickName;
+    private int userAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences p = getSharedPreferences("loginData",MODE_PRIVATE);
+        userNickName = p.getString("nickeName","出错啦啊啊啊~");
+        userAvatar = p.getInt("userAvatar",0);
+
         Intent intent = getIntent();
         objectId = intent.getStringExtra("objectId");
 
@@ -88,8 +94,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
-        memberBeanList = members;
-        ParticipantAdapter adapter = new ParticipantAdapter(this,memberBeanList);
+        ParticipantAdapter adapter = new ParticipantAdapter(this,members);
         recyclerView.setAdapter(adapter);
         progressDialog.dismiss();
     }
@@ -116,6 +121,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.detailed_info_take_part_in:
+                progressDialog.show();
                 BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
                 query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                     @Override
@@ -123,17 +129,59 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                         if (e == null){
                             List<MemberBean> memberBeanList = browserMsgBean.getMembers();
                             int s = memberBeanList.size();
+                            int n = browserMsgBean.getPersonNumberHave();
+                            int t = browserMsgBean.getTypeCode();
                             SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
                             String userObjectId = preferences.getString("userBeanId","错误啦啊啊啊~");
+                            String userNickName = preferences.getString("nickName","错误啦啊啊啊~");
+                            int userAvatar = preferences.getInt("userAvatar",0);
+                            boolean isJoined = false;
                             for(int i=0;i<s;i++){
                                 String s1 = memberBeanList.get(i).getMemberUserBeanId();
                                 if (s1.equals(userObjectId)){
-                                    Toast.makeText(AppointmentDetailActivity.this,"别闹..你都已经参加了",Toast.LENGTH_SHORT).show();
+                                    isJoined = true;
                                     break;
                                 }
                             }
+                            if (isJoined){
+                                Toast.makeText(AppointmentDetailActivity.this,"别闹..你都已经参加了",Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }else{
+                                BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
+                                List<MemberBean> members= browserMsgBean.getMembers();
+                                MemberBean memberBean = new MemberBean();
+                                memberBean.setMemberUserBeanId(userObjectId);
+                                memberBean.setMemberNickname(userNickName);
+                                memberBean.setMemberAvatar(userAvatar);
+                                members.add(memberBean);
+                                browserMsgBean2.setMembers(members);
+                                browserMsgBean2.update(objectId,new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null){
+                                        }else{
+                                            Toast.makeText(AppointmentDetailActivity.this,"更新数组失败"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                                BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
+                                browserMsgBean1.setPersonNumberHave(n+1);
+                                browserMsgBean1.setTypeCode(t);
+                                browserMsgBean1.update(objectId, new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null){
+                                            progressDialog.dismiss();
+                                        }else{
+                                            Toast.makeText(AppointmentDetailActivity.this,"人数更新失败 e="+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
+                                        }
+                                    }
+                                });
+                            }
                         }else{
                             Toast.makeText(AppointmentDetailActivity.this,"错误 e="+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
 
                     }
