@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
+// 下面那句是，添加对Apache的HTTP-client支持,
+// Android6.0版本移除了对Appache的HTTP client的支持，因此，需要添加org.apache.http.legacy.jar包
+// 另：如果在build.gradle文件中useLibrary 'org.apache.http.legacy'这句话报错，可将该jar直接放到libs目录下即可。
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.lightdance.appointment"

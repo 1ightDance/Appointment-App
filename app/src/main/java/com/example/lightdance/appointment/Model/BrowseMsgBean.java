@@ -5,6 +5,8 @@ import org.litepal.crud.DataSupport;
 /**
  * Created by LightDance on 2017/10/7.
  * 继承DataSupport类以使用数据库的操作方法
+ * int建议用Integer，因为大量用户并发操作，用普通的更新方法操作的话，会存在数据不一致的情况，
+ * Bmob提供了原子计数器来保证原子性的修改某一数值字段的值，但只支持Integer型而不是int
  */
 
 public class BrowseMsgBean extends DataSupport{

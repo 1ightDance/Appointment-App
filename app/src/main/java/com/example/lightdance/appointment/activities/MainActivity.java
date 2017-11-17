@@ -384,10 +384,6 @@ public class MainActivity extends AppCompatActivity{
     * */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mCurrentPosition == 5){
-            changeFragment(1);
-            return true;
-        }
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             long secondTime = System.currentTimeMillis();
             if (secondTime - firstTime > 2000) {

@@ -7,6 +7,10 @@ import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by pope on 2017/11/5.
+ * 继承BmobObject类以使用云端数据库的操作方法，
+ * BrowseMsgBean已被弃用，但还没删除掉
+ * int建议用Integer，因为大量用户并发操作，用普通的更新方法操作的话，会存在数据不一致的情况，
+ * Bmob提供了原子计数器来保证原子性的修改某一数值字段的值，但只支持Integer型而不是int
  */
 
 public class BrowserMsgBean extends BmobObject {

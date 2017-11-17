@@ -6,6 +6,8 @@ import cn.bmob.v3.BmobObject;
  * Created by LightDance on 2017/10/11.
  * 用于注册时存放学生信息，以便于通过该类把学生信息存入数据库,
  * 之后会通过调用学校数据库实现，目前先用注册方式进行存储
+ * int建议用Integer，因为大量用户并发操作，用普通的更新方法操作的话，会存在数据不一致的情况，
+ * Bmob提供了原子计数器来保证原子性的修改某一数值字段的值，但只支持Integer型而不是int
  */
 
 public class UserBean extends BmobObject {
@@ -22,14 +24,6 @@ public class UserBean extends BmobObject {
     private String userDescription;
     private String userPhoneNumber;
     private int userIconId;
-
-    public static int getMAN() {
-        return MAN;
-    }
-
-    public static int getWOMAN() {
-        return WOMAN;
-    }
 
     public String getUserStudentNum() {
         return userStudentNum;
