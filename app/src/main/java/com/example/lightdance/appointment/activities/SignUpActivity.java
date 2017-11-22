@@ -22,6 +22,7 @@ import org.litepal.tablemanager.Connector;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
+import cn.bmob.sms.listener.VerifySMSCodeListener;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -47,10 +48,18 @@ public class SignUpActivity extends AppCompatActivity {
     private SQLiteDatabase db = Connector.getDatabase();
     private MyCountDownTimer myCountDownTimer;
 
+    private int hahaha;
+    private String hint;
+    private String btnText;
+    private String templateText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        //初始化随机出现的3套验证码风格的模板
+        initString();
 
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_signup);
         mToolbar.setTitle("注册");
@@ -63,7 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        //初始化视图控件
         initView();
+        //性别选择
         userSexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -76,21 +87,22 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //获取验证码
         btnSecurityCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userPhoneNumber.getText() == null){
+                if (userPhoneNumber.getText().length() == 0){
                     Toast.makeText(SignUpActivity.this,"未填写手机号",Toast.LENGTH_SHORT).show();
                 }else if (userPhoneNumber.getText().length() < 11 ){
                     Toast.makeText(SignUpActivity.this,"请填写正确手机号",Toast.LENGTH_SHORT).show();
                 }else{
                     myCountDownTimer.start();
-                    String phoneNum = userPhoneNumber.getText().toString();
-                    BmobSMS.requestSMSCode(SignUpActivity.this, phoneNum, "注册验证码模板", new RequestSMSCodeListener() {
+                    BmobSMS.requestSMSCode(SignUpActivity.this, userPhoneNumber.getText().toString(), templateText, new RequestSMSCodeListener() {
                         @Override
                         public void done(Integer integer, cn.bmob.sms.exception.BmobException e) {
                             if (e == null){
-                                Toast.makeText(SignUpActivity.this,"发送成功 id="+integer,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(SignUpActivity.this,"发送失败 "+e.getMessage(),Toast.LENGTH_SHORT).show();
                             }
@@ -99,39 +111,80 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //完成注册
         signUpFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkUserInfo()) {
-                    UserBean newUser = new UserBean();
-                    newUser.setUserName(userName.getText().toString());
-                    newUser.setUserPassword(userPassword.getText().toString());
-                    newUser.setUserStudentNum(userStudentNumber.getText().toString());
-                    newUser.setUserPhoneNumber(userPhoneNumber.getText().toString());
-                    newUser.setUserSex(userSex);
-                    newUser.setUserNickName(userName.getText().toString());
-                    newUser.setUserDescription("这个人很懒，什么都没说");
-                    newUser.setUserCollege("未填");
-                    newUser.setUserIconId(R.mipmap.ic_user);
-                    newUser.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-                                Toast.makeText(SignUpActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent();
-                                intent.putExtra("userStudentNumber", userStudentNumber.getText().toString());
-                                intent.putExtra("userPassword", userPassword.getText().toString());
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            } else {
-                                Toast.makeText(SignUpActivity.this, "服务器端数据存储失败：" + e.getMessage()
-                                        , Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    BmobSMS.verifySmsCode(SignUpActivity.this, userPhoneNumber.getText().toString(),
+                            userSecurityCode.getText().toString(), new VerifySMSCodeListener() {
+                                @Override
+                                public void done(cn.bmob.sms.exception.BmobException e) {
+                                    if (e == null){
+                                        UserBean newUser = new UserBean();
+                                        newUser.setUserName(userName.getText().toString());
+                                        newUser.setUserPassword(userPassword.getText().toString());
+                                        newUser.setUserStudentNum(userStudentNumber.getText().toString());
+                                        newUser.setUserPhoneNumber(userPhoneNumber.getText().toString());
+                                        newUser.setUserSex(userSex);
+                                        newUser.setUserNickName(userName.getText().toString());
+                                        newUser.setUserDescription("这个人很懒，什么都没说");
+                                        newUser.setUserCollege("未填");
+                                        newUser.setUserIconId(R.mipmap.ic_user);
+                                        newUser.save(new SaveListener<String>() {
+                                            @Override
+                                            public void done(String s, BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(SignUpActivity.this,
+                                                            "注册成功！", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent();
+                                                    intent.putExtra("userStudentNumber",
+                                                            userStudentNumber.getText().toString());
+                                                    intent.putExtra("userPassword",
+                                                            userPassword.getText().toString());
+                                                    setResult(RESULT_OK, intent);
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(SignUpActivity.this,
+                                                            "服务器端数据存储失败：" + e.getMessage()
+                                                            , Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        Toast.makeText(SignUpActivity.this,
+                                                "验证码错误", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });
+    }
+
+    //初始化3套随机出现的验证码模板
+    private void initString() {
+        //生成1~3的随机数
+        hahaha = (int) (1+Math.random()*3);
+        switch (hahaha){
+            case 1:
+                hint = "密令";
+                btnText = "获取密令";
+                templateText = "注册验证码模板1";
+                break;
+            case 2:
+                hint = "通行码";
+                btnText = "获取通行码";
+                templateText = "注册验证码模板2";
+                break;
+            case 3:
+                hint = "接头暗号";
+                btnText = "获取暗号";
+                templateText = "注册验证码模板3";
+                break;
+            default:break;
+        }
     }
 
 
@@ -148,6 +201,8 @@ public class SignUpActivity extends AppCompatActivity {
         signUpFinish = (Button) findViewById(R.id.signup_finish);
         userSecurityCode = (EditText) findViewById(R.id.signup_security_code);
         btnSecurityCode = (Button) findViewById(R.id.btn_security_code);
+        userSecurityCode.setHint(hint);
+        btnSecurityCode.setText(btnText);
         myCountDownTimer = new MyCountDownTimer(60000,1000);
     }
 
@@ -204,5 +259,4 @@ public class SignUpActivity extends AppCompatActivity {
                 return true;
         }
     }
-
 }
