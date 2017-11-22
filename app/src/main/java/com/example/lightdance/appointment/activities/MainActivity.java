@@ -21,6 +21,7 @@ import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
+import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
         //初始化Bmob SDK
         Bmob.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
+        BmobSMS.initialize(this,"7420a33e6758604ec1e823f1378f4e61");
 
         //加载预览数据
 //        previewDataLoading();
