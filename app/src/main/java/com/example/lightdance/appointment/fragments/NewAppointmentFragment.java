@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
-import com.example.lightdance.appointment.Model.MemberBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.BrowserActivity;
 
@@ -75,6 +75,7 @@ public class NewAppointmentFragment extends Fragment {
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
     private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
+    private ProgressDialog progressDialog;
 
     public NewAppointmentFragment() {
 
@@ -281,7 +282,12 @@ public class NewAppointmentFragment extends Fragment {
      * 数据存储方法
      */
     private void saveData() {
-        //点击完成后 获取数据储存到后台
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("请稍等");
+        progressDialog.setMessage("发布中...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+        //点击完成后 获取发布页填写的数据储存到后台
         BrowserMsgBean browserMsgBean = new BrowserMsgBean();
         browserMsgBean.setTitle(editTextActivityTitle.getText().toString());
         browserMsgBean.setStartTime(tvActivityStartDate.getText().toString()
@@ -291,23 +297,16 @@ public class NewAppointmentFragment extends Fragment {
         browserMsgBean.setPlace(editTextActivityPlace.getText().toString());
         browserMsgBean.setContent(editTextActivityContent.getText().toString());
         browserMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
-        browserMsgBean.setTypeIconId(typeData);
         browserMsgBean.setTypeCode(typeCode);
         browserMsgBean.setPersonNumberNeed(personNumb);
         browserMsgBean.setPersonNumberHave(1);
+        //获取当前用户的信息存储为该活动的发布人
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-        int  inviterIconId = preferences.getInt("userAvatar",R.mipmap.ic_user);
-        String inviter = preferences.getString("nickName","BUG");
         String userBeanId = preferences.getString("userBeanId","BUG");
-        browserMsgBean.setInviterIconId(inviterIconId);
-        browserMsgBean.setInviter(inviter);
-        List<MemberBean> memberBeanList = new ArrayList<>();
-        MemberBean memberBean = new MemberBean();
-        memberBean.setMemberUserBeanId(userBeanId);
-        memberBean.setMemberAvatar(inviterIconId);
-        memberBean.setMemberNickname(inviter);
-        memberBeanList.add(memberBean);
-        browserMsgBean.setMembers(memberBeanList);
+        browserMsgBean.setInviter(userBeanId);
+        List<String> memberList = new ArrayList<>();
+        memberList.add(userBeanId);
+        browserMsgBean.setMembers(memberList);
         browserMsgBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
@@ -315,9 +314,11 @@ public class NewAppointmentFragment extends Fragment {
                     Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                     BrowserActivity activity = (BrowserActivity) getActivity();
                     activity.changeFragment(1);
+                    progressDialog.dismiss();
                     clearData();
                 }else{
                     Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             }
         });

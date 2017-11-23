@@ -119,7 +119,7 @@ public class BrowseFragment extends Fragment {
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(),"查询失败 "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"查询失败 "+e.getMessage(),Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -7,12 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by LightDance on 2017/10/5.
@@ -20,7 +26,9 @@ import java.util.List;
 
 public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.ViewHolder> {
 
-    //存放每一条信息的数组
+    /**
+     * 存放每一条信息的数组
+     */
     private List<BrowserMsgBean> msgBeanList;
 
     private OnItemClickListener msgOnclickListener = null;
@@ -28,7 +36,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     Context mContext;
 
 
-    //可以传监听事件的接口,一个对应整条item,另一个对应用户名
+    /**
+     * 可以传监听事件的接口,一个对应整条item,另一个对应用户名
+     */
     public interface OnItemClickListener {
         void onClick(int position);
     }
@@ -47,38 +57,33 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         this.msgOnclickListener = msgOnclickListener;
     }
 
-    //内部类ViewHolder与视图进行连接, @param browserMsgView用来保存最外层item实例
+    /**
+     * 内部类ViewHolder与视图进行连接, @param browserMsgView用来保存最外层item实例
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
 
 
         TextView title;
-        //        TextView publishTime;
-//        TextView startTime;
-//        TextView endTime;
-//        TextView place;
         TextView content;
         TextView inviter;
         TextView personNumberNeed;
         TextView personNumberHave;
-        ImageView type;
         ImageView inviterIcon;
 
         View browserMsgView;
 
-        //构造方法，将成员变量与界面组件一一对应
+        /**
+         * 构造方法，将成员变量与界面组件一一对应
+         * @param itemView
+         */
         public ViewHolder(View itemView) {
             super(itemView);
             browserMsgView = itemView;
             title = (TextView) itemView.findViewById(R.id.tv_appointment_title);
-//            publishTime  = (TextView) itemView.findViewById(R.id.tv_appointment_publishtime);
-//            startTime    = (TextView) itemView.findViewById(R.id.tv_appointment_starttime);
-//            endTime      = (TextView) itemView.findViewById(R.id.tv_appointment_endtime);
-//            place        = (TextView) itemView.findViewById(R.id.tv_appointment_place);
             content = (TextView) itemView.findViewById(R.id.tv_appointment_content);
             inviter = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
             personNumberNeed = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_need);
             personNumberHave = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_have);
-//            type = (ImageView) itemView.findViewById(R.id.img_appointment_type);
             inviterIcon = (ImageView) itemView.findViewById(R.id.img_appointment_inviterIcon);
         }
     }
@@ -89,9 +94,10 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     }
 
 
-    //重写从RecyclerView ADapter中继承来的三个方法
-    //传入布局文件 并膨胀为视图暂存在holder中
-
+    /**
+     * 重写从RecyclerView ADapter中继承来的三个方法
+     * 传入布局文件 并膨胀为视图暂存在holder中
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -127,20 +133,24 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
     @Override
     public void onBindViewHolder(final BrowserMsgAdapter.ViewHolder holder, int position) {
         BrowserMsgBean msgAppointment = msgBeanList.get(position);
-        // TODO 更改图片加载方式 Glide
         holder.title.setText(msgAppointment.getTitle());
-//        holder.publishTime.setText(msgAppointment.getPublishTime());
-//        holder.startTime.setText(msgAppointment.getStartTime());
-//        holder.endTime.setText(msgAppointment.getEndTime());
-//        holder.place.setText(msgAppointment.getPlace());
         holder.content.setText(msgAppointment.getContent());
-        holder.inviter.setText(msgAppointment.getInviter());
+        //通过查询发起人的ObjectId获取发起人的个人信息
+        BmobQuery<UserBean> query = new BmobQuery<>();
+        query.getObject(msgAppointment.getInviter(), new QueryListener<UserBean>() {
+            @Override
+            public void done(UserBean userBean, BmobException e) {
+                if (e == null){
+                    holder.inviter.setText(userBean.getUserNickName());
+                    Glide.with(mContext).load(userBean.getUserIconId()).into(holder.inviterIcon);
+                }else{
+                    Toast.makeText(mContext,"适配器查询出错" + e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
         holder.personNumberHave.setText(String.valueOf(msgAppointment.getPersonNumberHave()));
-//        holder.type.setImageResource(msgAppointment.getTypeIconId());
-//        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
-//        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
-        Glide.with(mContext).load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
+        //给RecyclerView的Item设置点击监听
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +159,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
                 }
             }
         });
+        //给RecyclerView的发起人昵称设置点击监听
         holder.inviter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

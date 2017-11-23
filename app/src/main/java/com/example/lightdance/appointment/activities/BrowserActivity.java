@@ -30,10 +30,6 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
-//        BrowseFragment browseFragment = BrowseFragment.newInstance();
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.add(R.id.container_browser, browseFragment);
-//        transaction.commit();
         Intent intent = getIntent();
         typeCode = intent.getIntExtra("typeCode",0);
         if (typeCode == 0){

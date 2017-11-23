@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
-import com.example.lightdance.appointment.Model.MemberBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.ParticipantAdapter;
 
@@ -51,8 +50,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private String objectId;
-    private String userNickName;
-    private int userAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +73,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences p = getSharedPreferences("loginData",MODE_PRIVATE);
-        userNickName = p.getString("nickeName","出错啦啊啊啊~");
-        userAvatar = p.getInt("userAvatar",0);
-
+        //获取该活动的ObjectId
         Intent intent = getIntent();
         objectId = intent.getStringExtra("objectId");
 
+        //查询该活动表中的详细活动信息
         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
             @Override
@@ -93,7 +88,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void loadParticipant(List<MemberBean> members) {
+    /**
+     * 加载参与人员方法
+     * @param members
+     */
+    private void loadParticipant(List<String> members) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_detailed_info);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -103,7 +102,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         progressDialog.dismiss();
     }
 
-
+    /**
+     * 加载活动信息方法
+     * @param browserMsgBean
+     */
     public void loadMsg(BrowserMsgBean browserMsgBean) {
         tvDetailedInfoTitle.setText(browserMsgBean.getTitle());
         tvDetailedInfoPlace.setText(browserMsgBean.getPlace());
@@ -133,19 +135,15 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                         if (e == null){
                             //获取已参与人员列表
-                            List<MemberBean> memberBeanList = browserMsgBean.getMembers();
+                            List<String> memberBeanList = browserMsgBean.getMembers();
                             int s = memberBeanList.size();
-                            int n = browserMsgBean.getPersonNumberHave();
-                            int t = browserMsgBean.getTypeCode();
-                            //获取当前用户个人信息
+                            //获取当前用户ObjectId
                             SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
                             String userObjectId = preferences.getString("userBeanId","错误啦啊啊啊~");
-                            String userNickName = preferences.getString("nickName","错误啦啊啊啊~");
-                            int userAvatar = preferences.getInt("userAvatar",0);
                             //检测当前用户是否已经在该活动已参与人员列表
                             boolean isJoined = false;
                             for(int i=0;i<s;i++){
-                                String s1 = memberBeanList.get(i).getMemberUserBeanId();
+                                String s1 = memberBeanList.get(i);
                                 if (s1.equals(userObjectId)){
                                     isJoined = true;
                                     break;
@@ -157,12 +155,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             }else{
                                 //如果未参与 将当前用户添加到该活动的参与人员名单
                                 BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
-                                List<MemberBean> members= browserMsgBean.getMembers();
-                                MemberBean memberBean = new MemberBean();
-                                memberBean.setMemberUserBeanId(userObjectId);
-                                memberBean.setMemberNickname(userNickName);
-                                memberBean.setMemberAvatar(userAvatar);
-                                members.add(memberBean);
+                                List<String> members= browserMsgBean.getMembers();
+                                members.add(userObjectId);
                                 browserMsgBean2.setMembers(members);
                                 browserMsgBean2.update(objectId,new UpdateListener() {
                                     @Override
@@ -175,8 +169,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 });
                                 //更改该活动的已参与人数+1
                                 BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
-                                browserMsgBean1.setPersonNumberHave(n+1);
-                                browserMsgBean1.setTypeCode(t);
+                                browserMsgBean1.setPersonNumberHave(s+1);
                                 browserMsgBean1.update(objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {

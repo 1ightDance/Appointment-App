@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lightdance.appointment.Model.MemberBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by pope on 2017/11/8.
@@ -20,10 +24,10 @@ import java.util.List;
 
 public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ViewHolder> {
 
-    private List<MemberBean> memberBean;
+    private List<String> memberBean;
     Context mContext;
 
-    public ParticipantAdapter(Context mContext,List<MemberBean> memberBean){
+    public ParticipantAdapter(Context mContext,List<String> memberBean){
         this.memberBean = memberBean;
         this.mContext = mContext;
     }
@@ -37,10 +41,16 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        MemberBean memberBean = this.memberBean.get(position);
-        Glide.with(mContext).load(memberBean.getMemberAvatar()).into(holder.participantAvatar);
-        holder.participantNickname.setText(memberBean.getMemberNickname());
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final String memberBean = this.memberBean.get(position);
+        BmobQuery<UserBean> query = new BmobQuery<>();
+        query.getObject(memberBean, new QueryListener<UserBean>() {
+            @Override
+            public void done(UserBean userBean, BmobException e) {
+                Glide.with(mContext).load(userBean.getUserIconId()).into(holder.participantAvatar);
+                holder.participantNickname.setText(userBean.getUserNickName());
+            }
+        });
     }
 
     @Override

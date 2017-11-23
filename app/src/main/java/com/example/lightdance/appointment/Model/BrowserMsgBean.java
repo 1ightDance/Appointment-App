@@ -6,7 +6,7 @@ import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
 /**
- * Created by pope on 2017/11/5.
+ * @author pope
  * 继承BmobObject类以使用云端数据库的操作方法，
  * BrowseMsgBean已被弃用，但还没删除掉
  * int建议用Integer，因为大量用户并发操作，用普通的更新方法操作的话，会存在数据不一致的情况，
@@ -23,31 +23,17 @@ public class BrowserMsgBean extends BmobObject {
     private String contactWay;
     private String inviter;
     private String personNumberNeed;
-    private int personNumNeed;
     private int personNumberHave;
-    private String participantsId;
     private String title;
-    private int participantsIconId;
-    private int inviterIconId;
-    private int typeIconId;
     private int typeCode;
-    private List<MemberBean> members;
-    private String[] participantsStudentNum;
+    private List<String> members;
 
-    public List<MemberBean> getMembers() {
+    public List<String> getMembers() {
         return members;
     }
 
-    public void setMembers(List<MemberBean> members) {
+    public void setMembers(List<String> members) {
         this.members = members;
-    }
-
-    public int getPersonNumNeed() {
-        return personNumNeed;
-    }
-
-    public void setPersonNumNeed(int personNumNeed) {
-        this.personNumNeed = personNumNeed;
     }
 
     public int getPersonNumberHave() {
@@ -56,14 +42,6 @@ public class BrowserMsgBean extends BmobObject {
 
     public void setPersonNumberHave(int personNumHave) {
         this.personNumberHave = personNumHave;
-    }
-
-    public String[] getParticipantsStudentNum() {
-        return participantsStudentNum;
-    }
-
-    public void setParticipantsStudentNum(String[] participantsStudentNum) {
-        this.participantsStudentNum = participantsStudentNum;
     }
 
     public int getTypeCode() {
@@ -96,14 +74,6 @@ public class BrowserMsgBean extends BmobObject {
 
     public void setPublishTime(BmobDate publishTime) {
         this.publishTime = publishTime;
-    }
-
-    public int getParticipantsIconId() {
-        return participantsIconId;
-    }
-
-    public void setParticipantsIconId(int participantsIconId) {
-        this.participantsIconId = participantsIconId;
     }
 
     public String getTitle() {
@@ -150,32 +120,8 @@ public class BrowserMsgBean extends BmobObject {
         return personNumberNeed;
     }
 
-    public String getParticipantsId() {
-        return participantsId;
-    }
-
-    public void setParticipantsId(String participantsId) {
-        this.participantsId = participantsId;
-    }
-
     public void setPersonNumberNeed(String personNumberNeed) {
         this.personNumberNeed = personNumberNeed;
 
-    }
-
-    public int getInviterIconId() {
-        return inviterIconId;
-    }
-
-    public void setInviterIconId(int inviterIconId) {
-        this.inviterIconId = inviterIconId;
-    }
-
-    public int getTypeIconId() {
-        return typeIconId;
-    }
-
-    public void setTypeIconId(int typeIconId) {
-        this.typeIconId = typeIconId;
     }
 }
