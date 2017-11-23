@@ -131,7 +131,9 @@ public class BrowseFragment extends Fragment {
         activity.changeFragment(2);
     }
 
-    //动态隐藏FloatingActionBar判断方法
+    /**
+     * 动态隐藏FloatingActionBar判断方法
+     */
     class HideScrollListener extends RecyclerView.OnScrollListener {
 
         private static final int HIDE_HEIGHT = 20;
@@ -146,7 +148,8 @@ public class BrowseFragment extends Fragment {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if ((toolbarVisible && dy > 0) || !toolbarVisible && dy < 0) {
+            boolean r = (toolbarVisible && dy > 0) || !toolbarVisible && dy < 0;
+            if (r) {
                 //recycler向上滚动时dy为正，向下滚动时dy为负数
                 scrolledInstance += dy;
             }
@@ -164,7 +167,9 @@ public class BrowseFragment extends Fragment {
         }
     }
 
-    //动态隐藏FloatingActionBar方法
+    /**
+     * 动态隐藏FloatingActionBar方法
+     */
     private void onHide() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;
@@ -173,7 +178,9 @@ public class BrowseFragment extends Fragment {
                 .setDuration(200).start();
     }
 
-    //动态显示FloatingActionBar方法
+    /**
+     * 动态显示FloatingActionBar方法
+     */
     private void onShow() {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
         int marginBottom = params.bottomMargin;

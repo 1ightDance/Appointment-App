@@ -34,6 +34,7 @@ import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
  * Created by LightDance on 2017/10/4.
+ * @author LightDance
  */
 
 public class NewAppointmentFragment extends Fragment {
@@ -64,12 +65,13 @@ public class NewAppointmentFragment extends Fragment {
     @BindView(R.id.numberPicker)
     NumberPickerView numberPickerView;
 
-    //该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
+    /**
+     * 该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
+     */
     int timeChange = 0;
     int typeData = 0;
     int typeCode = 0;
     private String personNumb = null;
-    private int personNum = 0;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
     private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
@@ -99,16 +101,17 @@ public class NewAppointmentFragment extends Fragment {
             numb[i] = "" + (i+1);
         }
         numb[100] = "无限制";
-        numberPickerView.setDisplayedValues(numb);//传入数组
+        //传入数组
+        numberPickerView.setDisplayedValues(numb);
         numberPickerView.setMinValue(0);
         numberPickerView.setMaxValue(numb.length - 1);
-        numberPickerView.setValue(0);//设置第一次显示的位置
+        //设置第一次显示的位置
+        numberPickerView.setValue(0);
         //给数字选择器设置监听
         numberPickerView.setOnValueChangedListener(new NumberPickerView.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
                 personNumb = numb[newVal];
-                personNum = getData(personNumb);
             }
         });
 
@@ -125,20 +128,6 @@ public class NewAppointmentFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private int getData(String personNumb) {
-        String[] numb = new String[101];
-        numb[100] = "无限制";
-        for (int i = 0;i<100;i++){
-            numb[i] = "" + (i+1);
-            if (personNumb.equals(numb[i])){
-                personNum = i+1;
-            }else{
-                personNum = 666;
-            }
-        }
-        return personNum;
     }
 
     @Override
@@ -191,10 +180,14 @@ public class NewAppointmentFragment extends Fragment {
                     saveData();
                 }
                 break;
+            default:
+                break;
         }
     }
 
-    //清空数据方法
+    /**
+     * 清空数据方法
+     */
     private void clearData() {
         editTextActivityTitle.setText("");
         tvActivityStartDate.setText("2017年01月01日");
@@ -208,7 +201,10 @@ public class NewAppointmentFragment extends Fragment {
         numberPickerView.setValue(0);
     }
 
-    //传送选择的活动类型的数据
+    /**
+     * 传送选择的活动类型的数据
+     * @param checkId
+     */
     private void sendTypeData(int checkId) {
         switch (checkId) {
             case R.id.radioButton_brpg:
@@ -247,15 +243,21 @@ public class NewAppointmentFragment extends Fragment {
                 typeData = R.drawable.ic_travel;
                 typeCode = 8;
                 break;
+            default:
+                break;
         }
     }
 
-    //判断发布信息内容是否合法
+    /**
+     * 判断发布信息内容是否合法
+     * @return
+     */
     private boolean isDataIllegal() {
         //缺少一个时间合法性检测
         if (editTextActivityTitle.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), "标题不可为空！", Toast.LENGTH_SHORT).show();
-            return true;//返回不合法
+            //返回不合法
+            return true;
         } else if (tvActivityTypeSelect.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), "请选择活动类型！", Toast.LENGTH_SHORT).show();
             return true;
@@ -275,7 +277,9 @@ public class NewAppointmentFragment extends Fragment {
         return false;
     }
 
-    //数据存储方法
+    /**
+     * 数据存储方法
+     */
     private void saveData() {
         //点击完成后 获取数据储存到后台
         BrowserMsgBean browserMsgBean = new BrowserMsgBean();
@@ -292,9 +296,6 @@ public class NewAppointmentFragment extends Fragment {
         browserMsgBean.setPersonNumberNeed(personNumb);
         browserMsgBean.setPersonNumberHave(1);
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-//        String[] strings = new String[personNum];
-//        strings[0] = preferences.getString("userStudentNum","这里出现了个BUG");
-//        browserMsgBean.setParticipantsStudentNum(strings);
         int  inviterIconId = preferences.getInt("userAvatar",R.mipmap.ic_user);
         String inviter = preferences.getString("nickName","BUG");
         String userBeanId = preferences.getString("userBeanId","BUG");
@@ -322,7 +323,12 @@ public class NewAppointmentFragment extends Fragment {
         });
     }
 
-    //判断更改哪个TextView显示的日期文本
+    /**
+     * 判断更改哪个TextView显示的日期文本
+     * @param yearSelect
+     * @param monthSelect
+     * @param daySelect
+     */
     public void setDate(int yearSelect, int monthSelect, int daySelect) {
         if (timeChange == 1) {
             setStartDate(yearSelect, monthSelect, daySelect);
@@ -332,7 +338,11 @@ public class NewAppointmentFragment extends Fragment {
         }
     }
 
-    //判断更改哪个TextView显示的时间文本
+    /**
+     * 判断更改哪个TextView显示的时间文本
+     * @param hour
+     * @param minute
+     */
     public void setTime(int hour, int minute) {
         if (timeChange == 1) {
             setStartTime(hour, minute);
@@ -343,7 +353,12 @@ public class NewAppointmentFragment extends Fragment {
         timeChange = 0;
     }
 
-    //更改方法
+    /**
+     * 更改方法
+     * @param year
+     * @param month
+     * @param day
+     */
     public void setStartDate(int year, int month, int day) {
         if (month < 10 && day >= 10) {
             tvActivityStartDate.setText(year + "-0" + month + "-" + day);

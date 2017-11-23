@@ -28,6 +28,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+/**
+ * @author pope
+ */
+
 public class AppointmentDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_detailed_info_title)
@@ -122,19 +126,23 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 break;
             case R.id.detailed_info_take_part_in:
                 progressDialog.show();
+                //通过objectId查询表内详细信息
                 BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
                 query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                     @Override
                     public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                         if (e == null){
+                            //获取已参与人员列表
                             List<MemberBean> memberBeanList = browserMsgBean.getMembers();
                             int s = memberBeanList.size();
                             int n = browserMsgBean.getPersonNumberHave();
                             int t = browserMsgBean.getTypeCode();
+                            //获取当前用户个人信息
                             SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
                             String userObjectId = preferences.getString("userBeanId","错误啦啊啊啊~");
                             String userNickName = preferences.getString("nickName","错误啦啊啊啊~");
                             int userAvatar = preferences.getInt("userAvatar",0);
+                            //检测当前用户是否已经在该活动已参与人员列表
                             boolean isJoined = false;
                             for(int i=0;i<s;i++){
                                 String s1 = memberBeanList.get(i).getMemberUserBeanId();
@@ -147,6 +155,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 Toast.makeText(AppointmentDetailActivity.this,"别闹..你都已经参加了",Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }else{
+                                //如果未参与 将当前用户添加到该活动的参与人员名单
                                 BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
                                 List<MemberBean> members= browserMsgBean.getMembers();
                                 MemberBean memberBean = new MemberBean();
@@ -164,6 +173,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
+                                //更改该活动的已参与人数+1
                                 BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
                                 browserMsgBean1.setPersonNumberHave(n+1);
                                 browserMsgBean1.setTypeCode(t);
@@ -186,7 +196,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
                     }
                 });
-
+                break;
+            default:
                 break;
         }
     }
