@@ -52,7 +52,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
 
 
         TextView title;
-//        TextView publishTime;
+        //        TextView publishTime;
 //        TextView startTime;
 //        TextView endTime;
 //        TextView place;
@@ -78,12 +78,12 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
             inviter = (TextView) itemView.findViewById(R.id.tv_appointment_inviter);
             personNumberNeed = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_need);
             personNumberHave = (TextView) itemView.findViewById(R.id.tv_appointment_personnumber_have);
-            type = (ImageView) itemView.findViewById(R.id.img_appointment_type);
+//            type = (ImageView) itemView.findViewById(R.id.img_appointment_type);
             inviterIcon = (ImageView) itemView.findViewById(R.id.img_appointment_inviterIcon);
         }
     }
 
-    public BrowserMsgAdapter(Context mContext,List<BrowserMsgBean> messageAppointmentList) {
+    public BrowserMsgAdapter(Context mContext, List<BrowserMsgBean> messageAppointmentList) {
         msgBeanList = messageAppointmentList;
         this.mContext = mContext;
     }
@@ -138,22 +138,23 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
         holder.personNumberHave.setText(String.valueOf(msgAppointment.getPersonNumberHave()));
 //        holder.type.setImageResource(msgAppointment.getTypeIconId());
-        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
+//        Glide.with(mContext).load(msgAppointment.getTypeIconId()).into(holder.type);
 //        holder.inviterIcon.setImageResource(msgAppointment.getInviterIconId());
         Glide.with(mContext).load(msgAppointment.getInviterIconId()).into(holder.inviterIcon);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (msgOnclickListener != null)
+                if (msgOnclickListener != null) {
                     msgOnclickListener.onClick(holder.getAdapterPosition());
+                }
             }
         });
         holder.inviter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (inviterOnClickListener != null)
+                if (inviterOnClickListener != null) {
                     inviterOnClickListener.onClick(holder.getAdapterPosition());
-
+                }
             }
         });
     }
