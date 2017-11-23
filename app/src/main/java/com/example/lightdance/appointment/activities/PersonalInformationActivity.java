@@ -101,25 +101,30 @@ public class PersonalInformationActivity extends AppCompatActivity {
                 setCode = SET_NICKNAME;
                 break;
             case R.id.img_userinfor_avatar:
-                Intent openAlbumIntent = new Intent(
-                        Intent.ACTION_GET_CONTENT);
-                openAlbumIntent.setType("image/*");
-                //用startActivityForResult方法，待会儿重写onActivityResult()方法，拿到图片做裁剪操作
-                startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
+                Toast.makeText(this,"休想换头像",Toast.LENGTH_SHORT).show();
+//                Intent openAlbumIntent = new Intent(
+//                        Intent.ACTION_GET_CONTENT);
+//                openAlbumIntent.setType("image/*");
+                /**用startActivityForResult方法，待会儿重写onActivityResult()方法，拿到图片做裁剪操作
+                 * 暂时不提供更换头像功能
+                 * 相关已写功能代码暂时注释掉
+                 */
+//                startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                 break;
             case R.id.tv_userinfor_name:
-                Toast.makeText(this,"姓名无法编辑",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"名字已定，无法更改",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_userinfor_sex:
-                Toast.makeText(this,"性别无法编辑",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"哟？你要变性了啊？",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_userinfor_college:
                 editDialog.show(getSupportFragmentManager(),"editDialog");
                 setCode = SET_COLLEGE;
                 break;
             case R.id.tv_userinfor_studentnumb:
-                Toast.makeText(this,"学号无法编辑",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"学号肯定不会给你改的，小样",Toast.LENGTH_SHORT).show();
                 break;
+            default:break;
         }
     }
 
@@ -208,6 +213,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
                     if (data != null) {
                         setImageToView(data); // 让刚才选择裁剪得到的图片显示在界面上
                     }
+                    break;
+                default:
                     break;
             }
         }
