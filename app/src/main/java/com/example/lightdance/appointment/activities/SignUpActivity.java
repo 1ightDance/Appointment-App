@@ -1,5 +1,6 @@
 package com.example.lightdance.appointment.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -36,6 +37,8 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText userPasswordConfirm;
     private EditText userPhoneNumber;
     private EditText userSecurityCode;
+    private EditText userNickName;
+    private EditText userCollege;
     private Button btnSecurityCode;
 
     //用于获取性别并保存在int型里面
@@ -47,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button signUpFinish;
     private SQLiteDatabase db = Connector.getDatabase();
     private MyCountDownTimer myCountDownTimer;
+    private ProgressDialog progressDialog;
 
     private int hahaha;
     private String hint;
@@ -116,6 +120,9 @@ public class SignUpActivity extends AppCompatActivity {
         signUpFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("注册中...");
+                progressDialog.setTitle("请稍等");
+                progressDialog.show();
                 if (checkUserInfo()) {
                     BmobSMS.verifySmsCode(SignUpActivity.this, userPhoneNumber.getText().toString(),
                             userSecurityCode.getText().toString(), new VerifySMSCodeListener() {
@@ -128,9 +135,9 @@ public class SignUpActivity extends AppCompatActivity {
                                         newUser.setUserStudentNum(userStudentNumber.getText().toString());
                                         newUser.setUserPhoneNumber(userPhoneNumber.getText().toString());
                                         newUser.setUserSex(userSex);
-                                        newUser.setUserNickName(userName.getText().toString());
+                                        newUser.setUserNickName(userNickName.getText().toString());
                                         newUser.setUserDescription("这个人很懒，什么都没说");
-                                        newUser.setUserCollege("未填");
+                                        newUser.setUserCollege(userCollege.getText().toString());
                                         newUser.setUserIconId(R.mipmap.ic_user);
                                         newUser.save(new SaveListener<String>() {
                                             @Override
@@ -144,17 +151,20 @@ public class SignUpActivity extends AppCompatActivity {
                                                     intent.putExtra("userPassword",
                                                             userPassword.getText().toString());
                                                     setResult(RESULT_OK, intent);
+                                                    progressDialog.dismiss();
                                                     finish();
                                                 } else {
                                                     Toast.makeText(SignUpActivity.this,
                                                             "服务器端数据存储失败：" + e.getMessage()
                                                             , Toast.LENGTH_SHORT).show();
+                                                    progressDialog.dismiss();
                                                 }
                                             }
                                         });
                                     }else{
                                         Toast.makeText(SignUpActivity.this,
                                                 "验证码错误", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
                                     }
                                 }
                             });
@@ -163,7 +173,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    //初始化3套随机出现的验证码模板
+    /**
+     * 初始化3套随机出现的验证码模板
+     */
     private void initString() {
         //生成1~3的随机数
         hahaha = (int) (1+Math.random()*3);
@@ -188,9 +200,13 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    //initView用于成员变量绑定xml文件对应组件
+    /**
+     * initView用于成员变量绑定xml文件对应组件
+     */
     private void initView() {
         userStudentNumber = (EditText) findViewById(R.id.signup_user_student_num);
+        userNickName = (EditText) findViewById(R.id.signup_user_nickname);
+        userCollege = (EditText) findViewById(R.id.signup_user_college);
         userName = (EditText) findViewById(R.id.signup_user_name);
         userPassword = (EditText) findViewById(R.id.signup_user_password);
         userPasswordConfirm = (EditText) findViewById(R.id.signup_user_ensure_password);
@@ -203,6 +219,7 @@ public class SignUpActivity extends AppCompatActivity {
         btnSecurityCode = (Button) findViewById(R.id.btn_security_code);
         userSecurityCode.setHint(hint);
         btnSecurityCode.setText(btnText);
+        progressDialog = new ProgressDialog(this);
         myCountDownTimer = new MyCountDownTimer(60000,1000);
     }
 
@@ -238,7 +255,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    //checkUserInfo用来检测用户输入信息是否合法、是否缺少必要信息
+    /**
+     * checkUserInfo用来检测用户输入信息是否合法、是否缺少必要信息
+     * @return 如果合法返回true,否则返回false
+     */
     private boolean checkUserInfo() {
         if (userStudentNumber.getText().toString().length() < 8) {
             Toast.makeText(SignUpActivity.this, "学号长度小于八位！", Toast.LENGTH_SHORT).show();

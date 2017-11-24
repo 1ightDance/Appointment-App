@@ -6,6 +6,216 @@
     android:layout_height="match_parent"
     tools:context="com.example.lightdance.appointment.activities.SignUpActivity">
 
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/ic_loginbg"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/box1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_login"
+            android:paddingBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="注册"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/signup_user_name"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="你的名字"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/textView1"
+                app:layout_constraintStart_toStartOf="@+id/textView1"
+                app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+            <EditText
+                android:id="@+id/signup_user_nickname"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="取个昵称"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_name"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_name"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_name" />
+
+            <RadioGroup
+                android:id="@+id/signup_user_sex_radiogroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_nickname"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_nickname"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_nickname">
+
+                <RadioButton
+                    android:id="@+id/signup_user_sex_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:text=" 男 "
+                    android:textSize="24sp"
+                    tools:layout_editor_absoluteX="227dp"
+                    tools:layout_editor_absoluteY="309dp" />
+
+                <RadioButton
+                    android:id="@+id/signup_user_sex_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:text="女"
+                    android:textSize="24sp"
+                    tools:layout_editor_absoluteX="92dp"
+                    tools:layout_editor_absoluteY="325dp" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/signup_user_student_num"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="杭电服役编号"
+                android:inputType="number"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_sex_radiogroup"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_sex_radiogroup"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_sex_radiogroup" />
+
+            <EditText
+                android:id="@+id/signup_user_college"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="哪个院的啊"
+                android:inputType="text"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_student_num"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_student_num"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_student_num" />
+
+            <EditText
+                android:id="@+id/signup_user_password"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="悄悄告诉我密码"
+                android:inputType="textPassword"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_college"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_college"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_college" />
+
+            <EditText
+                android:id="@+id/signup_user_ensure_password"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="没听清 再说遍"
+                android:inputType="textPassword"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_password"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_password"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_password" />
+
+            <EditText
+                android:id="@+id/signup_user_phone_num"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="你爪机号"
+                android:inputType="phone"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_ensure_password"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_ensure_password"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_ensure_password" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/box"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/signup_user_phone_num"
+                app:layout_constraintStart_toStartOf="@+id/signup_user_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/signup_user_phone_num">
+
+                <EditText
+                    android:id="@+id/signup_security_code"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="验证码"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_security_code"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_btn"
+                    android:text="获取验证码"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/signup_security_code"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/signup_security_code"
+                    app:layout_constraintTop_toTopOf="@+id/signup_security_code" />
+            </android.support.constraint.ConstraintLayout>
+
+            <Button
+                android:id="@+id/signup_finish"
+                style="@android:style/Widget.Holo.Button.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_btn"
+                android:text="立即注册"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/box"
+                app:layout_constraintStart_toStartOf="@+id/box"
+                app:layout_constraintTop_toBottomOf="@+id/box" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_signup"
         android:layout_width="0dp"
@@ -24,209 +234,5 @@
             android:layout_height="32dp" />
 
     </android.support.v7.widget.Toolbar>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_loginbg"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_signup"
-        android:layout_marginBottom="0dp" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/scrollView3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_signup">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="false"
-            android:background="@drawable/bg_login"
-            android:cropToPadding="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/signup_user_phone_num"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="你爪机号"
-            android:inputType="phone"
-            android:textAlignment="center"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_ensure_password" />
-
-        <EditText
-            android:id="@+id/signup_user_name"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="16dp"
-            android:hint="想造你名字"
-            android:textAlignment="center"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView1" />
-
-        <RadioGroup
-            android:id="@+id/signup_user_sex_radiogroup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/signup_user_name"
-            app:layout_constraintStart_toStartOf="@+id/signup_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_name">
-
-            <RadioButton
-                android:id="@+id/signup_user_sex_man"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:text=" 男 "
-                android:textSize="24sp"
-                tools:layout_editor_absoluteX="227dp"
-                tools:layout_editor_absoluteY="309dp" />
-
-            <RadioButton
-                android:id="@+id/signup_user_sex_woman"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:text="女"
-                android:textSize="24sp"
-                tools:layout_editor_absoluteX="92dp"
-                tools:layout_editor_absoluteY="325dp" />
-        </RadioGroup>
-
-        <EditText
-            android:id="@+id/signup_user_student_num"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="杭电服役编号"
-            android:inputType="number"
-            android:textAlignment="center"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_sex_radiogroup" />
-
-        <EditText
-            android:id="@+id/signup_user_ensure_password"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="没听清 再说遍"
-            android:inputType="textPassword"
-            android:textAlignment="center"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_password" />
-
-        <Button
-            android:id="@+id/signup_finish"
-            style="@android:style/Widget.Holo.Button.Small"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/bg_btn"
-            android:text="立即注册"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="24dp"
-            android:text="注册"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
-        <EditText
-            android:id="@+id/signup_user_password"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="悄悄告诉我密码"
-            android:inputType="textPassword"
-            android:textAlignment="center"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView3"
-            app:layout_constraintRight_toRightOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_student_num" />
-
-        <EditText
-            android:id="@+id/signup_security_code"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="验证码"
-            android:inputType="number"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/signup_finish"
-            app:layout_constraintStart_toStartOf="@+id/signup_user_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/signup_user_phone_num" />
-
-        <Button
-            android:id="@+id/btn_security_code"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_btn"
-            android:text="获取验证码"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/signup_security_code"
-            app:layout_constraintEnd_toEndOf="@+id/signup_user_phone_num"
-            app:layout_constraintStart_toEndOf="@+id/signup_security_code"
-            app:layout_constraintTop_toTopOf="@+id/signup_security_code" />
-
-    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
