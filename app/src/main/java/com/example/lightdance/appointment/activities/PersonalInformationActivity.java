@@ -21,15 +21,17 @@ import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.SetPersonalInformationFragment;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
+
+/**
+ * @author pope
+ */
 
 public class PersonalInformationActivity extends AppCompatActivity {
 
@@ -82,18 +84,44 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void initInformation() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("请稍等");
+        progressDialog.setMessage("加载中...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         SharedPreferences p = getSharedPreferences("loginData",MODE_PRIVATE);
-        tvUserinforNickname.setText(p.getString("nickName","无"));
-        imgUserinforAvatar.setImageResource(p.getInt("userAvatar",0));
-        editTextUserinforIntroduction.setText(p.getString("userIntroduction","空"));
-        tvUserinforName.setText(p.getString("userName","无"));
-        tvUserinforSex.setText(p.getString("userSex","无"));
-        tvUserinforCollege.setText(p.getString("userCollege","无"));
-        tvUserinforStudentnumb.setText(p.getString("userStudentNumber","无"));
+        String objectId = p.getString("userBeanId","7777777");
+        BmobQuery<UserBean> query = new BmobQuery<>();
+        query.getObject(objectId, new QueryListener<UserBean>() {
+            @Override
+            public void done(UserBean userBean, BmobException e) {
+                if (e == null){
+                    tvUserinforNickname.setText(userBean.getUserNickName());
+                    imgUserinforAvatar.setImageResource(userBean.getUserIconId());
+                    editTextUserinforIntroduction.setText(userBean.getUserDescription());
+                    tvUserinforName.setText(userBean.getUserName());
+                    String sex = null;
+                    if (userBean.getUserSex() == 0){
+                        sex = "女";
+                    }else{
+                        sex = "男";
+                    }
+                    tvUserinforSex.setText(sex);
+                    tvUserinforCollege.setText(userBean.getUserCollege());
+                    tvUserinforStudentnumb.setText(userBean.getUserStudentNum());
+                    progressDialog.dismiss();
+                }else{
+                    Toast.makeText(PersonalInformationActivity.this,"数据获取出错"+e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                }
+            }
+        });
     }
 
     //XML中控件的点击监听
-    @OnClick({ R.id.tv_userinfor_nickname, R.id.img_userinfor_avatar, R.id.tv_userinfor_name, R.id.tv_userinfor_sex, R.id.tv_userinfor_college, R.id.tv_userinfor_studentnumb})
+    @OnClick({ R.id.tv_userinfor_nickname, R.id.img_userinfor_avatar, R.id.tv_userinfor_name,
+            R.id.tv_userinfor_sex, R.id.tv_userinfor_college, R.id.tv_userinfor_studentnumb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_userinfor_nickname:
@@ -145,57 +173,66 @@ public class PersonalInformationActivity extends AppCompatActivity {
         tvUserinforCollege.setText(s);
     }
 
+    /**
+     * 更新数据方法
+     * @param s 企图更新的新数据
+     */
     public void updateData(final String s){
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("请稍等");
         progressDialog.setMessage("正在保存...");
         progressDialog.setCancelable(false);
+        progressDialog.show();
+        //通过获取SharedPreferences里的userBeanId获取当前用户的ObjectId查询表数据
         SharedPreferences p = getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        final String objectId = p.getString("userBeanId","错误");
         BmobQuery<UserBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("userStudentNum",p.getString("userStudentNumber","错误"));
-        query.findObjects(new FindListener<UserBean>() {
+        query.getObject(objectId, new QueryListener<UserBean>() {
             @Override
-            public void done(List<UserBean> list, BmobException e) {
-                if (e == null){
-                    SharedPreferences.Editor editor =getSharedPreferences("loginData",MODE_PRIVATE).edit();
-                    String objectId = list.get(0).getObjectId();
-                    UserBean user = new UserBean();
-                    if (setCode == SET_NICKNAME){
-                        editor.putString("nickName",s);
-                        editor.apply();
-                        user.setUserNickName(s);
-                        user.update(objectId, new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null){
-                                    Toast.makeText(PersonalInformationActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(PersonalInformationActivity.this,"保存失败"+e.getMessage()
-                                            ,Toast.LENGTH_SHORT).show();
-                                }
+            public void done(UserBean user, BmobException e) {
+                //更新昵称数据
+                if (setCode == SET_NICKNAME){
+                    user.setValue("userNickName",s);
+                    user.update(objectId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null){
+                                tvUserinforNickname.setText(s);
+                                SharedPreferences.Editor editor = getSharedPreferences("loginData",
+                                        Context.MODE_PRIVATE).edit();
+                                editor.putString("nickName",s);
+                                Toast.makeText(PersonalInformationActivity.this,"保存成功",
+                                        Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }else{
+                                Toast.makeText(PersonalInformationActivity.this,"保存失败"+e.getMessage()
+                                        ,Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
-                        });
-                        progressDialog.dismiss();
-                    }
-                    if (setCode == SET_COLLEGE){
-                        editor.putString("userCollege",s);
-                        editor.apply();
-                        user.setUserCollege(s);
-                        user.update(objectId, new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null){
-                                    Toast.makeText(PersonalInformationActivity.this,"保存成功",Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(PersonalInformationActivity.this, "保存失败" + e.getMessage()
-                                            , Toast.LENGTH_SHORT).show();
-                                }
+                        }
+                    });
+                }
+                //更新学院数据
+                if (setCode == SET_COLLEGE){
+                    user.setValue("userCollege",s);
+                    user.update(objectId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null){
+                                tvUserinforCollege.setText(s);
+                                SharedPreferences.Editor editor = getSharedPreferences("loginData",
+                                        Context.MODE_PRIVATE).edit();
+                                editor.putString("userCollege",s);
+                                Toast.makeText(PersonalInformationActivity.this,"保存成功",
+                                        Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }else {
+                                Toast.makeText(PersonalInformationActivity.this, "保存失败" + e.getMessage()
+                                        , Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
-                        });
-                        progressDialog.dismiss();
-                    }
-                }else{
-                    Toast.makeText(PersonalInformationActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });

@@ -87,35 +87,51 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.tv_forgetpassword:
                 break;
+            default:
+                break;
         }
     }
 
+    /**
+     * 验证账号密码是否正确方法
+     * @param editStudentNum 输入框中学号
+     * @param editPassWord 输入框中密码
+     */
     public void isMatch(final String editStudentNum, final String editPassWord){
-        BmobQuery<UserBean> query = new BmobQuery<UserBean>();
+        //判空
+        if (editPassWord == null||editStudentNum ==null){
+            Toast.makeText(LoginActivity.this,"账号或密码不能为空",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //查询当前输入的学号所对应的密码
+        BmobQuery<UserBean> query = new BmobQuery<>();
         query.addWhereEqualTo("userStudentNum",editStudentNum);
         query.findObjects(new FindListener<UserBean>() {
             @Override
             public void done(List<UserBean> list, BmobException e) {
+                //判断账号是否已被创建
                 if (list.isEmpty()){
-                    Toast.makeText(LoginActivity.this,"该账号不存在",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"该账号未创建",Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                     return;
                 }
+                //获取密码并判断是否正确
                 String passWord = list.get(0).getUserPassword();
-                String nickName = list.get(0).getUserNickName();
-                int userAvatar = list.get(0).getUserIconId();
-                String userBeanId = list.get(0).getObjectId();
-                String userIntroduction = list.get(0).getUserDescription();
-                String userName = list.get(0).getUserName();
-                int gender1 = list.get(0).getUserSex();
-                String gender = null;
-                if (gender1 == 1){
-                    gender = "男";
-                }if (gender1 == 0){
-                    gender = "女";
-                }
-                String userCollege = list.get(0).getUserCollege();
                 if (passWord .equals(editPassWord)){
+                    //若密码正确则获取该用户的所有个人信息并保存至本地 并更改登录状态为已登录
+                    String nickName = list.get(0).getUserNickName();
+                    int userAvatar = list.get(0).getUserIconId();
+                    String userBeanId = list.get(0).getObjectId();
+                    String userIntroduction = list.get(0).getUserDescription();
+                    String userName = list.get(0).getUserName();
+                    int gender1 = list.get(0).getUserSex();
+                    String gender = null;
+                    if (gender1 == 1){
+                        gender = "男";
+                    }if (gender1 == 0){
+                        gender = "女";
+                    }
+                    String userCollege = list.get(0).getUserCollege();
                     SharedPreferences.Editor editor = getSharedPreferences("loginData",MODE_PRIVATE).edit();
                     editor.putString("userBeanId",userBeanId);
                     editor.putBoolean("isLogined",true);

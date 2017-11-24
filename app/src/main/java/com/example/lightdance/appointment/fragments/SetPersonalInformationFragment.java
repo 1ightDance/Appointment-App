@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
+ * @author pope
  * A simple {@link Fragment} subclass.
  */
 public class SetPersonalInformationFragment extends DialogFragment {
@@ -57,7 +58,6 @@ public class SetPersonalInformationFragment extends DialogFragment {
         PersonalInformationActivity a = (PersonalInformationActivity) getActivity();
         a.setMsg(s);
         a.updateData(s);
-        editText.setText("");
         dismiss();
     }
 
