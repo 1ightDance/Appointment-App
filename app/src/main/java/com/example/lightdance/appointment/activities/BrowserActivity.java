@@ -25,28 +25,36 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     Fragment mNewAppointmentFragment;
     Fragment mBrowseFragment;
 
+    private int from;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
         Intent intent = getIntent();
-        typeCode = intent.getIntExtra("typeCode",0);
-        if (typeCode == 0){
-            Toast.makeText(this,"选择的活动类型的数据传输出现错误",Toast.LENGTH_LONG).show();
-        }else {
-            BrowseFragment browseFragment = (BrowseFragment) getFragment(1);
-            browseFragment.sendSelectType(typeCode);
-            changeFragment(1);
+        from = intent.getIntExtra("from", 1);
+        typeCode = intent.getIntExtra("typeCode", 0);
+        if (from == 1) {
+            if (typeCode == 0) {
+                Toast.makeText(this, "选择的活动类型的数据传输出现错误", Toast.LENGTH_LONG).show();
+            } else {
+                BrowseFragment browseFragment = (BrowseFragment) getFragment(1);
+                browseFragment.sendSelectType(typeCode);
+                changeFragment(1);
+            }
+        }
+        if (from == 2){
+            changeFragment(2);
         }
     }
 
-    public void changeFragment(int position){
-        if (position == mCurrentPosition){
+    public void changeFragment(int position) {
+        if (position == mCurrentPosition) {
             return;
         }
         Fragment fragment = getFragment(position);
-        if (fragment == null){
+        if (fragment == null) {
             return;
         }
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -77,7 +85,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
                 }
                 return mBrowseFragment;
             case 2:
-                if (mNewAppointmentFragment == null){
+                if (mNewAppointmentFragment == null) {
                     mNewAppointmentFragment = NewAppointmentFragment.newInstance();
                 }
                 return mNewAppointmentFragment;
@@ -88,9 +96,14 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mCurrentPosition == 2){
-            changeFragment(1);
-            return true;
+        if (mCurrentPosition == 2) {
+            if (from == 1) {
+                changeFragment(1);
+            }
+            if (from == 2){
+                finish();
+            }
+            return false;
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -98,29 +111,41 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     //重写TimeListener接口的saveDate方法
     @Override
     public void saveDate(int year, int month, int day) {
-        yearSelect  = year;
+        yearSelect = year;
         monthSelect = month;
-        daySelect   = day;
+        daySelect = day;
         changeData();
     }
 
     //重写TimeListener接口的saveTime方法
     @Override
     public void saveTime(int hour, int minute) {
-        hourSelect   = hour;
+        hourSelect = hour;
         minuteSelect = minute;
         changeTime();
     }
 
-    //用以更改日期的方法
-    public void changeData(){
+    /**
+     * 用以更改日期的方法
+     */
+    public void changeData() {
         NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
-        newAppointmentFragment.setDate(yearSelect,monthSelect,daySelect);
+        newAppointmentFragment.setDate(yearSelect, monthSelect, daySelect);
     }
 
-    //用以更改时间的方法
+    /**
+     * 用以更改时间的方法
+     */
     private void changeTime() {
         NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
-        newAppointmentFragment.setTime(hourSelect,minuteSelect);
+        newAppointmentFragment.setTime(hourSelect, minuteSelect);
     }
+
+    /**
+     * @return 返回FromCode 即返回该Activity从哪里启动来的
+     */
+    public int getFromCode(){
+        return from;
+    }
+
 }

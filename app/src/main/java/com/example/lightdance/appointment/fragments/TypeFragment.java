@@ -1,10 +1,13 @@
 package com.example.lightdance.appointment.fragments;
 
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -36,6 +40,8 @@ public class TypeFragment extends Fragment {
     @BindView(R.id.recyclerview_type)
     RecyclerView recyclerviewType;
     Unbinder unbinder;
+    @BindView(R.id.new_appointment_main)
+    FloatingActionButton fab;
 
     private List<TypeBean> typeList = new ArrayList<>();
     private int typeCode = 0;
@@ -60,23 +66,25 @@ public class TypeFragment extends Fragment {
 
         initData();
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2
-                ,LinearLayoutManager.VERTICAL,false);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2
+                , LinearLayoutManager.VERTICAL, false);
         recyclerviewType.setLayoutManager(layoutManager);
-        TypeAdapter adapter = new TypeAdapter(getActivity(),typeList);
+        TypeAdapter adapter = new TypeAdapter(getActivity(), typeList);
         recyclerviewType.setAdapter(adapter);
+
+        recyclerviewType.setOnScrollListener(new HideScrollListener());
 
         adapter.setTypeItemOnclickListener(new TypeAdapter.OnTypeItemClickListener() {
             @Override
             public void onClick(int position) {
                 SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-                if (preferences.getBoolean("isLogined",false)) {
-                    typeCode = position+1;
+                if (preferences.getBoolean("isLogined", false)) {
+                    typeCode = position + 1;
                     Intent intent = new Intent(getActivity(), BrowserActivity.class);
-                    intent.putExtra("typeCode",typeCode);
+                    intent.putExtra("typeCode", typeCode);
+                    intent.putExtra("from",1);
                     startActivity(intent);
-                }else
-                {
+                } else {
                     MainActivity activity = (MainActivity) getActivity();
                     activity.changeFragment(6);
                 }
@@ -86,6 +94,9 @@ public class TypeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 类别数据
+     */
     private void initData() {
         TypeBean type1 = new TypeBean();
         type1.setTypeImg(R.mipmap.type_study);
@@ -125,9 +136,78 @@ public class TypeFragment extends Fragment {
         typeList.add(type9);
     }
 
+    /**
+     * 动态隐藏FloatingActionBar判断方法
+     */
+    class HideScrollListener extends RecyclerView.OnScrollListener {
+
+        private static final int HIDE_HEIGHT = 20;
+        private int scrolledInstance = 0;
+        private boolean toolbarVisible = true;
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            boolean r = (toolbarVisible && dy > 0) || !toolbarVisible && dy < 0;
+            if (r) {
+                //recycler向上滚动时dy为正，向下滚动时dy为负数
+                scrolledInstance += dy;
+            }
+            if (scrolledInstance > HIDE_HEIGHT && toolbarVisible) {
+                //当recycler向上滑动距离超过设置的默认值并且toolbar可见时，隐藏toolbar和fab
+                onHide();
+                scrolledInstance = 0;
+                toolbarVisible = false;
+            } else if (scrolledInstance < -HIDE_HEIGHT && !toolbarVisible) {
+                //当recycler向下滑动距离超过设置的默认值并且toolbar不可见时，显示toolbar和fab
+                onShow();
+                scrolledInstance = 0;
+                toolbarVisible = true;
+            }
+        }
+    }
+
+    /**
+     * 动态隐藏FloatingActionBar方法
+     */
+    private void onHide() {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
+        int marginBottom = params.bottomMargin;
+        ObjectAnimator.ofFloat(fab, "translationY", 0, fab.getHeight() + fab.getPaddingBottom() + marginBottom)
+                .setDuration(200).start();
+    }
+
+    /**
+     * 动态显示FloatingActionBar方法
+     */
+    private void onShow() {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
+        int marginBottom = params.bottomMargin;
+        ObjectAnimator.ofFloat(fab, "translationY", fab.getHeight() + fab.getPaddingBottom() + marginBottom, 0)
+                .setDuration(200).start();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.new_appointment_main)
+    public void onViewClicked() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        if (preferences.getBoolean("isLogined", false)) {
+            Intent intent = new Intent(getActivity(), BrowserActivity.class);
+            intent.putExtra("from",2);
+            startActivity(intent);
+        } else {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.changeFragment(6);
+        }
     }
 }

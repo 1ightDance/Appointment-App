@@ -34,6 +34,7 @@ import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
  * Created by LightDance on 2017/10/4.
+ *
  * @author LightDance
  */
 
@@ -71,15 +72,12 @@ public class NewAppointmentFragment extends Fragment {
     int timeChange = 0;
     int typeData = 0;
     int typeCode = 0;
+    int from;
     private String personNumb = null;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
     private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
     private ProgressDialog progressDialog;
-
-    public NewAppointmentFragment() {
-
-    }
 
     public static NewAppointmentFragment newInstance() {
         NewAppointmentFragment fragment = new NewAppointmentFragment();
@@ -96,10 +94,14 @@ public class NewAppointmentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_appointment, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        //从activity中获取到FromCode
+        BrowserActivity a = (BrowserActivity) getActivity();
+        from = a.getFromCode();
+
         //创造一个存放1到100和无限制的String类型数组用以给数字选择器提供数据
         final String[] numb = new String[101];
-        for (int i = 0;i<100;i++){
-            numb[i] = "" + (i+1);
+        for (int i = 0; i < 100; i++) {
+            numb[i] = "" + (i + 1);
         }
         numb[100] = "无限制";
         //传入数组
@@ -124,7 +126,12 @@ public class NewAppointmentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 BrowserActivity activity = (BrowserActivity) getActivity();
-                activity.changeFragment(1);
+                if (from == 1) {
+                    activity.changeFragment(1);
+                }
+                if (from == 2){
+                    activity.finish();
+                }
             }
         });
 
@@ -139,7 +146,7 @@ public class NewAppointmentFragment extends Fragment {
 
     @OnClick({R.id.tv_activity_end_time, R.id.tv_activity_start_time, R.id.tv_activity_start_date,
             R.id.tv_activity_end_date, R.id.tv_activity_type_select,
-            R.id.imageView_activity_type_next,R.id.btn_newappointment_done})
+            R.id.imageView_activity_type_next, R.id.btn_newappointment_done})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_activity_start_time:
@@ -191,9 +198,9 @@ public class NewAppointmentFragment extends Fragment {
      */
     private void clearData() {
         editTextActivityTitle.setText("");
-        tvActivityStartDate.setText("2017年01月01日");
+        tvActivityStartDate.setText("2017-01-01");
         tvActivityStartTime.setText("12:00");
-        tvActivityEndDate.setText("2017年12月31日");
+        tvActivityEndDate.setText("2017-12-31");
         tvActivityEndTime.setText("12:00");
         editTextActivityPlace.setText("");
         editTextActivityContent.setText("");
@@ -204,6 +211,7 @@ public class NewAppointmentFragment extends Fragment {
 
     /**
      * 传送选择的活动类型的数据
+     *
      * @param checkId
      */
     private void sendTypeData(int checkId) {
@@ -251,6 +259,7 @@ public class NewAppointmentFragment extends Fragment {
 
     /**
      * 判断发布信息内容是否合法
+     *
      * @return
      */
     private boolean isDataIllegal() {
@@ -302,7 +311,7 @@ public class NewAppointmentFragment extends Fragment {
         browserMsgBean.setPersonNumberHave(1);
         //获取当前用户的信息存储为该活动的发布人
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-        String userBeanId = preferences.getString("userBeanId","BUG");
+        String userBeanId = preferences.getString("userBeanId", "BUG");
         browserMsgBean.setInviter(userBeanId);
         List<String> memberList = new ArrayList<>();
         memberList.add(userBeanId);
@@ -313,10 +322,15 @@ public class NewAppointmentFragment extends Fragment {
                 if (e == null) {
                     Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                     BrowserActivity activity = (BrowserActivity) getActivity();
-                    activity.changeFragment(1);
+                    if (from == 1) {
+                        activity.changeFragment(1);
+                    }
+                    if (from == 2){
+                        activity.finish();
+                    }
                     progressDialog.dismiss();
                     clearData();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                 }
@@ -326,6 +340,7 @@ public class NewAppointmentFragment extends Fragment {
 
     /**
      * 判断更改哪个TextView显示的日期文本
+     *
      * @param yearSelect
      * @param monthSelect
      * @param daySelect
@@ -341,6 +356,7 @@ public class NewAppointmentFragment extends Fragment {
 
     /**
      * 判断更改哪个TextView显示的时间文本
+     *
      * @param hour
      * @param minute
      */
@@ -356,6 +372,7 @@ public class NewAppointmentFragment extends Fragment {
 
     /**
      * 更改方法
+     *
      * @param year
      * @param month
      * @param day

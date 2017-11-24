@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity{
                     case R.id.menu_me:
                         changeFragment(4);
                         break;
+                    default:
+                        break;
                 }
                 return true;
             }
@@ -89,7 +91,8 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
 
-        if (position == 3){
+        //如果即将跳转3或5号碎片 判断该用户是否登录
+        if (position == 3||position ==5){
             SharedPreferences preferences = getSharedPreferences("loginData"
                     , Context.MODE_PRIVATE);
             boolean isLogined = preferences.getBoolean("isLogined", false);
@@ -116,7 +119,11 @@ public class MainActivity extends AppCompatActivity{
         mCurrentPosition = position;
     }
 
-    //获取碎片实例方法
+    /**
+     * 获取碎片实例方法
+     * @param position 传入获取碎片编号
+     * @return 返回编号对应的碎片
+     */
     public Fragment getFragment(int position) {
         switch (position) {
             case 1:
