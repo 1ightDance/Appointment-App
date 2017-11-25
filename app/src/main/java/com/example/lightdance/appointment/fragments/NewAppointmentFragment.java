@@ -217,39 +217,30 @@ public class NewAppointmentFragment extends Fragment {
     private void sendTypeData(int checkId) {
         switch (checkId) {
             case R.id.radioButton_brpg:
-                typeData = R.drawable.ic_brpg;
                 typeCode = 3;
                 break;
             case R.id.radioButton_dining:
-                typeData = R.drawable.ic_dining;
                 typeCode = 7;
                 break;
             case R.id.radioButton_game:
-                typeData = R.drawable.ic_game;
                 typeCode = 4;
                 break;
             case R.id.radioButton_movies:
-                typeData = R.drawable.ic_movies;
                 typeCode = 2;
                 break;
             case R.id.radioButton_others:
-                typeData = R.drawable.ic_others;
                 typeCode = 9;
                 break;
             case R.id.radioButton_singing:
-                typeData = R.drawable.ic_singing;
                 typeCode = 5;
                 break;
             case R.id.radioButton_sports:
-                typeData = R.drawable.ic_sports;
                 typeCode = 6;
                 break;
             case R.id.radioButton_study:
-                typeData = R.drawable.ic_study;
                 typeCode = 1;
                 break;
             case R.id.radioButton_travel:
-                typeData = R.drawable.ic_travel;
                 typeCode = 8;
                 break;
             default:
