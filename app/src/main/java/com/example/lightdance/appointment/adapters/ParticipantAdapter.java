@@ -19,16 +19,18 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 
 /**
+ * @author pope
  * Created by pope on 2017/11/8.
  */
 
 public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ViewHolder> {
 
-    private List<String> memberBean;
+    private ParticipantAdapter.OnItemClickListener msgOnclickListener = null;
+    private List<String> member;
     Context mContext;
 
-    public ParticipantAdapter(Context mContext,List<String> memberBean){
-        this.memberBean = memberBean;
+    public ParticipantAdapter(Context mContext,List<String> member){
+        this.member = member;
         this.mContext = mContext;
     }
 
@@ -42,33 +44,51 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final String memberBean = this.memberBean.get(position);
+        final String member = this.member.get(position);
         BmobQuery<UserBean> query = new BmobQuery<>();
-        query.getObject(memberBean, new QueryListener<UserBean>() {
+        query.getObject(member, new QueryListener<UserBean>() {
             @Override
             public void done(UserBean userBean, BmobException e) {
                 Glide.with(mContext).load(userBean.getUserIconId()).into(holder.participantAvatar);
                 holder.participantNickname.setText(userBean.getUserNickName());
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (msgOnclickListener != null) {
+                    msgOnclickListener.onClick(holder.getAdapterPosition());
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return memberBean.size();
+        return member.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView participantAvatar;
         TextView participantNickname;
+        View itemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            this.itemView = itemView;
             participantAvatar = (ImageView) itemView.findViewById(R.id.img_participant_avatar);
             participantNickname = (TextView) itemView.findViewById(R.id.tv_participant_nickname);
 
         }
     }
+
+    public interface OnItemClickListener {
+        void onClick(int position);
+    }
+
+    public void setItemOnclickListener(OnItemClickListener msgOnclickListener) {
+        this.msgOnclickListener = msgOnclickListener;
+    }
+
 }

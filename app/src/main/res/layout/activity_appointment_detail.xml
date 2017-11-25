@@ -233,6 +233,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView5">
 
                 <android.support.constraint.ConstraintLayout
+                    android:id="@+id/box_member"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 

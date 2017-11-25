@@ -99,6 +99,14 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         ParticipantAdapter adapter = new ParticipantAdapter(this,members);
         recyclerView.setAdapter(adapter);
+        adapter.setItemOnclickListener(new ParticipantAdapter.OnItemClickListener(){
+            @Override
+            public void onClick(int position) {
+                Intent i = new Intent(AppointmentDetailActivity.this,MemberDetailActivity.class);
+                i.putExtra("objectId",objectId);
+                startActivity(i);
+            }
+        });
         progressDialog.dismiss();
     }
 
@@ -118,14 +126,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in,R.id.textView18})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.recyclerView_detailed_info:
-                Intent intent = new Intent(this,MemberDetailActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.textView18:
-                Intent intent1 = new Intent(this,MemberDetailActivity.class);
-                startActivity(intent1);
-                break;
             case R.id.detailed_info_take_part_in:
                 progressDialog.show();
                 //通过objectId查询表内详细信息
