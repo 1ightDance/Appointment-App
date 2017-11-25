@@ -200,6 +200,15 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e == null) {
+                                            //应约成功后更新当前详情页数据
+                                            BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                                            query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                                                @Override
+                                                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                                    loadMsg(browserMsgBean);
+                                                    loadParticipant(browserMsgBean.getMembers());
+                                                }
+                                            });
                                             Toast.makeText(AppointmentDetailActivity.this,
                                                     "应约成功！别放别人鸽子哟~",
                                                     Toast.LENGTH_SHORT).show();
