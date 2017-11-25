@@ -73,6 +73,8 @@ public class TimePickerFragment extends DialogFragment {
         year  = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH)+1;
         day   = cal.get(Calendar.DAY_OF_MONTH);
+        hour  = cal.get(Calendar.HOUR_OF_DAY);
+        min   = cal.get(Calendar.MINUTE);
 
         //datePicker初始化 设置初始日期 并添加监听
         datePicker.init(year, cal.get(Calendar.MONTH), day, new DatePicker.OnDateChangedListener() {
@@ -106,13 +108,11 @@ public class TimePickerFragment extends DialogFragment {
 
     @OnClick(R.id.img_time_select)
     public void onViewClicked() {
-        mTimeListener.saveDate(year,month,day);
-        mTimeListener.saveTime(hour,min);
+        mTimeListener.saveSelectTime(year,month,day,hour,min);
         dismiss();
     }
 
     public interface timeListener{
-        void saveDate(int year,int month,int day);
-        void saveTime(int hour,int minute);
+        void saveSelectTime(int year,int month,int day,int hour,int minute);
     }
 }

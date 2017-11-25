@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -67,12 +68,22 @@ public class NewAppointmentFragment extends Fragment {
     NumberPickerView numberPickerView;
 
     /**
-     * 该变量用来存储调用日期选择器的View是哪一个 1代表start date/2代表end date
+     * 该变量用来存储调用日期选择器的View是哪一个 1代表start date 2代表end date
      */
     int timeChange = 0;
-    int typeData = 0;
     int typeCode = 0;
     int from;
+    int startDateYear;
+    int startDateMonth;
+    int startDateDay;
+    int startTimeHour;
+    int startTimeMin;
+    private Calendar cal;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int min;
     private String personNumb = null;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
@@ -93,6 +104,9 @@ public class NewAppointmentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_appointment, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        //初始化起止时间
+        initDateData();
 
         //从activity中获取到FromCode
         BrowserActivity a = (BrowserActivity) getActivity();
@@ -129,13 +143,31 @@ public class NewAppointmentFragment extends Fragment {
                 if (from == 1) {
                     activity.changeFragment(1);
                 }
-                if (from == 2){
+                if (from == 2) {
                     activity.finish();
                 }
             }
         });
 
         return view;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initDateData() {
+        //获取时间
+        cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        min = cal.get(Calendar.MINUTE);
+        startDateYear = year;
+        startDateMonth = month;
+        startDateDay = day;
+        startTimeHour = hour;
+        startTimeMin = min;
+        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, 1);
+        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, 2);
     }
 
     @Override
@@ -316,7 +348,7 @@ public class NewAppointmentFragment extends Fragment {
                     if (from == 1) {
                         activity.changeFragment(1);
                     }
-                    if (from == 2){
+                    if (from == 2) {
                         activity.finish();
                     }
                     progressDialog.dismiss();
@@ -330,102 +362,122 @@ public class NewAppointmentFragment extends Fragment {
     }
 
     /**
-     * 判断更改哪个TextView显示的日期文本
+     * 确保选择的结束时间晚于开始时间方法
      *
-     * @param yearSelect
-     * @param monthSelect
-     * @param daySelect
+     * @param year   用户选择的“年”数据
+     * @param month  用户选择的“月”数据
+     * @param day    用户选择的“日”数据
+     * @param hour   用户选择的“时”数据
+     * @param minute 用户选择的“分”数据
      */
-    public void setDate(int yearSelect, int monthSelect, int daySelect) {
+    public void ensureTimeRight(int year, int month, int day, int hour, int minute) {
         if (timeChange == 1) {
-            setStartDate(yearSelect, monthSelect, daySelect);
+            startDateYear = year;
+            startDateMonth = month;
+            startDateDay = day;
+            startTimeHour = hour;
+            startTimeMin = minute;
+            setSelectTime(year, month, day, hour, minute, timeChange);
         }
         if (timeChange == 2) {
-            setEndDate(yearSelect, monthSelect, daySelect);
+            if (year > startDateYear) {
+                setSelectTime(year, month, day, hour, minute, timeChange);
+            } else if (year == startDateYear) {
+                if (month > startDateMonth) {
+                    setSelectTime(year, month, day, hour, minute, timeChange);
+                } else if (month == startDateMonth) {
+                    if (day > startDateDay) {
+                        setSelectTime(year, month, day, hour, minute, timeChange);
+                    } else if (day == startDateDay) {
+                        if (hour > startTimeHour) {
+                            setSelectTime(year, month, day, hour, minute, timeChange);
+                        } else if (hour == startTimeHour) {
+                            if (minute > startTimeMin) {
+                                setSelectTime(year, month, day, hour, minute, timeChange);
+                            } else if (minute == startTimeMin) {
+                                Toast.makeText(getActivity(), "结束时间和开始时间一样了", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+            }
         }
+
     }
 
     /**
-     * 判断更改哪个TextView显示的时间文本
+     * 更改选择的时间方法
      *
-     * @param hour
-     * @param minute
+     * @param year  用户选择的“年”数据
+     * @param month 用户选择的“月”数据
+     * @param day   用户选择的“日”数据
+     * @param hour  用户选择的“时”数据
+     * @param min   用户选择的“分”数据
      */
-    public void setTime(int hour, int minute) {
+    public void setSelectTime(int year, int month, int day, int hour, int min, int timeChange) {
         if (timeChange == 1) {
-            setStartTime(hour, minute);
+            if (month < 10 && day >= 10) {
+                tvActivityStartDate.setText(year + "-0" + month + "-" + day);
+            }
+            if (day < 10 && month >= 10) {
+                tvActivityStartDate.setText(year + "-" + month + "-0" + day);
+            }
+            if (day < 10 && month < 10) {
+                tvActivityStartDate.setText(year + "-0" + month + "-0" + day);
+            }
+            if (day >= 10 && month >= 10) {
+                tvActivityStartDate.setText(year + "-" + month + "-" + day);
+            }
+            if (hour < 10 && min < 10) {
+                tvActivityStartTime.setText("0" + hour + ":0" + min);
+            }
+            if (hour < 10 && min >= 10) {
+                tvActivityStartTime.setText("0" + hour + ":" + min);
+            }
+            if (hour >= 10 && min < 10) {
+                tvActivityStartTime.setText(hour + ":0" + min);
+            }
+            if (hour >= 10 && min >= 10) {
+                tvActivityStartTime.setText(hour + ":" + min);
+            }
         }
         if (timeChange == 2) {
-            setEndTime(hour, minute);
+            if (month < 10 && day >= 10) {
+                tvActivityEndDate.setText(year + "-0" + month + "-" + day);
+            }
+            if (day < 10 && month >= 10) {
+                tvActivityEndDate.setText(year + "-" + month + "-0" + day);
+            }
+            if (day < 10 && month < 10) {
+                tvActivityEndDate.setText(year + "-0" + month + "-0" + day);
+            }
+            if (day >= 10 && month >= 10) {
+                tvActivityEndDate.setText(year + "-" + month + "-" + day);
+            }
+            if (hour < 10 && min < 10) {
+                tvActivityEndTime.setText("0" + hour + ":0" + min);
+            }
+            if (hour < 10 && min >= 10) {
+                tvActivityEndTime.setText("0" + hour + ":" + min);
+            }
+            if (hour >= 10 && min < 10) {
+                tvActivityEndTime.setText(hour + ":0" + min);
+            }
+            if (hour >= 10 && min >= 10) {
+                tvActivityEndTime.setText(hour + ":" + min);
+            }
         }
-        timeChange = 0;
-    }
 
-    /**
-     * 更改方法
-     *
-     * @param year
-     * @param month
-     * @param day
-     */
-    public void setStartDate(int year, int month, int day) {
-        if (month < 10 && day >= 10) {
-            tvActivityStartDate.setText(year + "-0" + month + "-" + day);
-        }
-        if (day < 10 && month >= 10) {
-            tvActivityStartDate.setText(year + "-" + month + "-0" + day);
-        }
-        if (day < 10 && month < 10) {
-            tvActivityStartDate.setText(year + "-0" + month + "-0" + day);
-        }
-        if (day >= 10 && month >= 10) {
-            tvActivityStartDate.setText(year + "-" + month + "-" + day);
-        }
-    }
-
-    public void setEndDate(int year, int month, int day) {
-        if (month < 10 && day >= 10) {
-            tvActivityEndDate.setText(year + "-0" + month + "-" + day);
-        }
-        if (day < 10 && month >= 10) {
-            tvActivityEndDate.setText(year + "-" + month + "-0" + day);
-        }
-        if (day < 10 && month < 10) {
-            tvActivityEndDate.setText(year + "-0" + month + "-0" + day);
-        }
-        if (day >= 10 && month >= 10) {
-            tvActivityEndDate.setText(year + "-" + month + "-" + day);
-        }
-    }
-
-    public void setStartTime(int hour, int min) {
-        if (hour < 10 && min < 10) {
-            tvActivityStartTime.setText("0" + hour + ":0" + min);
-        }
-        if (hour < 10 && min >= 10) {
-            tvActivityStartTime.setText("0" + hour + ":" + min);
-        }
-        if (hour >= 10 && min < 10) {
-            tvActivityStartTime.setText(hour + ":0" + min);
-        }
-        if (hour >= 10 && min >= 10) {
-            tvActivityStartTime.setText(hour + ":" + min);
-        }
-    }
-
-    public void setEndTime(int hour, int min) {
-        if (hour < 10 && min < 10) {
-            tvActivityEndTime.setText("0" + hour + ":0" + min);
-        }
-        if (hour < 10 && min >= 10) {
-            tvActivityEndTime.setText("0" + hour + ":" + min);
-        }
-        if (hour >= 10 && min < 10) {
-            tvActivityEndTime.setText(hour + ":0" + min);
-        }
-        if (hour >= 10 && min >= 10) {
-            tvActivityEndTime.setText(hour + ":" + min);
-        }
     }
 }
 
