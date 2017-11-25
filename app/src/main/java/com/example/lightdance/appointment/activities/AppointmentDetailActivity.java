@@ -47,6 +47,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     TextView tvDetailedInfoConnection;
     @BindView(R.id.toolbar_appointmentdetail)
     Toolbar mToolbar;
+    @BindView(R.id.tv_detailed_info_margin)
+    TextView tvDetailedInfoMargin;
+    @BindView(R.id.tv_detailed_info_headcount)
+    TextView tvDetailedInfoHeadcount;
 
     private ProgressDialog progressDialog;
     private String objectId;
@@ -90,6 +94,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     /**
      * 加载参与人员方法
+     *
      * @param members
      */
     private void loadParticipant(List<String> members) {
@@ -97,13 +102,13 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
-        ParticipantAdapter adapter = new ParticipantAdapter(this,members);
+        ParticipantAdapter adapter = new ParticipantAdapter(this, members);
         recyclerView.setAdapter(adapter);
-        adapter.setItemOnclickListener(new ParticipantAdapter.OnItemClickListener(){
+        adapter.setItemOnclickListener(new ParticipantAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                Intent i = new Intent(AppointmentDetailActivity.this,MemberDetailActivity.class);
-                i.putExtra("objectId",objectId);
+                Intent i = new Intent(AppointmentDetailActivity.this, MemberDetailActivity.class);
+                i.putExtra("objectId", objectId);
                 startActivity(i);
             }
         });
@@ -112,6 +117,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     /**
      * 加载活动信息方法
+     *
      * @param browserMsgBean
      */
     public void loadMsg(BrowserMsgBean browserMsgBean) {
@@ -121,9 +127,25 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         tvDetailedInfoEndtime.setText(browserMsgBean.getEndTime());
         tvDetailedInfoDescription.setText(browserMsgBean.getContent());
         tvDetailedInfoConnection.setText(browserMsgBean.getContactWay());
+        int personNumberHave = browserMsgBean.getPersonNumberHave();
+        tvDetailedInfoHeadcount.setText("共"+personNumberHave+"人/");
+        String personNumerNeed = browserMsgBean.getPersonNumberNeed();
+        if (personNumerNeed == null) {
+            Toast.makeText(this,"数据出错",Toast.LENGTH_LONG).show();
+        }else if (personNumerNeed.equals("∞")){
+                tvDetailedInfoMargin.setText("能来多少人来多少");
+            }else{
+                int personNumNeed = Integer.valueOf(personNumerNeed);
+                int x = personNumNeed-personNumberHave;
+                if (x == 0){
+                    tvDetailedInfoMargin.setText("人满啦！");
+                }else{
+                    tvDetailedInfoMargin.setText("还差"+x+"人");
+                }
+        }
     }
 
-    @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in,R.id.textView18})
+    @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in, R.id.textView18})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.detailed_info_take_part_in:
@@ -133,57 +155,57 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                     @Override
                     public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                        if (e == null){
+                        if (e == null) {
                             //获取已参与人员列表
                             List<String> memberBeanList = browserMsgBean.getMembers();
                             int s = memberBeanList.size();
                             //获取当前用户ObjectId
-                            SharedPreferences preferences = getSharedPreferences("loginData",MODE_PRIVATE);
-                            String userObjectId = preferences.getString("userBeanId","错误啦啊啊啊~");
+                            SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
+                            String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
                             //检测当前用户是否已经在该活动已参与人员列表
                             boolean isJoined = false;
-                            for(int i=0;i<s;i++){
+                            for (int i = 0; i < s; i++) {
                                 String s1 = memberBeanList.get(i);
-                                if (s1.equals(userObjectId)){
+                                if (s1.equals(userObjectId)) {
                                     isJoined = true;
                                     break;
                                 }
                             }
-                            if (isJoined){
-                                Toast.makeText(AppointmentDetailActivity.this,"别闹..你都已经参加了",Toast.LENGTH_SHORT).show();
+                            if (isJoined) {
+                                Toast.makeText(AppointmentDetailActivity.this, "别闹..你都已经参加了", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-                            }else{
+                            } else {
                                 //如果未参与 将当前用户添加到该活动的参与人员名单
                                 BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
-                                List<String> members= browserMsgBean.getMembers();
+                                List<String> members = browserMsgBean.getMembers();
                                 members.add(userObjectId);
                                 browserMsgBean2.setMembers(members);
-                                browserMsgBean2.update(objectId,new UpdateListener() {
+                                browserMsgBean2.update(objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
-                                        if (e == null){
-                                        }else{
-                                            Toast.makeText(AppointmentDetailActivity.this,"更新数组失败"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                        if (e == null) {
+                                        } else {
+                                            Toast.makeText(AppointmentDetailActivity.this, "更新数组失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                                 //更改该活动的已参与人数+1
                                 BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
-                                browserMsgBean1.setPersonNumberHave(s+1);
+                                browserMsgBean1.setPersonNumberHave(s + 1);
                                 browserMsgBean1.update(objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
-                                        if (e == null){
+                                        if (e == null) {
                                             progressDialog.dismiss();
-                                        }else{
-                                            Toast.makeText(AppointmentDetailActivity.this,"人数更新失败 e="+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(AppointmentDetailActivity.this, "人数更新失败 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             progressDialog.dismiss();
                                         }
                                     }
                                 });
                             }
-                        }else{
-                            Toast.makeText(AppointmentDetailActivity.this,"错误 e="+e.getMessage(),Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AppointmentDetailActivity.this, "错误 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
 

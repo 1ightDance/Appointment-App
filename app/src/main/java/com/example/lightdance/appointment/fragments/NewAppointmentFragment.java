@@ -103,7 +103,7 @@ public class NewAppointmentFragment extends Fragment {
         for (int i = 0; i < 100; i++) {
             numb[i] = "" + (i + 1);
         }
-        numb[100] = "无限制";
+        numb[100] = "∞";
         //传入数组
         numberPickerView.setDisplayedValues(numb);
         numberPickerView.setMinValue(0);
