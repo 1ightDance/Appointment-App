@@ -98,24 +98,24 @@ public class BrowseFragment extends Fragment {
                     adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
-                            final String objectId = browserMsgBeen.get(position).getObjectId();
-                            BmobQuery<BrowserMsgBean> query = new BmobQuery<BrowserMsgBean>();
-                            query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
-                                @Override
-                                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                                    Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
-                                    intent.putExtra("objectId",objectId);
-                                    startActivity(intent);
-                                }
-                            });
+                            String objectId = browserMsgBeen.get(position).getObjectId();
+                            Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                            intent.putExtra("objectId",objectId);
+                            startActivity(intent);
                         }
                     });
                     adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
                         @Override
                         public void onClick(int position) {
-                            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
-                            intent.putExtra("position",position+1);
-                            startActivity(intent);
+                            BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                            query.getObject(browserMsgBeen.get(position).getObjectId(), new QueryListener<BrowserMsgBean>() {
+                                @Override
+                                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                                    intent.putExtra("objectId",browserMsgBean.getInviter());
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     });
                 }else{

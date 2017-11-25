@@ -35,9 +35,6 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    /**
-     * TODO 将从后台获取到的成员数据存储到该List中
-     */
     private List<String> memberList;
 
     @Override
@@ -51,9 +48,11 @@ public class MemberDetailActivity extends AppCompatActivity {
         progressDialog.setMessage("加载中...");
         progressDialog.show();
 
+        //获取跳转到该页前所点击的BrowserBean的objectId
         Intent i = getIntent();
         objectId = i.getStringExtra("objectId");
 
+        //将获取到的BrowserBean的objectId传给初始化成员数据的方法
         initMemberData(objectId);
 
         //toolbar
@@ -69,6 +68,10 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 初始化成员数据的方法
+     * @param objectId 跳转到该页前所点击的BrowserBean的objectId
+     */
     private void initMemberData(String objectId) {
         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
@@ -80,6 +83,16 @@ public class MemberDetailActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(manager);
                 MemberAdapter adapter = new MemberAdapter(MemberDetailActivity.this, memberList);
                 recyclerView.setAdapter(adapter);
+                adapter.setItemOnclickListener(new MemberAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        String objectId = memberList.get(position);
+                        Intent intent = new Intent(MemberDetailActivity.this,
+                                UserInfoActivity.class);
+                        intent.putExtra("objectId",objectId);
+                        startActivity(intent);
+                    }
+                });
                 progressDialog.dismiss();
             }
         });
