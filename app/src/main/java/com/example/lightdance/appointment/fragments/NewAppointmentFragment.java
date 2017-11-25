@@ -152,6 +152,7 @@ public class NewAppointmentFragment extends Fragment {
         return view;
     }
 
+    //初始化时间数据方法
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initDateData() {
         //获取时间
@@ -346,10 +347,15 @@ public class NewAppointmentFragment extends Fragment {
                     Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                     BrowserActivity activity = (BrowserActivity) getActivity();
                     if (from == 1) {
+                        BrowseFragment browseFragment = (BrowseFragment) activity.getFragment(1);
+                        browseFragment.initBrowserData();
                         activity.changeFragment(1);
                     }
                     if (from == 2) {
-                        activity.finish();
+                        BrowserActivity browserActivity = (BrowserActivity) getActivity();
+                        BrowseFragment browseFragment = (BrowseFragment) browserActivity.getFragment(1);
+                        browseFragment.sendSelectType(typeCode);
+                        browserActivity.changeFragment(1);
                     }
                     progressDialog.dismiss();
                     clearData();

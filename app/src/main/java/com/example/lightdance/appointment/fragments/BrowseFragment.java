@@ -34,6 +34,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 
 /**
+ * @author 忘了
  * A simple {@link Fragment} subclass.
  */
 public class BrowseFragment extends Fragment {
@@ -75,7 +76,7 @@ public class BrowseFragment extends Fragment {
         return view;
     }
 
-    private void initBrowserData() {
+    public void initBrowserData() {
         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.addWhereEqualTo("typeCode",typeCode);
         query.setLimit(20);

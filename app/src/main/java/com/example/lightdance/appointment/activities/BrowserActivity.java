@@ -13,13 +13,11 @@ import com.example.lightdance.appointment.fragments.BrowseFragment;
 import com.example.lightdance.appointment.fragments.NewAppointmentFragment;
 import com.example.lightdance.appointment.fragments.TimePickerFragment;
 
+/**
+ * @author pope
+ */
 public class BrowserActivity extends AppCompatActivity implements TimePickerFragment.timeListener {
 
-    private int yearSelect;
-    private int monthSelect;
-    private int daySelect;
-    private int hourSelect;
-    private int minuteSelect;
     private int mCurrentPosition = -1;
     private int typeCode = 0;
     Fragment mNewAppointmentFragment;
@@ -98,6 +96,8 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (mCurrentPosition == 2) {
             if (from == 1) {
+                BrowseFragment browseFragment = (BrowseFragment) getFragment(1);
+                browseFragment.initBrowserData();
                 changeFragment(1);
             }
             if (from == 2){
