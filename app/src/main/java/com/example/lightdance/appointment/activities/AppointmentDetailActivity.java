@@ -128,20 +128,20 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         tvDetailedInfoDescription.setText(browserMsgBean.getContent());
         tvDetailedInfoConnection.setText(browserMsgBean.getContactWay());
         int personNumberHave = browserMsgBean.getPersonNumberHave();
-        tvDetailedInfoHeadcount.setText("共"+personNumberHave+"人/");
+        tvDetailedInfoHeadcount.setText("共" + personNumberHave + "人/");
         String personNumerNeed = browserMsgBean.getPersonNumberNeed();
         if (personNumerNeed == null) {
-            Toast.makeText(this,"数据出错",Toast.LENGTH_LONG).show();
-        }else if (personNumerNeed.equals("∞")){
-                tvDetailedInfoMargin.setText("能来多少人来多少");
-            }else{
-                int personNumNeed = Integer.valueOf(personNumerNeed);
-                int x = personNumNeed-personNumberHave;
-                if (x == 0){
-                    tvDetailedInfoMargin.setText("人满啦！");
-                }else{
-                    tvDetailedInfoMargin.setText("还差"+x+"人");
-                }
+            Toast.makeText(this, "数据出错", Toast.LENGTH_LONG).show();
+        } else if (personNumerNeed.equals("∞")) {
+            tvDetailedInfoMargin.setText("能来多少人来多少");
+        } else {
+            int personNumNeed = Integer.valueOf(personNumerNeed);
+            int x = personNumNeed - personNumberHave;
+            if (x == 0) {
+                tvDetailedInfoMargin.setText("人满啦！");
+            } else {
+                tvDetailedInfoMargin.setText("还差" + x + "人");
+            }
         }
     }
 
@@ -176,6 +176,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                             } else {
                                 //如果未参与 将当前用户添加到该活动的参与人员名单
+                                int typeCode = browserMsgBean.getTypeCode();
                                 BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
                                 List<String> members = browserMsgBean.getMembers();
                                 members.add(userObjectId);
@@ -185,20 +186,28 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                     public void done(BmobException e) {
                                         if (e == null) {
                                         } else {
-                                            Toast.makeText(AppointmentDetailActivity.this, "更新数组失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "更新数组失败" + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                                 //更改该活动的已参与人数+1
                                 BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
-                                browserMsgBean1.setPersonNumberHave(s + 1);
+                                browserMsgBean1.setValue("typeCode", typeCode);
+                                browserMsgBean1.setValue("personNumberHave", s + 1);
                                 browserMsgBean1.update(objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e == null) {
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "应约成功！别放别人鸽子哟~",
+                                                    Toast.LENGTH_SHORT).show();
                                             progressDialog.dismiss();
                                         } else {
-                                            Toast.makeText(AppointmentDetailActivity.this, "人数更新失败 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "人数更新失败 e=" + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
                                             progressDialog.dismiss();
                                         }
                                     }
