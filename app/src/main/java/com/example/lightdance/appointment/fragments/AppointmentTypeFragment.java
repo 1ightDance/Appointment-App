@@ -119,6 +119,7 @@ public class AppointmentTypeFragment extends DialogFragment {
                         radioGroup3.clearCheck();
                     }
                     break;
+                    default:
             }
             radioButtonId = checkedId;
         }
@@ -146,6 +147,7 @@ public class AppointmentTypeFragment extends DialogFragment {
                         radioGroup3.clearCheck();
                     }
                     break;
+                default:
             }
             radioButtonId = checkedId;
         }
@@ -174,6 +176,7 @@ public class AppointmentTypeFragment extends DialogFragment {
                         radioGroup2.clearCheck();
                     }
                     break;
+                    default:
             }
             radioButtonId = checkedId;
         }
