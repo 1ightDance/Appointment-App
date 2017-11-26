@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_login"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_loginbg" />
+        app:srcCompat="@mipmap/bg_login4" />
 
     <ImageView
         android:id="@+id/loginbg2"

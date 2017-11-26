@@ -17,7 +17,7 @@ public class LauncherActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        Integer time = 3000;    //设置等待时间，单位为毫秒
+        Integer time = 500;    //设置等待时间，单位为毫秒
         Handler handler = new Handler();
         //当计时结束时，跳转至主界面
         handler.postDelayed(new Runnable() {
