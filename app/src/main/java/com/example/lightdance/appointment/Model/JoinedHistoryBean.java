@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
  * @author pope
  */
 
-public class AppointmentHistoryBean extends BmobObject {
+public class JoinedHistoryBean extends BmobObject {
 
     private String userObjectId;
     private List<String> browserIdList;
