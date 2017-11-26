@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.JoinedHistoryBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.ParticipantAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,7 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -88,6 +92,64 @@ public class AppointmentDetailActivity extends AppCompatActivity {
             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                 loadMsg(browserMsgBean);
                 loadParticipant(browserMsgBean.getMembers());
+            }
+        });
+    }
+
+    /**
+     * 更新JoinedHistoryBean表数据方法
+     *
+     * @param browserObjectId 需要被添加的BrowserObjectId
+     * @param userObjectId 用户的UserObjectId
+     */
+    private void updateJoinedHistory(final String browserObjectId, final String userObjectId){
+        //将该用户对应的JoinedHistoryBean表中存入当前发布的BrowserObjectId
+        BmobQuery<JoinedHistoryBean> query1 = new BmobQuery<>();
+        query1.addWhereEqualTo("userObjectId", userObjectId);
+        query1.setLimit(10);
+        query1.findObjects(new FindListener<JoinedHistoryBean>() {
+            @Override
+            public void done(List<JoinedHistoryBean> list, BmobException e) {
+                if (e == null) {
+                    //如果该用户未在表中建立数据，则创建 如果已经建立则添加
+                    //e == null 即该用户在表中已创建数据 则完成添加即可
+                    //当表中查不到该用户有创建过数据时，则创建
+                    if (list.size() == 0){
+                        JoinedHistoryBean historyBean = new JoinedHistoryBean();
+                        historyBean.setUserObjectId(userObjectId);
+                        List<String> browserIdList = new ArrayList<>();
+                        browserIdList.add(browserObjectId);
+                        historyBean.setBrowserIdList(browserIdList);
+                        historyBean.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e != null) {
+                                    Toast.makeText(AppointmentDetailActivity.this, "创建错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }else{
+                        JoinedHistoryBean joinedHistoryBean = list.get(0);
+                        JoinedHistoryBean joinedHistoryBean1 = new JoinedHistoryBean();
+                        List<String> idList = joinedHistoryBean.getBrowserIdList();
+                        idList.add(browserObjectId);
+                        joinedHistoryBean1.setValue("browserIdList", idList);
+                        joinedHistoryBean1.update(joinedHistoryBean.getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e != null) {
+                                    Toast.makeText(AppointmentDetailActivity.this,
+                                            "更新错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+
+                } else if (e.getMessage().equals("object not found for JoinedHistoryBean.")) {
+                    Toast.makeText(AppointmentDetailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(AppointmentDetailActivity.this, "错误错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -161,7 +223,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             int s = memberBeanList.size();
                             //获取当前用户ObjectId
                             SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
-                            String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
+                            final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
                             //检测当前用户是否已经在该活动已参与人员列表
                             boolean isJoined = false;
                             for (int i = 0; i < s; i++) {
@@ -212,6 +274,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                             Toast.makeText(AppointmentDetailActivity.this,
                                                     "应约成功！别放别人鸽子哟~",
                                                     Toast.LENGTH_SHORT).show();
+                                            updateJoinedHistory(objectId,userObjectId);
                                             progressDialog.dismiss();
                                         } else {
                                             Toast.makeText(AppointmentDetailActivity.this,

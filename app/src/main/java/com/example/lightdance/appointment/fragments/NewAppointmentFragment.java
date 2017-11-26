@@ -335,17 +335,19 @@ public class NewAppointmentFragment extends Fragment {
         browserMsgBean.setPersonNumberHave(1);
         //获取当前用户的信息存储为该活动的发布人
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-        String userBeanId = preferences.getString("userBeanId", "BUG");
+        final String userBeanId = preferences.getString("userBeanId", "BUG");
         browserMsgBean.setInviter(userBeanId);
         List<String> memberList = new ArrayList<>();
         memberList.add(userBeanId);
         browserMsgBean.setMembers(memberList);
         browserMsgBean.save(new SaveListener<String>() {
             @Override
-            public void done(String s, BmobException e) {
+            public void done(final String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
                     BrowserActivity activity = (BrowserActivity) getActivity();
+                    //判断当前页从哪里跳转来的
+                    //并通过不同方法 刷新并跳转回BrowserFragment
                     if (from == 1) {
                         BrowseFragment browseFragment = (BrowseFragment) activity.getFragment(1);
                         browseFragment.initBrowserData();
