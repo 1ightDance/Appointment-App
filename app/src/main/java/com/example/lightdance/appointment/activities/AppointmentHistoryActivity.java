@@ -93,7 +93,9 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        //用来取数据库数据
+        /**
+         *用来取数据库数据
+         */
         private BmobQuery<BrowserMsgBean> msgHistoryList;
         RecyclerView historyRecyclerView;
 
@@ -121,12 +123,13 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
             //有点害怕这里设置完查询记录为空的textview之后不会消失
             final TextView ifEmpty = (TextView) rootView.findViewById(R.id.history_if_empty);
             historyRecyclerView = (RecyclerView)rootView.findViewById(R.id.section_recyclerview);
-            historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
-            String loginNickName = preferences.getString("nickName",null);
-            String loginStudentId = preferences.getString("userStudentNumber",null);
+            historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
+            String loginStudentId = preferences.getString("userBeanId",null);
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 //TODO 暂时这样,希望之后能有个每次加载10行，下拉加载更多的逻辑,目前设置的只查50条是有隐患的                msgHistoryList = new BmobQuery<BrowserMsgBean>();
-                msgHistoryList.addWhereEqualTo("inviter" , loginNickName);
+                msgHistoryList = new BmobQuery<>();
+                msgHistoryList.addWhereEqualTo("inviter" , loginStudentId);
                 msgHistoryList.setLimit(50);
                 msgHistoryList.findObjects(new FindListener<BrowserMsgBean>() {
                     @Override
@@ -167,8 +170,8 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
                 }else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2){
                 //查询所有约帖中“应约者列表”，显示所有含有本账号的约帖 ...
                 //TODO  我觉着会非常慢，效率感人，需要改进一下...而且setLimit存在同上隐患
-                msgHistoryList = msgHistoryList = new BmobQuery<BrowserMsgBean>();
-                msgHistoryList.addWhereEqualTo("inviter" , loginNickName);
+                msgHistoryList = new BmobQuery<BrowserMsgBean>();
+                msgHistoryList.addWhereEqualTo("inviter" , loginStudentId);
                 msgHistoryList.setLimit(50);
                 msgHistoryList.findObjects(new FindListener<BrowserMsgBean>() {
                     @Override
