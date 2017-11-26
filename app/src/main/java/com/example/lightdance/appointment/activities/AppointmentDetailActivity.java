@@ -243,6 +243,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 List<String> members = browserMsgBean.getMembers();
                                 members.add(userObjectId);
                                 browserMsgBean2.setMembers(members);
+                                browserMsgBean2.setValue("typeCode", typeCode);
+                                browserMsgBean2.setValue("personNumberHave", s + 1);
                                 browserMsgBean2.update(objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
