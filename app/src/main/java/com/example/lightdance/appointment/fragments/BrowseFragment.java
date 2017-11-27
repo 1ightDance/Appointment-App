@@ -63,6 +63,7 @@ public class BrowseFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        //当该Fragment被重新使用时将刷新一下该碎片数据
         initBrowserData();
     }
 
