@@ -286,7 +286,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     if (browserMsgBean.getInviter().equals(userObjectId)) {
                         userType = USER_INVITER;
                         detailedInfoTakePartIn.setText("编辑");
-                        detailedInfoDelete.setText("删除");
+                        detailedInfoDelete.setText("取消约人");
                     } else {
                         detailedInfoDelete.setVisibility(View.GONE);
                         //获取已参与人员列表
@@ -327,8 +327,58 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.detailed_info_delete:
-                progressDialog.show();
-                Toast.makeText(AppointmentDetailActivity.this, "删除尚待开发", Toast.LENGTH_LONG).show();
+                AlertDialog.Builder dialog1 = new AlertDialog.Builder(AppointmentDetailActivity.this);
+                dialog1.setTitle("注意！");
+                dialog1.setMessage("有的人可能很期待，有的人可能正在热情准备着，你确定要取消本约人帖了嘛？");
+                dialog1.setCancelable(true);
+                dialog1.setNegativeButton("容我再考虑考虑", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog1.setPositiveButton("狠心取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder dialog1 = new AlertDialog.Builder(AppointmentDetailActivity.this);
+                        dialog1.setTitle("取消约人须知");
+                        dialog1.setMessage("您正在取消本约人帖，一旦取消，该约人记录将被清除，无法恢复\n产生的任何后果自负");
+                        dialog1.setCancelable(true);
+                        dialog1.setNegativeButton("我再想想", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog1.setPositiveButton("我知道了\n依旧取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progressDialog.show();
+                                BrowserMsgBean browserMsgBean = new BrowserMsgBean();
+                                browserMsgBean.setObjectId(objectId);
+                                browserMsgBean.delete(new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null){
+                                            progressDialog.dismiss();
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "取消约人成功",
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }else{
+                                            progressDialog.dismiss();
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "取消约人失败" + e.getMessage(),
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        dialog1.show();
+                    }
+                });
+                dialog1.show();
                 break;
             case R.id.detailed_info_take_part_in:
                 //通过objectId查询表内详细信息
