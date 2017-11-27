@@ -61,6 +61,12 @@ public class BrowseFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        initBrowserData();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -71,7 +77,6 @@ public class BrowseFragment extends Fragment {
         progressDialog.setTitle("请稍等");
         progressDialog.setMessage("加载中...");
         progressDialog.show();
-        initBrowserData();
 
         return view;
     }
@@ -197,5 +202,7 @@ public class BrowseFragment extends Fragment {
     public void sendSelectType(int typeCode){
         this.typeCode = typeCode;
     }
+
+
 
 }

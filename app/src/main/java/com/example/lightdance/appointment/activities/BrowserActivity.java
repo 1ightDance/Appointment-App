@@ -23,6 +23,10 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     Fragment mNewAppointmentFragment;
     Fragment mBrowseFragment;
 
+    /**
+     * from == 1 加载活动广场碎片
+     * from == 2 加载发布新活动碎片
+     */
     private int from;
 
     @Override

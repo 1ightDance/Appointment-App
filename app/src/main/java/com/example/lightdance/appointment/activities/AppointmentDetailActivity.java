@@ -66,6 +66,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private String objectId;
+    private int typeCode;
 
     /**
      * 定义userType用来保存当前用户相对于当前帖子的身份
@@ -113,6 +114,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
             @Override
             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                typeCode = browserMsgBean.getTypeCode();
                 loadMsg(browserMsgBean);
             }
         });
@@ -426,7 +428,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e == null) {
-                                                        //应约成功后更新当前详情页数据
+                                                        //取消应约成功后更新当前详情页数据
                                                         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
                                                         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                                                             @Override
@@ -437,6 +439,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                         Toast.makeText(AppointmentDetailActivity.this,
                                                                 "取消应约成功！",
                                                                 Toast.LENGTH_SHORT).show();
+                                                        //更新应约历史记录数据
                                                         updateJoinedHistory(objectId, userObjectId,MODE_QUIT);
                                                         progressDialog.dismiss();
                                                     } else {
@@ -497,6 +500,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                     Toast.makeText(AppointmentDetailActivity.this,
                                                             "应约成功！别放别人鸽子哟~",
                                                             Toast.LENGTH_SHORT).show();
+                                                    //更新应约历史记录数据
                                                     updateJoinedHistory(objectId, userObjectId,MODE_JOIN);
                                                     progressDialog.dismiss();
                                                 } else {
