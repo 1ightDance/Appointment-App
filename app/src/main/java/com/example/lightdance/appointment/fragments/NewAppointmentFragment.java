@@ -36,6 +36,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
@@ -87,8 +88,8 @@ public class NewAppointmentFragment extends Fragment {
     private int startDateDay;
     private int startTimeHour;
     private int startTimeMin;
-    final private int TIME_START = 666;
-    final private int TIME_END = 999;
+    final private int TIME_START = 1;
+    final private int TIME_END = 2;
     final String[] numb = new String[101];
 
     private Calendar cal;
@@ -98,6 +99,7 @@ public class NewAppointmentFragment extends Fragment {
     private int hour;
     private int min;
     private String personNumb = "1";
+    private int personNumberHave = 1;
     private String editObjectId;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
@@ -167,24 +169,39 @@ public class NewAppointmentFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 加载被编辑的帖子的数据
+     */
     private void loadAppointmentData() {
         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.getObject(editObjectId, new QueryListener<BrowserMsgBean>() {
             @Override
             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                editTextActivityTitle.setText(browserMsgBean.getTitle());
-                tvActivityTypeSelect.setText(getTypeString(browserMsgBean.getTypeCode()));
-                editTextActivityPlace.setText(browserMsgBean.getPlace());
-                editTextActivityContent.setText(browserMsgBean.getContent());
-                editTextActivityContactWay.setText(browserMsgBean.getContactWay());
-                loadPersonNumberNeed(browserMsgBean.getPersonNumberNeed());
-                loadTimeData(browserMsgBean.getStartTime(), TIME_START);
-                loadTimeData(browserMsgBean.getEndTime(), TIME_END);
-                progressDialog.dismiss();
+                if (e == null){
+                    typeCode = browserMsgBean.getTypeCode();
+                    personNumberHave = browserMsgBean.getPersonNumberHave();
+                    editTextActivityTitle.setText(browserMsgBean.getTitle());
+                    tvActivityTypeSelect.setText(getTypeString(browserMsgBean.getTypeCode()));
+                    editTextActivityPlace.setText(browserMsgBean.getPlace());
+                    editTextActivityContent.setText(browserMsgBean.getContent());
+                    editTextActivityContactWay.setText(browserMsgBean.getContactWay());
+                    loadPersonNumberNeed(browserMsgBean.getPersonNumberNeed());
+                    loadTimeData(browserMsgBean.getStartTime(), TIME_START);
+                    loadTimeData(browserMsgBean.getEndTime(), TIME_END);
+                    progressDialog.dismiss();
+                }else{
+                    Toast.makeText(getActivity(),"获取被编辑帖子信息失败 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
+    /**
+     * 加载被编辑的帖子的时间数据并显示
+     *
+     * @param time 时间数据
+     * @param timeCode 时间类型（开始/结束）
+     */
     private void loadTimeData(String time, int timeCode) {
         int year;
         int month;
@@ -208,6 +225,11 @@ public class NewAppointmentFragment extends Fragment {
         }
     }
 
+    /**
+     * 加载被编辑的帖子的需要人数并显示在数字选择器上
+     *
+     * @param personNumberNeed 需要人数
+     */
     private void loadPersonNumberNeed(String personNumberNeed) {
         for (int i = 0; i < 101; i++) {
             if (personNumberNeed.equals(numb[i])){
@@ -218,6 +240,9 @@ public class NewAppointmentFragment extends Fragment {
         }
     }
 
+    /**
+     * 初始化时间选择器
+     */
     private void initNumberPicker() {
         //创造一个存放1到100和无限制的String类型数组用以给数字选择器提供数据
         for (int i = 0; i < 100; i++) {
@@ -441,6 +466,40 @@ public class NewAppointmentFragment extends Fragment {
     private void saveData() {
         if (from == 3) {
             // TODO 保存修改后的数据的逻辑
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("请稍等");
+            progressDialog.setMessage("发布中...");
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+            //点击完成后 获取发布页填写的数据储存到后台
+            BrowserMsgBean browserMsgBean = new BrowserMsgBean();
+            browserMsgBean.setValue("title",editTextActivityTitle.getText().toString());
+            browserMsgBean.setValue("content",editTextActivityContent.getText().toString());
+            browserMsgBean.setValue("personNumberNeed",personNumb);
+            browserMsgBean.setValue("personNumberHave",personNumberHave);
+            browserMsgBean.setValue("place",editTextActivityPlace.getText().toString());
+            browserMsgBean.setValue("typeCode",typeCode);
+            browserMsgBean.setValue("startTime",tvActivityStartDate.getText().toString()
+                    + "  " + tvActivityStartTime.getText().toString());
+            browserMsgBean.setValue("endTime",tvActivityEndDate.getText().toString()
+                    + "  " + tvActivityEndTime.getText().toString());
+            browserMsgBean.setValue("contactWay",editTextActivityContactWay.getText().toString());
+            browserMsgBean.update(editObjectId, new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null){
+                        //编辑完成自动跳转至其活动新发布的地方
+                        Toast.makeText(getActivity(),"保存修改成功",Toast.LENGTH_SHORT).show();
+                        BrowserActivity browserActivity = (BrowserActivity) getActivity();
+                        BrowseFragment browseFragment = (BrowseFragment) browserActivity.getFragment(1);
+                        browseFragment.sendSelectType(typeCode);
+                        browserActivity.changeFragment(1);
+                    }else{
+                        Toast.makeText(getActivity(),"保存修改失败 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                    progressDialog.dismiss();
+                }
+            });
         } else {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("请稍等");
