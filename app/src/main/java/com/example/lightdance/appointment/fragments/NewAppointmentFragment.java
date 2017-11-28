@@ -41,7 +41,7 @@ import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
  * Created by LightDance on 2017/10/4.
- *
+ * <p>
  * TODO 完善时间判断逻辑 包括通过“编辑”按钮启动本Activity的时间加载的数据载入
  *
  * @author LightDance
@@ -78,18 +78,23 @@ public class NewAppointmentFragment extends Fragment {
     Button btnNewappointmentDone;
 
     /**
-     * 该变量用来存储调用日期选择器的View是哪一个 1代表start date 2代表end date
+     * 该变量用来存储调用日期选择器的View是哪一个
      */
     private int timeChange = 0;
     private int typeCode = 0;
     private int from;
     private int startDateYear;
+    private int endDateYear;
     private int startDateMonth;
+    private int endDateMonth;
     private int startDateDay;
+    private int endDateDay;
     private int startTimeHour;
+    private int endTimeHour;
     private int startTimeMin;
-    final private int TIME_START = 1;
-    final private int TIME_END = 2;
+    private int endTimeMin;
+    final private int TIME_START = 666;
+    final private int TIME_END = 999;
     final String[] numb = new String[101];
 
     private Calendar cal;
@@ -177,7 +182,7 @@ public class NewAppointmentFragment extends Fragment {
         query.getObject(editObjectId, new QueryListener<BrowserMsgBean>() {
             @Override
             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                if (e == null){
+                if (e == null) {
                     typeCode = browserMsgBean.getTypeCode();
                     personNumberHave = browserMsgBean.getPersonNumberHave();
                     editTextActivityTitle.setText(browserMsgBean.getTitle());
@@ -189,8 +194,8 @@ public class NewAppointmentFragment extends Fragment {
                     loadTimeData(browserMsgBean.getStartTime(), TIME_START);
                     loadTimeData(browserMsgBean.getEndTime(), TIME_END);
                     progressDialog.dismiss();
-                }else{
-                    Toast.makeText(getActivity(),"获取被编辑帖子信息失败 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "获取被编辑帖子信息失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -199,7 +204,7 @@ public class NewAppointmentFragment extends Fragment {
     /**
      * 加载被编辑的帖子的时间数据并显示
      *
-     * @param time 时间数据
+     * @param time     时间数据
      * @param timeCode 时间类型（开始/结束）
      */
     private void loadTimeData(String time, int timeCode) {
@@ -208,17 +213,27 @@ public class NewAppointmentFragment extends Fragment {
         int day;
         int hour;
         int min;
-        year = Integer.valueOf(time.substring(0,4));
-        month = Integer.valueOf(time.substring(5,7));
-        day = Integer.valueOf(time.substring(8,10));
-        hour = Integer.valueOf(time.substring(12,14));
-        min = Integer.valueOf(time.substring(15,17));
+        year = Integer.valueOf(time.substring(0, 4));
+        month = Integer.valueOf(time.substring(5, 7));
+        day = Integer.valueOf(time.substring(8, 10));
+        hour = Integer.valueOf(time.substring(12, 14));
+        min = Integer.valueOf(time.substring(15, 17));
         switch (timeCode) {
             case TIME_START:
-                setSelectTime(year,month,day,hour,min,TIME_START);
+                startDateYear = year;
+                startDateMonth = month;
+                startDateDay = day;
+                startTimeHour = hour;
+                startTimeMin = min;
+                setSelectTime(year, month, day, hour, min, TIME_START);
                 break;
             case TIME_END:
-                setSelectTime(year,month,day,hour,min,TIME_END);
+                endDateYear = year;
+                endDateMonth = month;
+                endDateDay = day;
+                endTimeHour = hour;
+                endTimeMin = min;
+                setSelectTime(year, month, day, hour, min, TIME_END);
                 break;
             default:
                 break;
@@ -232,7 +247,7 @@ public class NewAppointmentFragment extends Fragment {
      */
     private void loadPersonNumberNeed(String personNumberNeed) {
         for (int i = 0; i < 101; i++) {
-            if (personNumberNeed.equals(numb[i])){
+            if (personNumberNeed.equals(numb[i])) {
                 numberPickerView.setValue(i);
                 personNumb = numb[i];
                 break;
@@ -246,7 +261,7 @@ public class NewAppointmentFragment extends Fragment {
     private void initNumberPicker() {
         //创造一个存放1到100和无限制的String类型数组用以给数字选择器提供数据
         for (int i = 0; i < 100; i++) {
-            numb[i] = String.valueOf(i+1);
+            numb[i] = String.valueOf(i + 1);
         }
         numb[100] = "∞";
         //传入数组
@@ -275,12 +290,17 @@ public class NewAppointmentFragment extends Fragment {
         hour = cal.get(Calendar.HOUR_OF_DAY);
         min = cal.get(Calendar.MINUTE);
         startDateYear = year;
+        endDateYear = year;
         startDateMonth = month;
+        endDateMonth = month;
         startDateDay = day;
+        endDateDay = day;
         startTimeHour = hour;
+        endTimeHour = hour;
         startTimeMin = min;
+        endTimeMin = min+1;
         setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, TIME_START);
-        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, TIME_END);
+        setSelectTime(endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMin, TIME_END);
     }
 
     @Override
@@ -296,19 +316,19 @@ public class NewAppointmentFragment extends Fragment {
         switch (view.getId()) {
             case R.id.tv_activity_start_time:
                 //展示碎片会话窗口（dialog）
-                timeChange = 1;
+                timeChange = TIME_START;
                 timePickerFragment.show(getFragmentManager(), "TimePicker");
                 break;
             case R.id.tv_activity_end_time:
-                timeChange = 2;
+                timeChange = TIME_END;
                 timePickerFragment.show(getFragmentManager(), "TimePicker");
                 break;
             case R.id.tv_activity_start_date:
-                timeChange = 1;
+                timeChange = TIME_START;
                 timePickerFragment.show(getFragmentManager(), "DatePicker");
                 break;
             case R.id.tv_activity_end_date:
-                timeChange = 2;
+                timeChange = TIME_END;
                 timePickerFragment.show(getFragmentManager(), "DatePicker");
                 break;
             case R.id.tv_activity_type_select:
@@ -465,7 +485,7 @@ public class NewAppointmentFragment extends Fragment {
      */
     private void saveData() {
         if (from == 3) {
-            // TODO 保存修改后的数据的逻辑
+            // 保存修改后的数据的逻辑
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("请稍等");
             progressDialog.setMessage("发布中...");
@@ -473,29 +493,29 @@ public class NewAppointmentFragment extends Fragment {
             progressDialog.show();
             //点击完成后 获取发布页填写的数据储存到后台
             BrowserMsgBean browserMsgBean = new BrowserMsgBean();
-            browserMsgBean.setValue("title",editTextActivityTitle.getText().toString());
-            browserMsgBean.setValue("content",editTextActivityContent.getText().toString());
-            browserMsgBean.setValue("personNumberNeed",personNumb);
-            browserMsgBean.setValue("personNumberHave",personNumberHave);
-            browserMsgBean.setValue("place",editTextActivityPlace.getText().toString());
-            browserMsgBean.setValue("typeCode",typeCode);
-            browserMsgBean.setValue("startTime",tvActivityStartDate.getText().toString()
+            browserMsgBean.setValue("title", editTextActivityTitle.getText().toString());
+            browserMsgBean.setValue("content", editTextActivityContent.getText().toString());
+            browserMsgBean.setValue("personNumberNeed", personNumb);
+            browserMsgBean.setValue("personNumberHave", personNumberHave);
+            browserMsgBean.setValue("place", editTextActivityPlace.getText().toString());
+            browserMsgBean.setValue("typeCode", typeCode);
+            browserMsgBean.setValue("startTime", tvActivityStartDate.getText().toString()
                     + "  " + tvActivityStartTime.getText().toString());
-            browserMsgBean.setValue("endTime",tvActivityEndDate.getText().toString()
+            browserMsgBean.setValue("endTime", tvActivityEndDate.getText().toString()
                     + "  " + tvActivityEndTime.getText().toString());
-            browserMsgBean.setValue("contactWay",editTextActivityContactWay.getText().toString());
+            browserMsgBean.setValue("contactWay", editTextActivityContactWay.getText().toString());
             browserMsgBean.update(editObjectId, new UpdateListener() {
                 @Override
                 public void done(BmobException e) {
-                    if (e == null){
+                    if (e == null) {
                         //编辑完成自动跳转至其活动新发布的地方
-                        Toast.makeText(getActivity(),"保存修改成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "保存修改成功", Toast.LENGTH_SHORT).show();
                         BrowserActivity browserActivity = (BrowserActivity) getActivity();
                         BrowseFragment browseFragment = (BrowseFragment) browserActivity.getFragment(1);
                         browseFragment.sendSelectType(typeCode);
                         browserActivity.changeFragment(1);
-                    }else{
-                        Toast.makeText(getActivity(),"保存修改失败 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "保存修改失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     progressDialog.dismiss();
                 }
@@ -566,48 +586,98 @@ public class NewAppointmentFragment extends Fragment {
      * @param minute 用户选择的“分”数据
      */
     public void ensureTimeRight(int year, int month, int day, int hour, int minute) {
-        if (timeChange == 1) {
-            startDateYear = year;
-            startDateMonth = month;
-            startDateDay = day;
-            startTimeHour = hour;
-            startTimeMin = minute;
-            setSelectTime(year, month, day, hour, minute, timeChange);
-        }
-        if (timeChange == 2) {
-            if (year > startDateYear) {
-                setSelectTime(year, month, day, hour, minute, timeChange);
-            } else if (year == startDateYear) {
-                if (month > startDateMonth) {
-                    setSelectTime(year, month, day, hour, minute, timeChange);
-                } else if (month == startDateMonth) {
-                    if (day > startDateDay) {
-                        setSelectTime(year, month, day, hour, minute, timeChange);
-                    } else if (day == startDateDay) {
-                        if (hour > startTimeHour) {
-                            setSelectTime(year, month, day, hour, minute, timeChange);
-                        } else if (hour == startTimeHour) {
-                            if (minute > startTimeMin) {
-                                setSelectTime(year, month, day, hour, minute, timeChange);
-                            } else if (minute == startTimeMin) {
-                                Toast.makeText(getActivity(), "结束时间和开始时间一样了", Toast.LENGTH_LONG).show();
+        boolean isOK;
+        switch (timeChange) {
+            case TIME_START:
+                if (year < endDateYear) {
+                    isOK = true;
+                } else if (year == endDateYear) {
+                    if (month < endDateMonth) {
+                        isOK = true;
+                    } else if (month == endDateMonth) {
+                        if (day < endDateDay) {
+                            isOK = true;
+                        } else if (day == endDateDay) {
+                            if (hour < endTimeHour) {
+                                isOK = true;
+                            } else if (hour == endTimeHour) {
+                                if (minute < endTimeMin) {
+                                    isOK = true;
+                                } else if (minute == endTimeMin) {
+                                    isOK = false;
+                                } else {
+                                    isOK = false;
+                                }
                             } else {
-                                Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                                isOK = false;
                             }
                         } else {
-                            Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                            isOK = false;
                         }
                     } else {
-                        Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                        isOK = false;
                     }
                 } else {
-                    Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
+                    isOK = false;
                 }
-            } else {
-                Toast.makeText(getActivity(), "别逗我，结束时间早于开始时间？", Toast.LENGTH_LONG).show();
-            }
+                if (isOK) {
+                    startDateYear = year;
+                    startDateMonth = month;
+                    startDateDay = day;
+                    startTimeHour = hour;
+                    startTimeMin = minute;
+                    setSelectTime(year, month, day, hour, minute, timeChange);
+                    isOK = false;
+                } else {
+                    Toast.makeText(getActivity(), "开始时间要早于结束时间噢~", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case TIME_END:
+                if (year > startDateYear) {
+                    isOK = true;
+                } else if (year == startDateYear) {
+                    if (month > startDateMonth) {
+                        isOK = true;
+                    } else if (month == startDateMonth) {
+                        if (day > startDateDay) {
+                            isOK = true;
+                        } else if (day == startDateDay) {
+                            if (hour > startTimeHour) {
+                                isOK = true;
+                            } else if (hour == startTimeHour) {
+                                if (minute > startTimeMin) {
+                                    isOK = true;
+                                } else if (minute == startTimeMin) {
+                                    isOK = false;
+                                } else {
+                                    isOK = false;
+                                }
+                            } else {
+                                isOK = false;
+                            }
+                        } else {
+                            isOK = false;
+                        }
+                    } else {
+                        isOK = false;
+                    }
+                } else {
+                    isOK = false;
+                }
+                if (isOK) {
+                    endDateYear = year;
+                    endDateMonth = month;
+                    endDateDay = day;
+                    endTimeHour = hour;
+                    endTimeMin = minute;
+                    setSelectTime(year, month, day, hour, minute, timeChange);
+                } else {
+                    Toast.makeText(getActivity(), "结束时间要晚于开始时间噢~", Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+                break;
         }
-
     }
 
     /**
