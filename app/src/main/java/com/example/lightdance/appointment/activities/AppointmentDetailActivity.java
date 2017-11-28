@@ -70,7 +70,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     /**
      * 定义userType用来保存当前用户相对于当前帖子的身份
-     *
+     * <p>
      * USER_INVITER  = 1 发起人
      * USER_JOINED   = 2 成员
      * USER_PASSERBY = 3 路人
@@ -186,13 +186,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void done(List<JoinedHistoryBean> list, BmobException e) {
                         if (e == null) {
-                            //如果该用户未在表中建立数据，则创建 如果已经建立则添加
-                            //e == null 即该用户在表中已创建数据 则完成添加即可
-                            //当表中查不到该用户有创建过数据时，则创建
+                            //获取需要被操作的帖子的成员列表 查询其应约历史列表并删除该帖子的ObjectId
                             JoinedHistoryBean joinedHistoryBean = list.get(0);
                             JoinedHistoryBean joinedHistoryBean1 = new JoinedHistoryBean();
                             List<String> idList = joinedHistoryBean.getBrowserIdList();
-                            idList = remove(idList,browserObjectId);
+                            idList = remove(idList, browserObjectId);
                             joinedHistoryBean1.setValue("browserIdList", idList);
                             joinedHistoryBean1.update(joinedHistoryBean.getObjectId(), new UpdateListener() {
                                 @Override
@@ -356,9 +354,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      * 发起人“编辑”功能逻辑
      */
     private void editAppointment() {
-        Intent intent = new Intent(this,BrowserActivity.class);
-        intent.putExtra("editObjectId",objectId);
-        intent.putExtra("from",3);
+        Intent intent = new Intent(this, BrowserActivity.class);
+        intent.putExtra("editObjectId", objectId);
+        intent.putExtra("from", 3);
         startActivity(intent);
         finish();
     }
@@ -408,7 +406,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                             "应约成功！别放别人鸽子哟~",
                                             Toast.LENGTH_SHORT).show();
                                     //更新应约历史记录数据
-                                    updateJoinedHistory(objectId, userObjectId,MODE_JOIN);
+                                    updateJoinedHistory(objectId, userObjectId, MODE_JOIN);
                                     progressDialog.dismiss();
                                 } else {
                                     Toast.makeText(AppointmentDetailActivity.this,
@@ -479,7 +477,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                 "取消应约成功！",
                                                 Toast.LENGTH_SHORT).show();
                                         //更新应约历史记录数据
-                                        updateJoinedHistory(objectId, userObjectId,MODE_QUIT);
+                                        updateJoinedHistory(objectId, userObjectId, MODE_QUIT);
                                         progressDialog.dismiss();
                                     } else {
                                         Toast.makeText(AppointmentDetailActivity.this,
@@ -529,31 +527,61 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         progressDialog.show();
-                        BrowserMsgBean browserMsgBean = new BrowserMsgBean();
-                        browserMsgBean.setObjectId(objectId);
-                        browserMsgBean.delete(new UpdateListener() {
+                        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                             @Override
-                            public void done(BmobException e) {
-                                if (e == null){
+                            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                if (e == null) {
+                                    //获取成员信息并删除这些成员的本活动的应约记录方法
+                                    deleteMembersHistory(browserMsgBean);
+                                    BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
+                                    browserMsgBean1.setObjectId(objectId);
+                                    browserMsgBean1.delete(new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                progressDialog.dismiss();
+                                                Toast.makeText(AppointmentDetailActivity.this,
+                                                        "取消约人成功",
+                                                        Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                progressDialog.dismiss();
+                                                Toast.makeText(AppointmentDetailActivity.this,
+                                                        "取消约人失败" + e.getMessage(),
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                } else {
                                     progressDialog.dismiss();
                                     Toast.makeText(AppointmentDetailActivity.this,
-                                            "取消约人成功",
-                                            Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }else{
-                                    progressDialog.dismiss();
-                                    Toast.makeText(AppointmentDetailActivity.this,
-                                            "取消约人失败" + e.getMessage(),
+                                            "获取数据失败" + e.getMessage(),
                                             Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
+
                     }
                 });
                 dialog1.show();
             }
         });
         dialog1.show();
+    }
+
+    /**
+     * 获取成员信息并删除这些成员的本活动的应约记录方法
+     *
+     * @param browserMsgBean 需要清理成员应约记录的BrowserBean
+     */
+    private void deleteMembersHistory(BrowserMsgBean browserMsgBean) {
+        List<String> members;
+        members = browserMsgBean.getMembers();
+        for (int i = 0; i < members.size(); i++) {
+            String member = members.get(i);
+            updateJoinedHistory(objectId,member,MODE_QUIT);
+        }
     }
 
     /**
