@@ -119,7 +119,7 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
      * 在这里不可以直接对item中控件设置监听，而应使用回调方法，OnclickListener为什么是一个接口原因就在这里
      * 我们定义两个点击监听器的接口，并在这里创建（实现）该接口的私有成员变量，分别用来监听对item和item里发布者昵
      * 称的点击事件
-     * 看一下运行app时的过程：在BrowseFragment的实例中，会创建adapter，
+     * 看一下运行app时的过程：在BrowserFragment的实例中，会创建adapter，
      * 然后就可以通过设置OnClickListener接口，即setOnclickListener方法为两个监听器设置具体的监听逻辑（实现
      * onClick()方法）
      * 这样，在这个adapter里，我们就可以把onClick的逻辑实现交给设置onItemClickListener的类（即BrowseFragment）
