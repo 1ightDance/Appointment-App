@@ -24,9 +24,7 @@ import java.util.List;
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
-    /**
-     *创建一个数组全局变量用以存放资讯的数据
-     */
+    //创建一个数组全局变量用以存放资讯的数据
     private List<NewsBean> mNewsMsg;
     Context mContext;
 
