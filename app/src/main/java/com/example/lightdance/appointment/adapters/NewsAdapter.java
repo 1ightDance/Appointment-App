@@ -15,23 +15,33 @@ import com.example.lightdance.appointment.R;
 import java.util.List;
 
 /**
+ * @author pope
  * Created by pope on 2017/10/7.
  */
-//咨询适配器 继承自RecyclerView.Adapter 将泛型指定为NewsAdapter.ViewHolder
+
+/**
+ *咨询适配器 继承自RecyclerView.Adapter 将泛型指定为NewsAdapter.ViewHolder
+ */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
-    //创建一个数组全局变量用以存放资讯的数据
+    /**
+     *创建一个数组全局变量用以存放资讯的数据
+     */
     private List<NewsBean> mNewsMsg;
     Context mContext;
 
-    //定义内部类ViewHolder并继承RecyclerView.ViewHolder 需创建结构体
+    /**
+     *定义内部类ViewHolder并继承RecyclerView.ViewHolder 需创建结构体
+     */
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView newsImg;
         TextView newsTitle;
         TextView newsContent;
 
-        //结构体
+        /**
+         *结构体
+         */
         public ViewHolder(View itemView) {
             super(itemView);
             newsImg     = (ImageView) itemView.findViewById(R.id.img_news_pic);
@@ -45,8 +55,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         this.mContext = mContext;
     }
 
-    //重写从RecyclerView ADapter中继承来的三个方法
-    //传入布局文件 并膨胀为视图暂存在holder中
+    /**
+     *重写从RecyclerView ADapter中继承来的三个方法
+     *传入布局文件 并膨胀为视图暂存在holder中
+     */
     @Override
     public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -55,7 +67,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return holder;
     }
 
-    //将各项数据进行绑定
+    /**
+     *将各项数据进行绑定（内容，标题等）
+     */
     @Override
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
         NewsBean newsBean = mNewsMsg.get(position);
@@ -64,7 +78,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         holder.newsContent.setText(newsBean.getNewsContent());
     }
 
-    //传入数据源长度
+    /**
+     *传入数据源长度
+     */
     @Override
     public int getItemCount() {
         return mNewsMsg.size();
