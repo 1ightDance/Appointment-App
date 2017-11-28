@@ -135,7 +135,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         BrowserMsgBean msgAppointment = msgBeanList.get(position);
         holder.title.setText(msgAppointment.getTitle());
         holder.content.setText(msgAppointment.getContent());
-        //通过查询发起人的ObjectId获取发起人的个人信息
+        /**
+         *通过查询发起人的ObjectId获取发起人的个人信息
+         */
         BmobQuery<UserBean> query = new BmobQuery<>();
         query.getObject(msgAppointment.getInviter(), new QueryListener<UserBean>() {
             @Override
@@ -150,7 +152,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         });
         holder.personNumberNeed.setText(msgAppointment.getPersonNumberNeed());
         holder.personNumberHave.setText(String.valueOf(msgAppointment.getPersonNumberHave()));
-        //给RecyclerView的Item设置点击监听
+        /**
+         *给RecyclerView的Item设置点击监听
+         */
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +163,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
                 }
             }
         });
-        //给RecyclerView的发起人昵称设置点击监听
+        /**
+         *给RecyclerView的发起人昵称设置点击监听
+         */
         holder.inviter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +176,9 @@ public class BrowserMsgAdapter extends RecyclerView.Adapter<BrowserMsgAdapter.Vi
         });
     }
 
-    //传入数据源长度
+    /**
+     *传入数据源长度
+     */
     @Override
     public int getItemCount() {
         return msgBeanList.size();
