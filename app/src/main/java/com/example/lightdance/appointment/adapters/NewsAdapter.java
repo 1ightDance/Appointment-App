@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 /**
- *咨询适配器 继承自RecyclerView.Adapter 将泛型指定为NewsAdapter.ViewHolder
+ *资讯适配器 继承自RecyclerView.Adapter 将泛型指定为NewsAdapter.ViewHolder
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
