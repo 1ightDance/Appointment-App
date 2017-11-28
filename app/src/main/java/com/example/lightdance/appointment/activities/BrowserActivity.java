@@ -24,10 +24,12 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     Fragment mBrowseFragment;
 
     /**
-     * from == 1 加载活动广场碎片
-     * from == 2 加载发布新活动碎片
+     * from == 1 通过点击TypeFragment的ItemView开启本Activity，意图加载活动广场碎片
+     * from == 2 通过点击TypeFragment的FloatingBar开启本Activity，意图加载发布新活动碎片
+     * from == 3 通过点击AppointmentDetailed的编辑按钮开启本Activity，意图加载发布新活动碎片
      */
     private int from;
+    private String editObjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
         Intent intent = getIntent();
         from = intent.getIntExtra("from", 1);
         typeCode = intent.getIntExtra("typeCode", 0);
+        editObjectId = intent.getStringExtra("editObjectId");
         if (from == 1) {
             if (typeCode == 0) {
                 Toast.makeText(this, "选择的活动类型的数据传输出现错误", Toast.LENGTH_LONG).show();
@@ -46,7 +49,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
                 changeFragment(1);
             }
         }
-        if (from == 2){
+        if (from == 2||from == 3){
             changeFragment(2);
         }
     }
@@ -107,6 +110,12 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
             if (from == 2){
                 finish();
             }
+            if (from == 3){
+                Intent intent = new Intent(this, AppointmentDetailActivity.class);
+                intent.putExtra("objectId",editObjectId);
+                startActivity(intent);
+                finish();
+            }
             return false;
         }
         return super.onKeyUp(keyCode, event);
@@ -124,6 +133,10 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
      */
     public int getFromCode(){
         return from;
+    }
+
+    public String getEditObjectId(){
+        return editObjectId;
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.lightdance.appointment.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.util.Calendar;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.R;
+import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.BrowserActivity;
 
 import java.util.ArrayList;
@@ -29,12 +32,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
  * Created by LightDance on 2017/10/4.
+ *
+ * TODO 完善时间判断逻辑 包括通过“编辑”按钮启动本Activity的时间加载的数据载入
  *
  * @author LightDance
  */
@@ -66,25 +73,32 @@ public class NewAppointmentFragment extends Fragment {
     Toolbar toolbar;
     @BindView(R.id.numberPicker)
     NumberPickerView numberPickerView;
+    @BindView(R.id.btn_newappointment_done)
+    Button btnNewappointmentDone;
 
     /**
      * 该变量用来存储调用日期选择器的View是哪一个 1代表start date 2代表end date
      */
-    int timeChange = 0;
-    int typeCode = 0;
-    int from;
-    int startDateYear;
-    int startDateMonth;
-    int startDateDay;
-    int startTimeHour;
-    int startTimeMin;
+    private int timeChange = 0;
+    private int typeCode = 0;
+    private int from;
+    private int startDateYear;
+    private int startDateMonth;
+    private int startDateDay;
+    private int startTimeHour;
+    private int startTimeMin;
+    final private int TIME_START = 666;
+    final private int TIME_END = 999;
+    final String[] numb = new String[101];
+
     private Calendar cal;
     private int year;
     private int month;
     private int day;
     private int hour;
     private int min;
-    private String personNumb = null;
+    private String personNumb = "1";
+    private String editObjectId;
 
     private TimePickerFragment timePickerFragment = new TimePickerFragment();
     private AppointmentTypeFragment appointmentTypeFragment = new AppointmentTypeFragment();
@@ -108,29 +122,8 @@ public class NewAppointmentFragment extends Fragment {
         //初始化起止时间
         initDateData();
 
-        //从activity中获取到FromCode
-        BrowserActivity a = (BrowserActivity) getActivity();
-        from = a.getFromCode();
-
-        //创造一个存放1到100和无限制的String类型数组用以给数字选择器提供数据
-        final String[] numb = new String[101];
-        for (int i = 0; i < 100; i++) {
-            numb[i] = "" + (i + 1);
-        }
-        numb[100] = "∞";
-        //传入数组
-        numberPickerView.setDisplayedValues(numb);
-        numberPickerView.setMinValue(0);
-        numberPickerView.setMaxValue(numb.length - 1);
-        //设置第一次显示的位置
-        numberPickerView.setValue(0);
-        //给数字选择器设置监听
-        numberPickerView.setOnValueChangedListener(new NumberPickerView.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
-                personNumb = numb[newVal];
-            }
-        });
+        //初始化时间选择器
+        initNumberPicker();
 
         //toolbar
         toolbar.setTitle("发起约人");
@@ -146,10 +139,104 @@ public class NewAppointmentFragment extends Fragment {
                 if (from == 2) {
                     activity.finish();
                 }
+                if (from == 3) {
+                    Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                    intent.putExtra("objectId", editObjectId);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
 
+        //从activity中获取到FromCode
+        BrowserActivity a = (BrowserActivity) getActivity();
+        from = a.getFromCode();
+        editObjectId = a.getEditObjectId();
+        if (from == 3) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("请稍等");
+            progressDialog.setMessage("加载中...");
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+            toolbar.setTitle("编辑活动");
+            btnNewappointmentDone.setText("保存更改");
+            //加载被编辑的BrowserBean数据
+            loadAppointmentData();
+        }
+
         return view;
+    }
+
+    private void loadAppointmentData() {
+        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+        query.getObject(editObjectId, new QueryListener<BrowserMsgBean>() {
+            @Override
+            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                editTextActivityTitle.setText(browserMsgBean.getTitle());
+                tvActivityTypeSelect.setText(getTypeString(browserMsgBean.getTypeCode()));
+                editTextActivityPlace.setText(browserMsgBean.getPlace());
+                editTextActivityContent.setText(browserMsgBean.getContent());
+                editTextActivityContactWay.setText(browserMsgBean.getContactWay());
+                loadPersonNumberNeed(browserMsgBean.getPersonNumberNeed());
+                loadTimeData(browserMsgBean.getStartTime(), TIME_START);
+                loadTimeData(browserMsgBean.getEndTime(), TIME_END);
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void loadTimeData(String time, int timeCode) {
+        int year;
+        int month;
+        int day;
+        int hour;
+        int min;
+        year = Integer.valueOf(time.substring(0,4));
+        month = Integer.valueOf(time.substring(5,7));
+        day = Integer.valueOf(time.substring(8,10));
+        hour = Integer.valueOf(time.substring(12,14));
+        min = Integer.valueOf(time.substring(15,17));
+        switch (timeCode) {
+            case TIME_START:
+                setSelectTime(year,month,day,hour,min,TIME_START);
+                break;
+            case TIME_END:
+                setSelectTime(year,month,day,hour,min,TIME_END);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void loadPersonNumberNeed(String personNumberNeed) {
+        for (int i = 0; i < 101; i++) {
+            if (personNumberNeed.equals(numb[i])){
+                numberPickerView.setValue(i);
+                personNumb = numb[i];
+                break;
+            }
+        }
+    }
+
+    private void initNumberPicker() {
+        //创造一个存放1到100和无限制的String类型数组用以给数字选择器提供数据
+        for (int i = 0; i < 100; i++) {
+            numb[i] = String.valueOf(i+1);
+        }
+        numb[100] = "∞";
+        //传入数组
+        numberPickerView.setDisplayedValues(numb);
+        numberPickerView.setMinValue(0);
+        numberPickerView.setMaxValue(numb.length - 1);
+        //设置第一次显示的位置
+        numberPickerView.setValue(0);
+        //给数字选择器设置监听
+        numberPickerView.setOnValueChangedListener(new NumberPickerView.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
+                personNumb = numb[newVal];
+            }
+        });
     }
 
     //初始化时间数据方法
@@ -167,8 +254,8 @@ public class NewAppointmentFragment extends Fragment {
         startDateDay = day;
         startTimeHour = hour;
         startTimeMin = min;
-        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, 1);
-        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, 2);
+        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, TIME_START);
+        setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, TIME_END);
     }
 
     @Override
@@ -281,10 +368,47 @@ public class NewAppointmentFragment extends Fragment {
         }
     }
 
+    private String getTypeString(int typeCode) {
+        String s;
+        switch (typeCode) {
+            case 1:
+                s = "自习";
+                break;
+            case 2:
+                s = "电影";
+                break;
+            case 3:
+                s = "桌游";
+                break;
+            case 4:
+                s = "电竞";
+                break;
+            case 5:
+                s = "唱歌";
+                break;
+            case 6:
+                s = "运动";
+                break;
+            case 7:
+                s = "吃饭";
+                break;
+            case 8:
+                s = "旅行";
+                break;
+            case 9:
+                s = "其他";
+                break;
+            default:
+                s = "错误";
+                break;
+        }
+        return s;
+    }
+
     /**
      * 判断发布信息内容是否合法
      *
-     * @return
+     * @return true：不合法 false：合法
      */
     private boolean isDataIllegal() {
         //缺少一个时间合法性检测
@@ -315,58 +439,62 @@ public class NewAppointmentFragment extends Fragment {
      * 数据存储方法
      */
     private void saveData() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("请稍等");
-        progressDialog.setMessage("发布中...");
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-        //点击完成后 获取发布页填写的数据储存到后台
-        BrowserMsgBean browserMsgBean = new BrowserMsgBean();
-        browserMsgBean.setTitle(editTextActivityTitle.getText().toString());
-        browserMsgBean.setStartTime(tvActivityStartDate.getText().toString()
-                + "  " + tvActivityStartTime.getText().toString());
-        browserMsgBean.setEndTime(tvActivityEndDate.getText().toString()
-                + "  " + tvActivityEndTime.getText().toString());
-        browserMsgBean.setPlace(editTextActivityPlace.getText().toString());
-        browserMsgBean.setContent(editTextActivityContent.getText().toString());
-        browserMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
-        browserMsgBean.setTypeCode(typeCode);
-        browserMsgBean.setPersonNumberNeed(personNumb);
-        browserMsgBean.setPersonNumberHave(1);
-        //获取当前用户的信息存储为该活动的发布人
-        SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
-        final String userBeanId = preferences.getString("userBeanId", "BUG");
-        browserMsgBean.setInviter(userBeanId);
-        List<String> memberList = new ArrayList<>();
-        memberList.add(userBeanId);
-        browserMsgBean.setMembers(memberList);
-        browserMsgBean.save(new SaveListener<String>() {
-            @Override
-            public void done(final String s, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
-                    BrowserActivity activity = (BrowserActivity) getActivity();
-                    //判断当前页从哪里跳转来的
-                    //并通过不同方法 刷新并跳转回BrowserFragment
-                    if (from == 1) {
-                        BrowseFragment browseFragment = (BrowseFragment) activity.getFragment(1);
-                        browseFragment.initBrowserData();
-                        activity.changeFragment(1);
+        if (from == 3) {
+            // TODO 保存修改后的数据的逻辑
+        } else {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("请稍等");
+            progressDialog.setMessage("发布中...");
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+            //点击完成后 获取发布页填写的数据储存到后台
+            BrowserMsgBean browserMsgBean = new BrowserMsgBean();
+            browserMsgBean.setTitle(editTextActivityTitle.getText().toString());
+            browserMsgBean.setStartTime(tvActivityStartDate.getText().toString()
+                    + "  " + tvActivityStartTime.getText().toString());
+            browserMsgBean.setEndTime(tvActivityEndDate.getText().toString()
+                    + "  " + tvActivityEndTime.getText().toString());
+            browserMsgBean.setPlace(editTextActivityPlace.getText().toString());
+            browserMsgBean.setContent(editTextActivityContent.getText().toString());
+            browserMsgBean.setContactWay(editTextActivityContactWay.getText().toString());
+            browserMsgBean.setTypeCode(typeCode);
+            browserMsgBean.setPersonNumberNeed(personNumb);
+            browserMsgBean.setPersonNumberHave(1);
+            //获取当前用户的信息存储为该活动的发布人
+            SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+            final String userBeanId = preferences.getString("userBeanId", "BUG");
+            browserMsgBean.setInviter(userBeanId);
+            List<String> memberList = new ArrayList<>();
+            memberList.add(userBeanId);
+            browserMsgBean.setMembers(memberList);
+            browserMsgBean.save(new SaveListener<String>() {
+                @Override
+                public void done(final String s, BmobException e) {
+                    if (e == null) {
+                        Toast.makeText(getActivity(), "约人信息发布成功", Toast.LENGTH_SHORT).show();
+                        BrowserActivity activity = (BrowserActivity) getActivity();
+                        //判断当前页从哪里跳转来的
+                        //并通过不同方法 刷新并跳转回BrowserFragment
+                        if (from == 1) {
+                            BrowseFragment browseFragment = (BrowseFragment) activity.getFragment(1);
+                            browseFragment.initBrowserData();
+                            activity.changeFragment(1);
+                        }
+                        if (from == 2) {
+                            BrowserActivity browserActivity = (BrowserActivity) getActivity();
+                            BrowseFragment browseFragment = (BrowseFragment) browserActivity.getFragment(1);
+                            browseFragment.sendSelectType(typeCode);
+                            browserActivity.changeFragment(1);
+                        }
+                        progressDialog.dismiss();
+                        clearData();
+                    } else {
+                        Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
                     }
-                    if (from == 2) {
-                        BrowserActivity browserActivity = (BrowserActivity) getActivity();
-                        BrowseFragment browseFragment = (BrowseFragment) browserActivity.getFragment(1);
-                        browseFragment.sendSelectType(typeCode);
-                        browserActivity.changeFragment(1);
-                    }
-                    progressDialog.dismiss();
-                    clearData();
-                } else {
-                    Toast.makeText(getActivity(), "发布失败 " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    progressDialog.dismiss();
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -433,7 +561,7 @@ public class NewAppointmentFragment extends Fragment {
      * @param min   用户选择的“分”数据
      */
     public void setSelectTime(int year, int month, int day, int hour, int min, int timeChange) {
-        if (timeChange == 1) {
+        if (timeChange == TIME_START) {
             if (month < 10 && day >= 10) {
                 tvActivityStartDate.setText(year + "-0" + month + "-" + day);
             }
@@ -459,7 +587,7 @@ public class NewAppointmentFragment extends Fragment {
                 tvActivityStartTime.setText(hour + ":" + min);
             }
         }
-        if (timeChange == 2) {
+        if (timeChange == TIME_END) {
             if (month < 10 && day >= 10) {
                 tvActivityEndDate.setText(year + "-0" + month + "-" + day);
             }

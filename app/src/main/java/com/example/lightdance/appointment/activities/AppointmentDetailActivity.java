@@ -70,7 +70,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     /**
      * 定义userType用来保存当前用户相对于当前帖子的身份
-     * <p>
+     *
      * USER_INVITER  = 1 发起人
      * USER_JOINED   = 2 成员
      * USER_PASSERBY = 3 路人
@@ -356,8 +356,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      * 发起人“编辑”功能逻辑
      */
     private void editAppointment() {
-        progressDialog.show();
-        Toast.makeText(AppointmentDetailActivity.this, "编辑尚待开发", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,BrowserActivity.class);
+        intent.putExtra("editObjectId",objectId);
+        intent.putExtra("from",3);
+        startActivity(intent);
+        finish();
     }
 
     /**
