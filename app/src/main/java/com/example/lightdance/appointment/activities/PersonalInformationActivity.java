@@ -290,7 +290,9 @@ public class PersonalInformationActivity extends AppCompatActivity {
             mBitmap = extras.getParcelable("data");
             //这里图片是方形的，可以用一个工具类处理成圆形（很多头像都是圆形，这种工具类网上很多不再详述）
             imgUserinforAvatar.setImageBitmap(mBitmap);//显示图片
-            //在这个地方可以写上上传该图片到服务器的代码，后期将单独写一篇这方面的博客，敬请期待...
+            /**
+             * TODO 写上上传该图片到服务器的代码，后期将单独写一篇这方面的博客，敬请期待...
+             */
         }
     }
 
