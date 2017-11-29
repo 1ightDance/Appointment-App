@@ -133,7 +133,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
 //                Intent openAlbumIntent = new Intent(
 //                        Intent.ACTION_GET_CONTENT);
 //                openAlbumIntent.setType("image/*");
-                /**用startActivityForResult方法，待会儿重写onActivityResult()方法，拿到图片做裁剪操作
+                /**
+                 * 用startActivityForResult方法，待会儿重写onActivityResult()方法，拿到图片做裁剪操作
                  * 暂时不提供更换头像功能
                  * 相关已写功能代码暂时注释掉
                  */
