@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.Model.JoinedHistoryBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.ParticipantAdapter;
 
@@ -80,6 +81,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     final private int USER_INVITER = 1;
     final private int USER_JOINED = 2;
     final private int USER_PASSERBY = 3;
+    final private int MANAGER_FIRSTLEVEL = 1001;
+    final private int USER = 1000;
     final private int MODE_JOIN = 666;
     final private int MODE_QUIT = 999;
 
@@ -277,57 +280,140 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         //获取当前用户ObjectId
         SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
         final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
-        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
-        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+        BmobQuery<UserBean> q = new BmobQuery<>();
+        q.getObject(userObjectId, new QueryListener<UserBean>() {
             @Override
-            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                if (e == null) {
-                    //判断当前用户是否为发起人
-                    if (browserMsgBean.getInviter().equals(userObjectId)) {
-                        userType = USER_INVITER;
-                        detailedInfoTakePartIn.setText("编辑");
-                        detailedInfoDelete.setText("取消约人");
-                    } else {
-                        detailedInfoDelete.setVisibility(View.GONE);
-                        //获取已参与人员列表
-                        List<String> memberBeanList = browserMsgBean.getMembers();
-                        int s = memberBeanList.size();
-                        //检测当前用户是否已经在该活动已参与人员列表
-                        boolean isJoined = false;
-                        for (int i = 0; i < s; i++) {
-                            String s1 = memberBeanList.get(i);
-                            if (s1.equals(userObjectId)) {
-                                isJoined = true;
-                                break;
+            public void done(UserBean userBean, BmobException e) {
+                int levelCode = userBean.getLevelCode();
+                switch (levelCode) {
+                    case MANAGER_FIRSTLEVEL:
+                        userType = MANAGER_FIRSTLEVEL;
+                        detailedInfoTakePartIn.setBackgroundResource(R.drawable.bg_btn_press);
+                        detailedInfoDelete.setText("删除");
+                        break;
+                    case USER:
+                        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                            @Override
+                            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                if (e == null) {
+                                    //判断当前用户是否为发起人
+                                    if (browserMsgBean.getInviter().equals(userObjectId)) {
+                                        userType = USER_INVITER;
+                                        detailedInfoTakePartIn.setText("编辑");
+                                        detailedInfoDelete.setText("取消约人");
+                                    } else {
+                                        detailedInfoDelete.setVisibility(View.GONE);
+                                        //获取已参与人员列表
+                                        List<String> memberBeanList = browserMsgBean.getMembers();
+                                        int s = memberBeanList.size();
+                                        //检测当前用户是否已经在该活动已参与人员列表
+                                        boolean isJoined = false;
+                                        for (int i = 0; i < s; i++) {
+                                            String s1 = memberBeanList.get(i);
+                                            if (s1.equals(userObjectId)) {
+                                                isJoined = true;
+                                                break;
+                                            }
+                                        }
+                                        if (isJoined) {
+                                            userType = USER_JOINED;
+                                            detailedInfoTakePartIn.setText("取消应约");
+                                        } else {
+                                            userType = USER_PASSERBY;
+                                            if (isFull) {
+                                                detailedInfoTakePartIn.setBackgroundResource(R.drawable.bg_btn_press);
+                                                detailedInfoTakePartIn.setText("人满啦！");
+                                            } else {
+                                                detailedInfoTakePartIn.setText("应约");
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(AppointmentDetailActivity.this, "错误 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+
                             }
-                        }
-                        if (isJoined) {
-                            userType = USER_JOINED;
-                            detailedInfoTakePartIn.setText("取消应约");
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    private void deleteByManager() {
+        AlertDialog.Builder dialog1 = new AlertDialog.Builder(AppointmentDetailActivity.this);
+        dialog1.setTitle("注意！");
+        dialog1.setMessage("您正在删除本约人帖，请认真核对确认该帖为违法帖后再进行删除");
+        dialog1.setCancelable(true);
+        dialog1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog1.setPositiveButton("确认删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                progressDialog.show();
+                BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                    @Override
+                    public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                        if (e == null) {
+                            //获取成员信息并删除这些成员的本活动的应约记录方法
+                            deleteMembersHistory(browserMsgBean);
+                            int typeCode = browserMsgBean.getTypeCode();
+                            int have = browserMsgBean.getPersonNumberHave();
+                            BrowserMsgBean browserMsgBean1 = new BrowserMsgBean();
+                            browserMsgBean1.setValue("typeCode", typeCode + 1000);
+                            browserMsgBean1.setValue("personNumberHave", have);
+                            browserMsgBean1.update(objectId, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(AppointmentDetailActivity.this,
+                                                "删除成功",
+                                                Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(AppointmentDetailActivity.this,
+                                                "删除失败" + e.getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         } else {
-                            userType = USER_PASSERBY;
-                            if (isFull) {
-                                detailedInfoTakePartIn.setBackgroundResource(R.drawable.bg_btn_press);
-                                detailedInfoTakePartIn.setText("人满啦！");
-                            } else {
-                                detailedInfoTakePartIn.setText("应约");
-                            }
+                            progressDialog.dismiss();
+                            Toast.makeText(AppointmentDetailActivity.this,
+                                    "获取数据失败" + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
-                } else {
-                    Toast.makeText(AppointmentDetailActivity.this, "错误 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-                }
+                });
 
             }
         });
+        dialog1.show();
     }
 
     @OnClick({R.id.recyclerView_detailed_info, R.id.detailed_info_take_part_in, R.id.textView18, R.id.detailed_info_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.detailed_info_delete:
-                deleteAppointment();
+                switch (userType) {
+                    case MANAGER_FIRSTLEVEL:
+                        deleteByManager();
+                        break;
+                    default:
+                        deleteAppointment();
+                        break;
+                }
                 break;
             case R.id.detailed_info_take_part_in:
                 //通过objectId查询表内详细信息
@@ -340,6 +426,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                         break;
                     case USER_PASSERBY:
                         joinAppointment();
+                        break;
+                    case MANAGER_FIRSTLEVEL:
+                        Toast.makeText(this, "管理人员无法应约", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -580,7 +669,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         members = browserMsgBean.getMembers();
         for (int i = 0; i < members.size(); i++) {
             String member = members.get(i);
-            updateJoinedHistory(objectId,member,MODE_QUIT);
+            updateJoinedHistory(objectId, member, MODE_QUIT);
         }
     }
 

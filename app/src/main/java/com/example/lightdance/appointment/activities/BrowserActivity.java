@@ -121,7 +121,15 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
         return super.onKeyUp(keyCode, event);
     }
 
-    //重写TimeListener接口的saveSelectTime方法
+    /**
+     * 重写TimeListener接口的saveSelectTime方法
+     * 传入需要被保存的年、月、日、时、分数据
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @param hour 时
+     * @param minute 分
+     */
     @Override
     public void saveSelectTime(int year, int month, int day, int hour, int minute) {
         NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
