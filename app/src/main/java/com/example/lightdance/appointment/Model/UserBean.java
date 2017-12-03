@@ -19,11 +19,20 @@ public class UserBean extends BmobObject {
     private String userPassword;
     private String userName;
     private String userNickName;
-    private String userCollege;        //新增用户学院字段
+    private String userCollege;
     private int userSex;
     private String userDescription;
     private String userPhoneNumber;
     private int userIconId;
+    private Integer levelCode;
+
+    public Integer getLevelCode() {
+        return levelCode;
+    }
+
+    public void setLevelCode(Integer levelCode) {
+        this.levelCode = levelCode;
+    }
 
     public String getUserStudentNum() {
         return userStudentNum;

@@ -4,7 +4,10 @@ package com.example.lightdance.appointment.fragments;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -45,6 +48,13 @@ public class BrowseFragment extends Fragment {
     @BindView(R.id.recyclerview_browse)
     RecyclerView recyclerView;
 
+    private Calendar cal;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int min;
+
     private List<BrowserMsgBean> browserMsgBeen;
     private int typeCode = 0;
     private ProgressDialog progressDialog;
@@ -83,7 +93,7 @@ public class BrowseFragment extends Fragment {
     }
 
     public void initBrowserData() {
-        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+        final BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
         query.addWhereEqualTo("typeCode",typeCode);
         query.setLimit(20);
         query.findObjects(new FindListener<BrowserMsgBean>() {
@@ -105,10 +115,69 @@ public class BrowseFragment extends Fragment {
                     adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
-                            String objectId = browserMsgBeen.get(position).getObjectId();
-                            Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
-                            intent.putExtra("objectId",objectId);
-                            startActivity(intent);
+                            final String objectId = browserMsgBeen.get(position).getObjectId();
+                            BmobQuery<BrowserMsgBean> query1 = new BmobQuery<>();
+                            query1.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
+                                @Override
+                                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                    if (e == null){
+                                        cal = Calendar.getInstance();
+                                        year = cal.get(Calendar.YEAR);
+                                        month = cal.get(Calendar.MONTH) + 1;
+                                        day = cal.get(Calendar.DAY_OF_MONTH);
+                                        hour = cal.get(Calendar.HOUR_OF_DAY);
+                                        min = cal.get(Calendar.MINUTE);
+                                        String time = browserMsgBean.getEndTime();
+                                        int endYear = Integer.valueOf(time.substring(0, 4));
+                                        int endMonth = Integer.valueOf(time.substring(5, 7));
+                                        int endDay = Integer.valueOf(time.substring(8, 10));
+                                        int endHour = Integer.valueOf(time.substring(12, 14));
+                                        int endMin = Integer.valueOf(time.substring(15, 17));
+                                        boolean isOK;
+                                        if (year > endYear) {
+                                            isOK = false;
+                                        } else if (year == endYear) {
+                                            if (month > endMonth) {
+                                                isOK = false;
+                                            } else if (month == endMonth) {
+                                                if (day > endDay) {
+                                                    isOK = false;
+                                                } else if (day == endDay) {
+                                                    if (hour > endHour) {
+                                                        isOK = false;
+                                                    } else if (hour == endHour) {
+                                                        if (min > endMin) {
+                                                            isOK = false;
+                                                        } else if (min == endMin) {
+                                                            isOK = false;
+                                                        } else {
+                                                            isOK = true;
+                                                        }
+                                                    } else {
+                                                        isOK = true;
+                                                    }
+                                                } else {
+                                                    isOK = true;
+                                                }
+                                            } else {
+                                                isOK = true;
+                                            }
+                                        } else {
+                                            isOK = true;
+                                        }
+                                        if (isOK){
+                                            Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
+                                            intent.putExtra("objectId",objectId);
+                                            startActivity(intent);
+                                        }else{
+                                            Toast.makeText(getActivity(),"该活动已经结束啦！",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        Toast.makeText(getActivity(),"出错"+e.getMessage(),Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         }
                     });
                     adapter.setInviterOnClickListener(new BrowserMsgAdapter.OnInviterClickListener() {
