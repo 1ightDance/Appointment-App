@@ -138,6 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         newUser.setUserNickName(userNickName.getText().toString());
                                         newUser.setUserDescription("这个人很懒，什么都没说");
                                         newUser.setUserCollege(userCollege.getText().toString());
+                                        newUser.setLevelCode(1000);
                                         newUser.setUserIconId(R.mipmap.ic_user);
                                         newUser.save(new SaveListener<String>() {
                                             @Override
