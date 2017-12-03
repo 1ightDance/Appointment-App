@@ -25,6 +25,15 @@ public class UserBean extends BmobObject {
     private String userPhoneNumber;
     private int userIconId;
     private Integer levelCode;
+    private double attendance;
+
+    public double getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(double attendance) {
+        this.attendance = attendance;
+    }
 
     public Integer getLevelCode() {
         return levelCode;

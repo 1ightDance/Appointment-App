@@ -83,16 +83,20 @@ public class PersonalCenterFragment extends Fragment {
         return view;
     }
 
-    //判断是否登录而更改个人中心碎片内容
+    /**
+     * 判断是否登录而更改个人中心碎片内容
+     *
+     * @param logined 是否登录
+     */
     public void checkIsLogined(boolean logined) {
         if (logined == false) {
             tvInformation.setTextColor(Color.parseColor("#ff757575"));
             tvHistory.setTextColor(Color.parseColor("#ff757575"));
         }
-        if (logined == true){
+        if (logined == true) {
             userAvatar.setImageResource(R.mipmap.headshot_2);
-            SharedPreferences preferences = getActivity().getSharedPreferences("loginData",Context.MODE_PRIVATE);
-            tvUserName.setText(preferences.getString("nickName","点击登录"));
+            SharedPreferences preferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+            tvUserName.setText(preferences.getString("nickName", "点击登录"));
         }
         imgInforNext.setClickable(logined);
         imgHistoryNext.setClickable(logined);
@@ -122,11 +126,11 @@ public class PersonalCenterFragment extends Fragment {
                 intent = null;
                 break;
             case R.id.tv_user_name:
-                if (isLogined){
+                if (isLogined) {
                     startActivity(new Intent(getActivity(), LogoutActivity.class));
                     getActivity().finish();
                     break;
-                }else{
+                } else {
                     intent = new Intent(getActivity(), LoginActivity.class);
                     getActivity().finish();
                 }
@@ -162,19 +166,21 @@ public class PersonalCenterFragment extends Fragment {
                 intent = null;
                 break;
             case R.id.img_count_setting:
-                if (isLogined){
+                if (isLogined) {
                     startActivity(new Intent(getActivity(), LogoutActivity.class));
                     getActivity().finish();
                     break;
-                }else{
+                } else {
                     intent = new Intent(getActivity(), LoginActivity.class);
                     getActivity().finish();
                 }
                 break;
+            default:
+                break;
         }
-        if (intent == null){
+        if (intent == null) {
             return;
-        }else{
+        } else {
             startActivity(intent);
         }
     }
