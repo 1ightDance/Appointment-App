@@ -11,26 +11,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.BrowseMsgBean;
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.JoinedHistoryBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.BrowserMsgAdapter;
 
-import org.litepal.crud.DataSupport;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SQLQueryListener;
 
 public class AppointmentHistoryActivity extends AppCompatActivity {
 
@@ -49,6 +52,12 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    /**
+     * 声明两个fragment，并在初始化时获取数据库信息并绑定相应adapter，
+     * 在getItem中用switch-case语句返回相应fragment并显示
+     */
+    private Fragment myAppointmentFragment;
+    private Fragment joinedAppointmentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +73,9 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.history_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.history_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -97,6 +91,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
          *用来取数据库数据
          */
         private BmobQuery<BrowserMsgBean> msgHistoryList;
+        private BmobQuery<JoinedHistoryBean> joinedHistoryList;
         RecyclerView historyRecyclerView;
 
         public PlaceholderFragment() {
@@ -119,15 +114,17 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             //绑定视图
             final View rootView = inflater.inflate(R.layout.fragment_appointment_history, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //有点害怕这里设置完查询记录为空的textview之后不会消失
             final TextView ifEmpty = (TextView) rootView.findViewById(R.id.history_if_empty);
             historyRecyclerView = (RecyclerView)rootView.findViewById(R.id.section_recyclerview);
             historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+
             SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
             String loginStudentId = preferences.getString("userBeanId",null);
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
-                //TODO 暂时这样,希望之后能有个每次加载10行，下拉加载更多的逻辑,目前设置的只查50条是有隐患的                msgHistoryList = new BmobQuery<BrowserMsgBean>();
+                //TODO 暂时这样,希望之后能有个每次加载10行，下拉加载更多的逻辑,目前设置的只查50条是有隐患的
                 msgHistoryList = new BmobQuery<>();
                 msgHistoryList.addWhereEqualTo("inviter" , loginStudentId);
                 msgHistoryList.setLimit(50);
@@ -136,31 +133,17 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
                     public void done(List<BrowserMsgBean> list, BmobException e) {
                         if (e == null) {
                             //查询成功，读取数据以供adapter保存
-                            Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT);
-                            for (BrowserMsgBean msg : list) {
-                                msg.getContactWay();
-                                msg.getContent();
-                                msg.getEndTime();
-                                msg.getInviter();
-                                msg.getMembers();
-                                msg.getPersonNumberHave();
-                                msg.getPersonNumberNeed();
-                                msg.getPlace();
-                                msg.getStartTime();
-                                msg.getPublishTime();
-                                msg.getTitle();
-                                msg.getTypeCode();
-                            }
+                            //Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT).show();//debug
                             BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(), list);
                             historyRecyclerView.setAdapter(adapter);
                             //如果为空，显示这样的字段
                             if (list.isEmpty()) {
                                 ifEmpty.setText("发布记录空空如也");
-                            } else {
-                                //TODO 这里在考虑加幅网络连接失败图片啥的，但是不太会搞定那个抛异常
-                                Toast.makeText(getActivity(), "你网有毛病吧", Toast.LENGTH_SHORT);
-
                             }
+                        } else {
+                            //TODO 这里在考虑加幅网络连接失败图片啥的，但是不太会搞定那个抛异常
+                            Toast.makeText(getActivity(), "你网有毛病吧"
+                                    +e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -168,14 +151,47 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
 //                BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),msgHistoryList);
 //                this.historyRecyclerView.setAdapter(adapter);
                 }else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2){
-                //查询所有约帖中“应约者列表”，显示所有含有本账号的约帖 ...
-                //TODO  我觉着会非常慢，效率感人，需要改进一下...而且setLimit存在同上隐患
-                msgHistoryList = new BmobQuery<BrowserMsgBean>();
-                msgHistoryList.addWhereEqualTo("inviter" , loginStudentId);
-                msgHistoryList.setLimit(50);
-                msgHistoryList.findObjects(new FindListener<BrowserMsgBean>() {
+                /**
+                 * * 查询所有约帖中“应约者列表”，显示所有含有本账号的约帖 ...
+                 * TODO {@methord setLimit}存在同上隐患
+                 */
+                joinedHistoryList = new BmobQuery<>();
+
+                /*先查询应约过的帖子Id，并存个数组*/
+                String basicSql = "select browserIdList from JoinedHistoryBean where userObjectId = " + loginStudentId + ";";
+                joinedHistoryList.doSQLQuery(basicSql, new SQLQueryListener<JoinedHistoryBean>() {
                     @Override
-                    public void done(List<BrowserMsgBean> list, BmobException e) {
+                    public void done(BmobQueryResult<JoinedHistoryBean> bmobQueryResult, BmobException e) {
+                        if(e ==null){
+                            List<JoinedHistoryBean> list = bmobQueryResult.getResults();
+                            List<String> msgIds = new ArrayList<>();
+                            while(list.iterator().hasNext()){
+                                msgIds.add(list.iterator().next().getUserObjectId());
+                            }
+                            if(list!=null && list.size()>0){
+                                /*查询结果不为空，通过查到的帖子id列表，向发帖列表中查询对应帖子，并通过适配器显示*/
+                                msgHistoryList = new BmobQuery<>();
+                                msgHistoryList.addWhereContainedIn("objectId" , Arrays.asList(msgIds));
+                                msgHistoryList.findObjects(new FindListener<BrowserMsgBean>() {
+                                    @Override
+                                    public void done(List<BrowserMsgBean> list, BmobException e) {
+                                        if(e==null){
+                                            //debug
+                                            Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT).show();
+                                            BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(), list);
+                                            historyRecyclerView.setAdapter(adapter);
+                                        }else{
+                                            Toast.makeText(getActivity() , "查询失败："+e.toString() , Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }else{
+                                /*应约列表为空，设置TextView提示*/
+                                ifEmpty.setText("应约记录空空如也");
+                            }
+                        }else{
+                            Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                        }
                     }
                 });
             }
@@ -197,6 +213,11 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+
+            /*TODO 不确定是不是得写在这里*/
+            switch (position){
+            }
+
             return PlaceholderFragment.newInstance(position + 1);
         }
 
