@@ -12,6 +12,15 @@ public class JoinedHistoryBean extends BmobObject {
 
     private String userObjectId;
     private List<String> browserIdList;
+    private List<String> noComment;
+
+    public List<String> getNoComment() {
+        return noComment;
+    }
+
+    public void setNoComment(List<String> noComment) {
+        this.noComment = noComment;
+    }
 
     public String getUserObjectId() {
         return userObjectId;

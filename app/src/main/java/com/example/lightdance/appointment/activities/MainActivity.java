@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.lightdance.appointment.Model.JoinedHistoryBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
@@ -19,10 +20,15 @@ import com.example.lightdance.appointment.fragments.PersonalCenterFragment;
 import com.example.lightdance.appointment.fragments.TypeFragment;
 import com.example.lightdance.appointment.fragments.WarningFragment;
 
+import java.util.List;
+
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private int mCurrentPosition = -1;
     private long firstTime = 0;
@@ -44,17 +50,16 @@ public class MainActivity extends AppCompatActivity{
 
         //初始化Bmob SDK
         Bmob.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
-        BmobSMS.initialize(this,"7420a33e6758604ec1e823f1378f4e61");
+        BmobSMS.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
 
-        //加载预览数据
-//        previewDataLoading();
+        checkIsComment();
 
-        bottomNavigationView = (BottomNavigationView)findViewById(R.id.main_bottomnavigationview);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.main_bottomnavigationview);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.menu_browse:
                         changeFragment(1);
                         break;
@@ -79,20 +84,40 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    //动态加载碎片的方法 TEST
-    public void changeFragment(int position){
-        if (position == mCurrentPosition){
+    private void checkIsComment() {
+        SharedPreferences sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+        String userObjectId = sharedPreferences.getString("userBeanId", "出错");
+        BmobQuery<JoinedHistoryBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("userObjectId",userObjectId);
+        query.findObjects(new FindListener<JoinedHistoryBean>() {
+            @Override
+            public void done(List<JoinedHistoryBean> list, BmobException e) {
+                if (e == null){
+                }else{
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 动态加载碎片的方法
+     *
+     * @param position 需要跳转到的碎片位置
+     */
+    public void changeFragment(int position) {
+        if (position == mCurrentPosition) {
             return;
         }
         Fragment fragment = getFragment(position);
-        if (fragment == null){
+        if (fragment == null) {
             return;
         }
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
 
         //如果即将跳转3或5号碎片 判断该用户是否登录
-        if (position == 3||position ==5){
+        if (position == 3 || position == 5) {
             SharedPreferences preferences = getSharedPreferences("loginData"
                     , Context.MODE_PRIVATE);
             boolean isLogined = preferences.getBoolean("isLogined", false);
@@ -121,6 +146,7 @@ public class MainActivity extends AppCompatActivity{
 
     /**
      * 获取碎片实例方法
+     *
      * @param position 传入获取碎片编号
      * @return 返回编号对应的碎片
      */
@@ -147,7 +173,7 @@ public class MainActivity extends AppCompatActivity{
                 }
                 return mPersonalCenterFragment;
             case 6:
-                if (mWarningFragment == null){
+                if (mWarningFragment == null) {
                     mWarningFragment = WarningFragment.newInstance();
                 }
                 return mWarningFragment;
@@ -161,14 +187,19 @@ public class MainActivity extends AppCompatActivity{
         super.onDestroy();
     }
 
-    // 改变NavigationBar被选中Item的方法
+    /**
+     * 改变NavigationBar被选中Item的方法
+     *
+     * @param selectedId 被选中的Item的Id
+     */
     public void changeNavigationSelected(int selectedId) {
         bottomNavigationView.setSelectedItemId(selectedId);
     }
 
-    /* 若在NewAppointment碎片则back键实现返回效果
-    *  若在其他碎片 则back键实现双击退出应用程序
-    * */
+    /**
+     * 若在NewAppointment碎片则back键实现返回效果
+     * 若在其他碎片 则back键实现双击退出应用程序
+     */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {

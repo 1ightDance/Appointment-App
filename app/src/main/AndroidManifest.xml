@@ -17,11 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--android:screenOrientation="portrait",这句可以指定屏幕方向，以防止旋转屏幕时重新加载Activity-->
+
+        <!-- android:screenOrientation="portrait",这句可以指定屏幕方向，以防止旋转屏幕时重新加载Activity -->
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".activities.LoginActivity"
@@ -29,8 +30,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activities.PersonalInformationActivity"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".activities.SignUpActivity"
@@ -56,7 +57,8 @@
         <activity android:name=".activities.AppointmentDetailActivity" />
         <activity android:name=".activities.UserInfoActivity" />
         <activity android:name=".activities.BrowserActivity" />
-        <activity android:name=".activities.MemberDetailActivity"></activity>
+        <activity android:name=".activities.MemberDetailActivity" />
+        <activity android:name=".activities.CommentActivity"></activity>
     </application>
 
 </manifest>

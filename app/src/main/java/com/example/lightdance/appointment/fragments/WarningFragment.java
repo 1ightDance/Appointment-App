@@ -50,7 +50,7 @@ public class WarningFragment extends Fragment {
         unbinder.unbind();
     }
 
-    //点击监听
+
     @OnClick({R.id.tv_to_changefragment, R.id.tv_to_sighup})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -64,6 +64,8 @@ public class WarningFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+                break;
+            default:
                 break;
         }
     }
