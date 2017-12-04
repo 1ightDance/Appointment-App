@@ -1,12 +1,15 @@
 package com.example.lightdance.appointment.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Bmob.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
         BmobSMS.initialize(this, "7420a33e6758604ec1e823f1378f4e61");
 
+        //检查是否有未完成反馈的已结束活动
         checkIsComment();
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.main_bottomnavigationview);
@@ -88,13 +92,40 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
         String userObjectId = sharedPreferences.getString("userBeanId", "出错");
         BmobQuery<JoinedHistoryBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("userObjectId",userObjectId);
+        query.addWhereEqualTo("userObjectId", userObjectId);
         query.findObjects(new FindListener<JoinedHistoryBean>() {
             @Override
             public void done(List<JoinedHistoryBean> list, BmobException e) {
-                if (e == null){
-                }else{
-
+                if (e == null) {
+                    JoinedHistoryBean joinedHistoryBean = list.get(0);
+                    List<String> list1 = joinedHistoryBean.getNoComment();
+                    if (list1 == null) {
+                        Toast.makeText(MainActivity.this, "没有未评论活动1", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (list1.size() != 0) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                            dialog.setTitle("通知");
+                            dialog.setMessage("您还有已经结束的活动未作出反馈哟\n您的反馈对于其他用户来说都是一个非常重要的参考依据，希望得到您的配合！");
+                            dialog.setPositiveButton("去反馈", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(MainActivity.this, CommentActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            dialog.setNegativeButton("再等等", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "没有未评论活动2", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "错误" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
