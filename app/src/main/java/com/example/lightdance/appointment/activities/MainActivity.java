@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     JoinedHistoryBean joinedHistoryBean = list.get(0);
                     List<String> list1 = joinedHistoryBean.getNoComment();
                     if (list1 == null) {
-                        Toast.makeText(MainActivity.this, "没有未评论活动1", Toast.LENGTH_LONG).show();
+                        // 说明用户在该表中还没有数据
                     } else {
                         if (list1.size() != 0) {
                             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
@@ -121,11 +121,11 @@ public class MainActivity extends AppCompatActivity {
                             });
                             dialog.show();
                         } else {
-                            Toast.makeText(MainActivity.this, "没有未评论活动2", Toast.LENGTH_LONG).show();
+                            // 说明用户在该表中的未评论活动中数据为null
                         }
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "错误" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "e错误" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
