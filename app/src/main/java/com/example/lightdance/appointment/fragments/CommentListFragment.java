@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
+ * @author pope
  * A simple {@link Fragment} subclass.
  */
 public class CommentListFragment extends Fragment {

@@ -92,46 +92,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkIsComment() {
-        SharedPreferences sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
-        String userObjectId = sharedPreferences.getString("userBeanId", "出错");
-        BmobQuery<JoinedHistoryBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("userObjectId", userObjectId);
-        query.findObjects(new FindListener<JoinedHistoryBean>() {
-            @Override
-            public void done(List<JoinedHistoryBean> list, BmobException e) {
-                if (e == null) {
-                    JoinedHistoryBean joinedHistoryBean = list.get(0);
-                    List<String> list1 = joinedHistoryBean.getNoComment();
-                    if (list1 == null) {
-                        // 说明用户在该表中还没有数据
-                    } else {
-                        if (list1.size() != 0) {
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-                            dialog.setTitle("通知");
-                            dialog.setMessage("您还有已经结束的活动未作出反馈哟\n您的反馈对于其他用户来说都是一个非常重要的参考依据，希望得到您的配合！");
-                            dialog.setPositiveButton("去反馈", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(MainActivity.this, CommentActivity.class);
-                                    startActivity(intent);
-                                }
-                            });
-                            dialog.setNegativeButton("再等等", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            dialog.show();
+        //检测是否登录 若登录则检查是否有未反馈活动
+        SharedPreferences preferences = getSharedPreferences("loginData"
+                , Context.MODE_PRIVATE);
+        boolean isLogined = preferences.getBoolean("isLogined", false);
+        if (isLogined) {
+            String userObjectId = preferences.getString("userBeanId", "出错");
+            BmobQuery<JoinedHistoryBean> query = new BmobQuery<>();
+            query.addWhereEqualTo("userObjectId", userObjectId);
+            query.findObjects(new FindListener<JoinedHistoryBean>() {
+                @Override
+                public void done(List<JoinedHistoryBean> list, BmobException e) {
+                    if (e == null) {
+                        JoinedHistoryBean joinedHistoryBean = list.get(0);
+                        List<String> list1 = joinedHistoryBean.getNoComment();
+                        if (list1 == null) {
+                            // 说明用户在该表中还没有数据
                         } else {
-                            // 说明用户在该表中的未评论活动中数据为null
+                            if (list1.size() != 0) {
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                dialog.setTitle("通知");
+                                dialog.setMessage("您还有已经结束的活动未作出反馈哟\n您的反馈对于其他用户来说都是一个非常重要的参考依据，希望得到您的配合！");
+                                dialog.setPositiveButton("去反馈", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(MainActivity.this, CommentActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                dialog.setNegativeButton("再等等", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                dialog.show();
+                            } else {
+                                // 说明用户在该表中的未评论活动中数据为null
+                            }
                         }
+                    } else {
+                        Toast.makeText(MainActivity.this, "e错误" + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(MainActivity.this, "e错误" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
