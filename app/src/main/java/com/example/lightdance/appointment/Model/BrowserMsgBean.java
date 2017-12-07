@@ -27,6 +27,33 @@ public class BrowserMsgBean extends BmobObject {
     private String title;
     private int typeCode;
     private List<String> members;
+    private List<String> noCommentUser;
+    private List<Integer> commentResult;
+    private List<Integer> commentScore;
+
+    public List<String> getNoCommentUser() {
+        return noCommentUser;
+    }
+
+    public void setNoCommentUser(List<String> noCommentUser) {
+        this.noCommentUser = noCommentUser;
+    }
+
+    public List<Integer> getCommentResult() {
+        return commentResult;
+    }
+
+    public void setCommentResult(List<Integer> commentResult) {
+        this.commentResult = commentResult;
+    }
+
+    public List<Integer> getCommentScore() {
+        return commentScore;
+    }
+
+    public void setCommentScore(List<Integer> commentScore) {
+        this.commentScore = commentScore;
+    }
 
     public List<String> getMembers() {
         return members;
