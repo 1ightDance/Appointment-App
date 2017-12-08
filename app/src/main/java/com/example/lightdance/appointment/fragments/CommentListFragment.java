@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,16 +73,22 @@ public class CommentListFragment extends Fragment {
 
         progressDialog = new ProgressDialog(getActivity());
 
-//        initData();
+        //初始化数据
+        initData();
 
         return view;
     }
 
+    /**
+     * 初始化列表数据方法
+     */
     private void initData() {
+        //先显示出progress dialog
         progressDialog.setTitle("请稍等");
         progressDialog.setMessage("加载中...");
         progressDialog.show();
         browserMsgBeen = new ArrayList<>();
+        //获取当前用户的UserBean中的ObjectId并在HistoryBean中查询该用户的数据
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
         String userObjectId = sharedPreferences.getString("userBeanId", "出错啦~");
         BmobQuery<HistoryBean> query = new BmobQuery<>();
@@ -93,22 +98,21 @@ public class CommentListFragment extends Fragment {
             public void done(List<HistoryBean> list, BmobException e) {
                 if (e == null) {
                     if (list.size() != 0) {
+                        //获取该用户未反馈过的活动列表信息
                         final List<String> browserId = list.get(0).getNoComment();
                         for (int i = 0; i < browserId.size(); i++) {
-                            Log.i("调试","第"+i+"调用");
+                            //for循环建一个长度与browserId长度相同的无数据的List
+                            browserMsgBeen.add(i,new BrowserMsgBean());
                             final int finalI = i;
                             BmobQuery<BrowserMsgBean> query1 = new BmobQuery<>();
-                            Log.i("调试","第"+i+"次准备查询");
                             query1.getObject(browserId.get(i), new QueryListener<BrowserMsgBean>() {
                                 @Override
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                                    Log.i("调试","第"+finalI+"次查询成功");
                                     if (e == null){
-                                        Log.i("调试","第"+finalI+"次准备添加");
-                                        browserMsgBeen.add(finalI,browserMsgBean);
-                                        Log.i("调试","第"+finalI+"次添加结束");
+                                        //异步查询到结果后将数据置换掉List中无数据的Bean
+                                        browserMsgBeen.set(finalI,browserMsgBean);
                                         if (finalI == browserId.size()-1){
-                                            Log.i("调试","结束循环并加载List");
+                                            //for循环即将结束时执行初始化列表并加载的方法
                                             initList();
                                         }
                                     }else{
@@ -125,6 +129,9 @@ public class CommentListFragment extends Fragment {
         });
     }
 
+    /**
+     * 初始化列表并加载显示
+     */
     private void initList() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -133,6 +140,11 @@ public class CommentListFragment extends Fragment {
         progressDialog.dismiss();
     }
 
+    /**
+     * 暴露出本碎片实例
+     *
+     * @return 返回本碎片的实例
+     */
     public static CommentListFragment newInstance() {
         CommentListFragment fragment = new CommentListFragment();
         Bundle args = new Bundle();
