@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
+ * @author pope
  * A simple {@link Fragment} subclass.
  */
 public class CommentDetailFragment extends Fragment {
@@ -38,6 +39,9 @@ public class CommentDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comment_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        //初始化数据
+        initData();
+
         toolbar.setTitle("活动反馈");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         toolbar.setNavigationIcon(R.mipmap.ic_back_white);
@@ -50,6 +54,15 @@ public class CommentDetailFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * 初始化数据方法
+     */
+    private void initData() {
+        //获取需要显示的BrowserMsgBean的ObjectId
+        CommentActivity activity = (CommentActivity) getActivity();
+        String objectId = activity.getObjectId();
     }
 
     public static CommentDetailFragment newInstance() {

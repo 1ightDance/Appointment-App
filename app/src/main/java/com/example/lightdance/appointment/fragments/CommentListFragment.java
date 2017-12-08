@@ -47,6 +47,7 @@ public class CommentListFragment extends Fragment {
 
     private List<BrowserMsgBean> browserMsgBeen;
     private ProgressDialog progressDialog;
+    private int xx;
 
     public CommentListFragment() {
         // Required empty public constructor
@@ -99,23 +100,25 @@ public class CommentListFragment extends Fragment {
                 if (e == null) {
                     if (list.size() != 0) {
                         //获取该用户未反馈过的活动列表信息
+                        xx = 0;
                         final List<String> browserId = list.get(0).getNoComment();
                         for (int i = 0; i < browserId.size(); i++) {
                             //for循环建一个长度与browserId长度相同的无数据的List
-                            browserMsgBeen.add(i,new BrowserMsgBean());
+                            browserMsgBeen.add(i, new BrowserMsgBean());
                             final int finalI = i;
                             BmobQuery<BrowserMsgBean> query1 = new BmobQuery<>();
                             query1.getObject(browserId.get(i), new QueryListener<BrowserMsgBean>() {
                                 @Override
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                                    if (e == null){
+                                    if (e == null) {
                                         //异步查询到结果后将数据置换掉List中无数据的Bean
-                                        browserMsgBeen.set(finalI,browserMsgBean);
-                                        if (finalI == browserId.size()-1){
-                                            //for循环即将结束时执行初始化列表并加载的方法
-                                            initList();
+                                        browserMsgBeen.set(finalI, browserMsgBean);
+                                        xx = xx + 1;
+                                        if (xx == browserId.size()) {
+                                            //确定每一个ObjectId都经过查询并置换进List中后，初始化列表
+                                            initList(browserId);
                                         }
-                                    }else{
+                                    } else {
                                         Toast.makeText(getActivity(), "查询数据出错1" + e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 }
@@ -131,13 +134,24 @@ public class CommentListFragment extends Fragment {
 
     /**
      * 初始化列表并加载显示
+     *
+     * @param browserId 传入未反馈活动的ObjectId列表
      */
-    private void initList() {
+    private void initList(final List<String> browserId) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         NoCommentListAdapter adapter = new NoCommentListAdapter(browserMsgBeen, getActivity());
         recyclerView.setAdapter(adapter);
         progressDialog.dismiss();
+
+        adapter.setItemOnclickListener(new NoCommentListAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                CommentActivity activity = (CommentActivity) getActivity();
+                activity.setObjectId(browserId.get(position));
+                activity.changeFragment(2);
+            }
+        });
     }
 
     /**

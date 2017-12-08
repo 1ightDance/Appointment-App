@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.CommentDetailFragment;
@@ -17,6 +18,7 @@ public class CommentActivity extends AppCompatActivity {
     private int mCurrentPosition = -1;
     private CommentListFragment mCommentListFragment;
     private CommentDetailFragment mCommentDetailFragment;
+    private String objectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,22 @@ public class CommentActivity extends AppCompatActivity {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (mCurrentPosition == 2){
+            changeFragment(1);
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    public void setObjectId(String id){
+        objectId = id;
+    }
+
+    public String getObjectId(){
+        return objectId;
     }
 
 }
