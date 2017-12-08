@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class MyAppointmentFragment extends Fragment {
 
     private TextView ifEmpty;
-    private TextView sectionLabel;
     private RecyclerView mRecyclerView;
     public static MyAppointmentFragment newInstance() {
         MyAppointmentFragment fragment = new MyAppointmentFragment();
@@ -81,6 +81,7 @@ public class MyAppointmentFragment extends Fragment {
                     //TODO 这里在考虑加幅网络连接失败图片啥的，但是不太会搞定那个抛异常
                     Toast.makeText(getActivity(), "你网有毛病吧"
                             +e.toString(), Toast.LENGTH_SHORT).show();
+                    Log.i("smile" , "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
                 }
             }
         });
