@@ -89,6 +89,7 @@ public class CommentActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (mCurrentPosition == 2){
             changeFragment(1);
+            return true;
         }
         return super.onKeyUp(keyCode, event);
     }
