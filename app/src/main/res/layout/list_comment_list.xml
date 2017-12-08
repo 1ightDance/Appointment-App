@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="5dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/tv_comment_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintTop_creator="1"
+            tools:text="这里是标题" />
+
+
+        <TextView
+            android:id="@+id/tv_comment_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_comment_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_comment_title"
+            app:layout_constraintRight_toRightOf="@+id/tv_comment_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_title"
+            tools:text="这里是一些关于该活动的描述性文字" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/img_comment_inviterIcon"
+            android:layout_width="20dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="@+id/tv_comment_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment_content"
+            tools:src="@drawable/me" />
+
+        <TextView
+            android:id="@+id/tv_comment_inviter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:maxWidth="72dp"
+            android:singleLine="true"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/img_comment_inviterIcon"
+            app:layout_constraintLeft_toRightOf="@+id/img_comment_inviterIcon"
+            app:layout_constraintTop_toTopOf="@+id/img_comment_inviterIcon"
+            tools:text="天舒" />
+
+        <TextView
+            android:id="@+id/tv_comment_type"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:text="#类别#"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_comment_inviter"
+            app:layout_constraintEnd_toEndOf="@+id/tv_comment_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_comment_inviter" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
