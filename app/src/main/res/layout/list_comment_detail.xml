@@ -47,7 +47,7 @@
                 app:srcCompat="@mipmap/ic_user" />
 
             <Switch
-                android:id="@+id/switch_isShow"
+                android:id="@+id/switch_isshow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

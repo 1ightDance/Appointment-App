@@ -81,7 +81,7 @@ public class CommentDetailFragment extends Fragment {
     /**
      * 初始化数据方法
      */
-    private void initData() {
+    public void initData() {
         progressDialog.setTitle("请稍等");
         progressDialog.setMessage("加载中...");
         progressDialog.show();
@@ -138,11 +138,17 @@ public class CommentDetailFragment extends Fragment {
     private void initList(List<UserBean> membersBean) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        NoCommentDetailAdapter adapter = new NoCommentDetailAdapter(membersBean,getActivity());
+        NoCommentDetailAdapter adapter = new NoCommentDetailAdapter(membersBean);
         recyclerView.setAdapter(adapter);
 
         progressDialog.dismiss();
 
+        adapter.setSwitchChangeListener(new NoCommentDetailAdapter.SwitchChangeListener() {
+            @Override
+            public void onCheckedChanged(int position, boolean isChecked) {
+                Toast.makeText(getActivity(), "position="+position+"\n"+"isChecked="+isChecked, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static CommentDetailFragment newInstance() {
