@@ -58,8 +58,8 @@ public class NoCommentDetailAdapter extends RecyclerView.Adapter<NoCommentDetail
 
         public ViewHolder(View itemView) {
             super(itemView);
-            userAvatar = (ImageView) itemView.findViewById(R.id.imageView_user_avatar);
-            userNickName = (TextView) itemView.findViewById(R.id.textView_userNickName);
+            userAvatar = (ImageView) itemView.findViewById(R.id.imageview_useravatar);
+            userNickName = (TextView) itemView.findViewById(R.id.textview_usernickName);
         }
     }
 }

@@ -73,7 +73,7 @@ public class CommentDetailFragment extends Fragment {
         });
 
         //初始化数据
-//        initData();
+        initData();
 
         return view;
     }
