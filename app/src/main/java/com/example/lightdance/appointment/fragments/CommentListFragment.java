@@ -144,6 +144,7 @@ public class CommentListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         progressDialog.dismiss();
 
+        //未反馈活动列表Item的点击监听
         adapter.setItemOnclickListener(new NoCommentListAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {

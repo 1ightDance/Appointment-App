@@ -15,7 +15,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.lightdance.appointment.Model.JoinedHistoryBean;
+import com.example.lightdance.appointment.Model.HistoryBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.fragments.MessageFragment;
 import com.example.lightdance.appointment.fragments.NewsFragment;
@@ -98,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
         boolean isLogined = preferences.getBoolean("isLogined", false);
         if (isLogined) {
             String userObjectId = preferences.getString("userBeanId", "出错");
-            BmobQuery<JoinedHistoryBean> query = new BmobQuery<>();
+            BmobQuery<HistoryBean> query = new BmobQuery<>();
             query.addWhereEqualTo("userObjectId", userObjectId);
-            query.findObjects(new FindListener<JoinedHistoryBean>() {
+            query.findObjects(new FindListener<HistoryBean>() {
                 @Override
-                public void done(List<JoinedHistoryBean> list, BmobException e) {
+                public void done(List<HistoryBean> list, BmobException e) {
                     if (e == null) {
-                        JoinedHistoryBean joinedHistoryBean = list.get(0);
-                        List<String> list1 = joinedHistoryBean.getNoComment();
+                        HistoryBean historyBean = list.get(0);
+                        List<String> list1 = historyBean.getNoComment();
                         if (list1 == null) {
                             // 说明用户在该表中还没有数据
                         } else {
