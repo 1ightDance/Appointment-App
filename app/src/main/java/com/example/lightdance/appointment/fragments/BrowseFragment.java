@@ -55,7 +55,7 @@ public class BrowseFragment extends Fragment {
     private int hour;
     private int min;
 
-    private List<BrowserMsgBean> browserMsgBeen;
+    private List<BrowserMsgBean> browserMsgBeans;
     private int typeCode = 0;
     private ProgressDialog progressDialog;
 
@@ -100,12 +100,12 @@ public class BrowseFragment extends Fragment {
             @Override
             public void done(List<BrowserMsgBean> list, BmobException e) {
                 if (e == null){
-                    browserMsgBeen = list;
+                    browserMsgBeans = list;
                     //绑定RecyclerView 并设置适配器
                     StaggeredGridLayoutManager layoutManager = new
                             StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
                     recyclerView.setLayoutManager(layoutManager);
-                    BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(),browserMsgBeen);
+                    BrowserMsgAdapter adapter = new BrowserMsgAdapter(getActivity(), browserMsgBeans);
                     recyclerView.setAdapter(adapter);
                     progressDialog.dismiss();
 
@@ -115,7 +115,7 @@ public class BrowseFragment extends Fragment {
                     adapter.setItemOnclickListener(new BrowserMsgAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
-                            final String objectId = browserMsgBeen.get(position).getObjectId();
+                            final String objectId = browserMsgBeans.get(position).getObjectId();
                             BmobQuery<BrowserMsgBean> query1 = new BmobQuery<>();
                             query1.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -184,7 +184,7 @@ public class BrowseFragment extends Fragment {
                         @Override
                         public void onClick(int position) {
                             BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
-                            query.getObject(browserMsgBeen.get(position).getObjectId(), new QueryListener<BrowserMsgBean>() {
+                            query.getObject(browserMsgBeans.get(position).getObjectId(), new QueryListener<BrowserMsgBean>() {
                                 @Override
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                                     Intent intent = new Intent(getActivity(), UserInfoActivity.class);

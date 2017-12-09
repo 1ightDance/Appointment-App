@@ -64,7 +64,6 @@ public class JoinedAppointmentFragment extends Fragment {
 
         BmobQuery<BrowserMsgBean> msgHistoryList;
         msgHistoryList = new BmobQuery<>();
-
         SharedPreferences preferences = getActivity().getSharedPreferences("loginData",MODE_PRIVATE);
         String loginStudentId = preferences.getString("userBeanId",null);
         msgHistoryList.addWhereEqualTo("inviter" , loginStudentId);
@@ -112,7 +111,8 @@ public class JoinedAppointmentFragment extends Fragment {
                                 ifEmpty.setText("应约记录空空如也");
                             }
                         }else{
-                            Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                            ifEmpty.setText("你网有毛病吧...");
+                            Log.e("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
                         }
                     }
                 });

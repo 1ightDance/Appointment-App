@@ -81,9 +81,12 @@ public class MyAppointmentFragment extends Fragment {
                     //TODO 这里在考虑加幅网络连接失败图片啥的，但是不太会搞定那个抛异常
                     Toast.makeText(getActivity(), "你网有毛病吧"
                             +e.toString(), Toast.LENGTH_SHORT).show();
-                    Log.i("smile" , "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                    ifEmpty.setText("你网有毛病吧");
+                    Log.e("sad" , "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
                 }
             }
         });
+
+
     }
 }

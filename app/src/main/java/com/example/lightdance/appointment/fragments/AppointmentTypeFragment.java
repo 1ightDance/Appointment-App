@@ -86,14 +86,22 @@ public class AppointmentTypeFragment extends DialogFragment {
         listener.sendId(b.getId());
         dismiss();
     }
-    //给碎片提供OnTypeSelectListener类监听实例
+    /**
+     * 给碎片提供OnTypeSelectListener类监听实例
+     */
+
     public void setOnTypeSelectListener(OnTypeSelectListener listener) {
         this.listener = listener;
     }
-    //自定义监听接口
+
+    /**
+     * 自定义监听接口
+     */
     interface OnTypeSelectListener {
         void onSelect(String text);
-        //传递ID方法
+        /**
+         * 传递ID方法
+         */
         void sendId(int checkId);
     }
 

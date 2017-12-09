@@ -57,18 +57,18 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
      * 具体见{@link MyAppointmentFragment}和{@link JoinedAppointmentFragment}
      * 在getItem中用switch-case语句返回相应fragment并显示
      */
-    private Fragment myAppointmentFragment;
-    private Fragment joinedAppointmentFragment;
+    private MyAppointmentFragment myAppointmentFragment;
+    private JoinedAppointmentFragment joinedAppointmentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_history);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -76,50 +76,11 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.history_tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-    }
+        //tabLayout.setupWithViewPager(mViewPager);//感觉这一行与下面两行功能重复，但是不知该如何替换
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        /**
-         *用来取数据库数据
-         */
-        private BmobQuery<BrowserMsgBean> msgHistoryList;
-        private BmobQuery<JoinedHistoryBean> joinedHistoryList;
-        RecyclerView historyRecyclerView;
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            //绑定视图
-            final View rootView = inflater.inflate(R.layout.fragment_my_appointment_history, container, false);
-            //有点害怕这里设置完查询记录为空的textview之后不会消失
-            historyRecyclerView = (RecyclerView)rootView.findViewById(R.id.section_recyclerview);
-            historyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            return rootView;
-        }
     }
 
     /**
@@ -127,6 +88,8 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private List<View> mViewList;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -138,18 +101,20 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
          */
         @Override
         public Fragment getItem(int position) {
-
-            /*TODO 不确定是不是得写在这里*/
-            switch (position){
+            switch (position) {
+                case 0:
+                    if (myAppointmentFragment == null){
+                        myAppointmentFragment = new MyAppointmentFragment();
+                    }
+                    return myAppointmentFragment;
                 case 1:
-                    return new MyAppointmentFragment();
-                case 2:
-                    return new JoinedAppointmentFragment();
+                    if (joinedAppointmentFragment == null){
+                        joinedAppointmentFragment = new JoinedAppointmentFragment();
+                    }
+                    return joinedAppointmentFragment;
                 default:
                     return null;
             }
-
-            //return PlaceholderFragment.newInstance(position + 1);//害怕有用就没敢删
         }
 
         @Override
@@ -165,7 +130,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity {
                     return "发布";
                 case 1:
                     return "应约";
-                    default:
+                default:
             }
             return null;
         }
