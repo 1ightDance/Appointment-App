@@ -128,22 +128,22 @@ public class BrowseFragment extends Fragment {
                                         day = cal.get(Calendar.DAY_OF_MONTH);
                                         hour = cal.get(Calendar.HOUR_OF_DAY);
                                         min = cal.get(Calendar.MINUTE);
-                                        String time = browserMsgBean.getEndTime();
-                                        int endYear = Integer.valueOf(time.substring(0, 4));
-                                        int endMonth = Integer.valueOf(time.substring(5, 7));
-                                        int endDay = Integer.valueOf(time.substring(8, 10));
-                                        int endHour = Integer.valueOf(time.substring(12, 14));
-                                        int endMin = Integer.valueOf(time.substring(15, 17));
+                                        String time = browserMsgBean.getStartTime();
+                                        int startTime = Integer.valueOf(time.substring(0, 4));
+                                        int startMonth = Integer.valueOf(time.substring(5, 7));
+                                        int startDay = Integer.valueOf(time.substring(8, 10));
+                                        int startHour = Integer.valueOf(time.substring(12, 14));
+                                        int startMin = Integer.valueOf(time.substring(15, 17));
                                         cal.set(year,month,day,hour,min);
                                         long sysMillisSec = cal.getTimeInMillis();
-                                        cal.set(endYear,endMonth,endDay,endHour,endMin);
+                                        cal.set(startTime,startMonth,startDay,startHour,startMin);
                                         long endMillisSec = cal.getTimeInMillis();
                                         if (sysMillisSec < endMillisSec){
                                             Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
                                             intent.putExtra("objectId",objectId);
                                             startActivity(intent);
                                         }else{
-                                            Toast.makeText(getActivity(),"该活动已经结束啦！",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(),"该活动已经开始啦！",Toast.LENGTH_SHORT).show();
                                         }
                                     }else{
                                         Toast.makeText(getActivity(),"出错"+e.getMessage(),Toast.LENGTH_LONG).show();
