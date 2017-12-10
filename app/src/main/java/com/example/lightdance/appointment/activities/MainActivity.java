@@ -212,12 +212,14 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0;i<personNum;i++){
                         s = s+"是";
                     }
-                    int x = 0;
                     List<String> commentResult = new ArrayList<>();
+                    List<String> commentScore = new ArrayList<>();
                     for (int i = 0; i < personNum; i++) {
                         commentResult.add(s);
+                        commentScore.add("0");
                     }
                     browserMsgBean.setValue("commentResult",commentResult);
+                    browserMsgBean.setValue("commentScore",commentScore);
                     browserMsgBean.update(browserObjectId, new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
