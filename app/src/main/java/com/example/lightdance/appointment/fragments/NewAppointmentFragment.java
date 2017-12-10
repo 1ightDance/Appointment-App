@@ -279,7 +279,9 @@ public class NewAppointmentFragment extends Fragment {
         });
     }
 
-    //初始化时间数据方法
+    /**
+     * 初始化时间数据方法
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initDateData() {
         //获取时间
@@ -585,86 +587,33 @@ public class NewAppointmentFragment extends Fragment {
      * @param hour   用户选择的“时”数据
      * @param minute 用户选择的“分”数据
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void ensureTimeRight(int year, int month, int day, int hour, int minute) {
-        boolean isOK;
+        long startMillisSec;
+        long endMillisSec;
         switch (timeChange) {
             case TIME_START:
-                if (year < endDateYear) {
-                    isOK = true;
-                } else if (year == endDateYear) {
-                    if (month < endDateMonth) {
-                        isOK = true;
-                    } else if (month == endDateMonth) {
-                        if (day < endDateDay) {
-                            isOK = true;
-                        } else if (day == endDateDay) {
-                            if (hour < endTimeHour) {
-                                isOK = true;
-                            } else if (hour == endTimeHour) {
-                                if (minute < endTimeMin) {
-                                    isOK = true;
-                                } else if (minute == endTimeMin) {
-                                    isOK = false;
-                                } else {
-                                    isOK = false;
-                                }
-                            } else {
-                                isOK = false;
-                            }
-                        } else {
-                            isOK = false;
-                        }
-                    } else {
-                        isOK = false;
-                    }
-                } else {
-                    isOK = false;
-                }
-                if (isOK) {
+                cal.set(year,month,day,hour,minute);
+                startMillisSec = cal.getTimeInMillis();
+                cal.set(endDateYear,endDateMonth,endDateDay,endTimeHour,endTimeMin);
+                endMillisSec = cal.getTimeInMillis();
+                if (startMillisSec < endMillisSec) {
                     startDateYear = year;
                     startDateMonth = month;
                     startDateDay = day;
                     startTimeHour = hour;
                     startTimeMin = minute;
                     setSelectTime(year, month, day, hour, minute, timeChange);
-                    isOK = false;
                 } else {
                     Toast.makeText(getActivity(), "开始时间要早于结束时间噢~", Toast.LENGTH_LONG).show();
                 }
                 break;
             case TIME_END:
-                if (year > startDateYear) {
-                    isOK = true;
-                } else if (year == startDateYear) {
-                    if (month > startDateMonth) {
-                        isOK = true;
-                    } else if (month == startDateMonth) {
-                        if (day > startDateDay) {
-                            isOK = true;
-                        } else if (day == startDateDay) {
-                            if (hour > startTimeHour) {
-                                isOK = true;
-                            } else if (hour == startTimeHour) {
-                                if (minute > startTimeMin) {
-                                    isOK = true;
-                                } else if (minute == startTimeMin) {
-                                    isOK = false;
-                                } else {
-                                    isOK = false;
-                                }
-                            } else {
-                                isOK = false;
-                            }
-                        } else {
-                            isOK = false;
-                        }
-                    } else {
-                        isOK = false;
-                    }
-                } else {
-                    isOK = false;
-                }
-                if (isOK) {
+                cal.set(startDateYear,startDateMonth,startDateDay,startTimeHour,startTimeMin);
+                startMillisSec = cal.getTimeInMillis();
+                cal.set(year,month,day,hour,minute);
+                endMillisSec = cal.getTimeInMillis();
+                if (startMillisSec < endMillisSec) {
                     endDateYear = year;
                     endDateMonth = month;
                     endDateDay = day;

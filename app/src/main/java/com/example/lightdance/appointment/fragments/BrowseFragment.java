@@ -134,39 +134,11 @@ public class BrowseFragment extends Fragment {
                                         int endDay = Integer.valueOf(time.substring(8, 10));
                                         int endHour = Integer.valueOf(time.substring(12, 14));
                                         int endMin = Integer.valueOf(time.substring(15, 17));
-                                        boolean isOK;
-                                        if (year > endYear) {
-                                            isOK = false;
-                                        } else if (year == endYear) {
-                                            if (month > endMonth) {
-                                                isOK = false;
-                                            } else if (month == endMonth) {
-                                                if (day > endDay) {
-                                                    isOK = false;
-                                                } else if (day == endDay) {
-                                                    if (hour > endHour) {
-                                                        isOK = false;
-                                                    } else if (hour == endHour) {
-                                                        if (min > endMin) {
-                                                            isOK = false;
-                                                        } else if (min == endMin) {
-                                                            isOK = false;
-                                                        } else {
-                                                            isOK = true;
-                                                        }
-                                                    } else {
-                                                        isOK = true;
-                                                    }
-                                                } else {
-                                                    isOK = true;
-                                                }
-                                            } else {
-                                                isOK = true;
-                                            }
-                                        } else {
-                                            isOK = true;
-                                        }
-                                        if (isOK){
+                                        cal.set(year,month,day,hour,min);
+                                        long sysMillisSec = cal.getTimeInMillis();
+                                        cal.set(endYear,endMonth,endDay,endHour,endMin);
+                                        long endMillisSec = cal.getTimeInMillis();
+                                        if (sysMillisSec < endMillisSec){
                                             Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
                                             intent.putExtra("objectId",objectId);
                                             startActivity(intent);

@@ -21,7 +21,6 @@ public class HistoryBean extends BmobObject {
     private List<String> finishedAppointment;
     private List<String> organizeAppointment;
     private List<String> joinedAppointment;
-    private List<String> relatedAppointment;
 
     public String getUserObjectId() {
         return userObjectId;
@@ -103,11 +102,4 @@ public class HistoryBean extends BmobObject {
         this.joinedAppointment = joinedAppointment;
     }
 
-    public List<String> getRelatedAppointment() {
-        return relatedAppointment;
-    }
-
-    public void setRelatedAppointment(List<String> relatedAppointment) {
-        this.relatedAppointment = relatedAppointment;
-    }
 }
