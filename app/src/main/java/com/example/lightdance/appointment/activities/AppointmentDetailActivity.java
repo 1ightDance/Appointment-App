@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
-import com.example.lightdance.appointment.Model.JoinedHistoryBean;
+import com.example.lightdance.appointment.Model.HistoryBean;
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.ParticipantAdapter;
@@ -128,43 +128,68 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      *
      * @param browserObjectId 需要被添加或删除的BrowserObjectId
      * @param userObjectId    用户的UserObjectId
-     * @param mode            用户操作模式
+     * @param mode            用户操作模式:添加/删除
      */
-    private void updateJoinedHistory(final String browserObjectId, final String userObjectId, int mode) {
+    private void updateHistoryBean(final String browserObjectId, final String userObjectId, int mode) {
         switch (mode) {
             //应约后 加入相应应约历史
             case MODE_JOIN:
                 //将该用户对应的JoinedHistoryBean表中存入当前发布的BrowserObjectId
-                BmobQuery<JoinedHistoryBean> query1 = new BmobQuery<>();
-                query1.addWhereEqualTo("userObjectId", userObjectId);
-                query1.findObjects(new FindListener<JoinedHistoryBean>() {
+                BmobQuery<HistoryBean> q = new BmobQuery<>();
+                q.addWhereEqualTo("userObjectId", userObjectId);
+                q.findObjects(new FindListener<HistoryBean>() {
                     @Override
-                    public void done(List<JoinedHistoryBean> list, BmobException e) {
+                    public void done(List<HistoryBean> list, BmobException e) {
                         if (e == null) {
                             //如果该用户未在表中建立数据，则创建 如果已经建立则添加
                             //e == null 即该用户在表中已创建数据 则完成添加即可
                             //当表中查不到该用户有创建过数据时，则创建
                             if (list.size() == 0) {
-                                JoinedHistoryBean historyBean = new JoinedHistoryBean();
+                                final HistoryBean historyBean = new HistoryBean();
                                 historyBean.setUserObjectId(userObjectId);
-                                List<String> browserIdList = new ArrayList<>();
-                                browserIdList.add(browserObjectId);
-                                historyBean.setBrowserIdList(browserIdList);
-                                historyBean.save(new SaveListener<String>() {
+                                BmobQuery<UserBean> query = new BmobQuery<>();
+                                query.getObject(userObjectId, new QueryListener<UserBean>() {
                                     @Override
-                                    public void done(String s, BmobException e) {
-                                        if (e != null) {
-                                            Toast.makeText(AppointmentDetailActivity.this, "创建错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    public void done(UserBean userBean, BmobException e) {
+                                        if (e == null){
+                                            String userName = userBean.getUserName();
+                                            historyBean.setValue("userName",userName);
+                                            List<String> joinedList = new ArrayList<>();
+                                            List<String> noCommentList = new ArrayList<>();
+                                            List<String> ongoingList = new ArrayList<>();
+                                            joinedList.add(browserObjectId);
+                                            noCommentList.add(browserObjectId);
+                                            ongoingList.add(browserObjectId);
+                                            historyBean.setJoinedAppointment(joinedList);
+                                            historyBean.setNoComment(noCommentList);
+                                            historyBean.setOngoingAppointment(ongoingList);
+                                            historyBean.save(new SaveListener<String>() {
+                                                @Override
+                                                public void done(String s, BmobException e) {
+                                                    if (e != null) {
+                                                        Toast.makeText(AppointmentDetailActivity.this, "创建错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+                                        }else{
+                                            Toast.makeText(AppointmentDetailActivity.this,
+                                                    "创建时查询用户姓名出错：" + e.getMessage(),
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
                             } else {
-                                JoinedHistoryBean joinedHistoryBean = list.get(0);
-                                JoinedHistoryBean joinedHistoryBean1 = new JoinedHistoryBean();
-                                List<String> idList = joinedHistoryBean.getBrowserIdList();
-                                idList.add(browserObjectId);
-                                joinedHistoryBean1.setValue("browserIdList", idList);
-                                joinedHistoryBean1.update(joinedHistoryBean.getObjectId(), new UpdateListener() {
+                                HistoryBean historyBean = list.get(0);
+                                List<String> joinedList = historyBean.getJoinedAppointment();
+                                List<String> noCommentList = historyBean.getNoComment();
+                                List<String> ongoingList = historyBean.getOngoingAppointment();
+                                joinedList.add(browserObjectId);
+                                noCommentList.add(browserObjectId);
+                                ongoingList.add(browserObjectId);
+                                historyBean.setValue("joinedAppointment",joinedList);
+                                historyBean.setValue("noComment",noCommentList);
+                                historyBean.setValue("ongoingAppointment",ongoingList);
+                                historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e != null) {
@@ -180,22 +205,28 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
+
             //取消某个应约 删掉相应应约历史
             case MODE_QUIT:
                 //将该用户对应的JoinedHistoryBean表中存入当前发布的BrowserObjectId
-                BmobQuery<JoinedHistoryBean> query2 = new BmobQuery<>();
-                query2.addWhereEqualTo("userObjectId", userObjectId);
-                query2.findObjects(new FindListener<JoinedHistoryBean>() {
+                BmobQuery<HistoryBean> q2 = new BmobQuery<>();
+                q2.addWhereEqualTo("userObjectId", userObjectId);
+                q2.findObjects(new FindListener<HistoryBean>() {
                     @Override
-                    public void done(List<JoinedHistoryBean> list, BmobException e) {
+                    public void done(List<HistoryBean> list, BmobException e) {
                         if (e == null) {
                             //获取需要被操作的帖子的成员列表 查询其应约历史列表并删除该帖子的ObjectId
-                            JoinedHistoryBean joinedHistoryBean = list.get(0);
-                            JoinedHistoryBean joinedHistoryBean1 = new JoinedHistoryBean();
-                            List<String> idList = joinedHistoryBean.getBrowserIdList();
-                            idList = remove(idList, browserObjectId);
-                            joinedHistoryBean1.setValue("browserIdList", idList);
-                            joinedHistoryBean1.update(joinedHistoryBean.getObjectId(), new UpdateListener() {
+                            HistoryBean historyBean = list.get(0);
+                            List<String> joinedList = historyBean.getJoinedAppointment();
+                            List<String> noCommentList = historyBean.getNoComment();
+                            List<String> ongoingList = historyBean.getOngoingAppointment();
+                            joinedList = remove(joinedList,browserObjectId);
+                            noCommentList = remove(noCommentList,browserObjectId);
+                            ongoingList = remove(ongoingList,browserObjectId);
+                            historyBean.setValue("joinedAppointment",joinedList);
+                            historyBean.setValue("noComment",noCommentList);
+                            historyBean.setValue("ongoingAppointment",ongoingList);
+                            historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e != null) {
@@ -499,7 +530,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                             "应约成功！别放别人鸽子哟~",
                                             Toast.LENGTH_SHORT).show();
                                     //更新应约历史记录数据
-                                    updateJoinedHistory(objectId, userObjectId, MODE_JOIN);
+                                    updateHistoryBean(objectId, userObjectId, MODE_JOIN);
                                     progressDialog.dismiss();
                                 } else {
                                     Toast.makeText(AppointmentDetailActivity.this,
@@ -555,7 +586,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             browserMsgBean2.setMembers(members);
                             //从未反馈成员列表中移除当前用户
                             List<String> noCommentUser = browserMsgBean.getNoCommentUser();
-                            noCommentUser = remove(noCommentUser,userObjectId);
+                            noCommentUser = remove(noCommentUser, userObjectId);
                             browserMsgBean2.setNoCommentUser(noCommentUser);
                             browserMsgBean2.setValue("typeCode", typeCode);
                             browserMsgBean2.setValue("personNumberHave", s - 1);
@@ -575,7 +606,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                 "取消应约成功！",
                                                 Toast.LENGTH_SHORT).show();
                                         //更新应约历史记录数据
-                                        updateJoinedHistory(objectId, userObjectId, MODE_QUIT);
+                                        updateHistoryBean(objectId, userObjectId, MODE_QUIT);
                                         progressDialog.dismiss();
                                     } else {
                                         Toast.makeText(AppointmentDetailActivity.this,
@@ -678,7 +709,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         members = browserMsgBean.getMembers();
         for (int i = 0; i < members.size(); i++) {
             String member = members.get(i);
-            updateJoinedHistory(objectId, member, MODE_QUIT);
+            updateHistoryBean(objectId, member, MODE_QUIT);
         }
     }
 
