@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
+import com.example.lightdance.appointment.Model.HistoryBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.BrowserActivity;
@@ -34,6 +36,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -486,6 +489,7 @@ public class NewAppointmentFragment extends Fragment {
      * 数据存储方法
      */
     private void saveData() {
+        //从活动详情页的编辑按钮跳转至此
         if (from == 3) {
             // 保存修改后的数据的逻辑
             progressDialog = new ProgressDialog(getActivity());
@@ -523,6 +527,7 @@ public class NewAppointmentFragment extends Fragment {
                 }
             });
         } else {
+            //发布新活动
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("请稍等");
             progressDialog.setMessage("发布中...");
@@ -546,12 +551,11 @@ public class NewAppointmentFragment extends Fragment {
             final String userBeanId = preferences.getString("userBeanId", "BUG");
             browserMsgBean.setInviter(userBeanId);
             List<String> memberList = new ArrayList<>();
-            memberList.add(userBeanId);
-            browserMsgBean.setMembers(memberList);
             List<String> noCommentUser = new ArrayList<>();
+            memberList.add(userBeanId);
             noCommentUser.add(userBeanId);
+            browserMsgBean.setMembers(memberList);
             browserMsgBean.setNoCommentUser(noCommentUser);
-            {}
             browserMsgBean.save(new SaveListener<String>() {
                 @Override
                 public void done(final String s, BmobException e) {
@@ -560,6 +564,7 @@ public class NewAppointmentFragment extends Fragment {
                         BrowserActivity activity = (BrowserActivity) getActivity();
                         //判断当前页从哪里跳转来的
                         //并通过不同方法 刷新并跳转回BrowserFragment
+                        updateHistoryBean(s);
                         if (from == 1) {
                             BrowseFragment browseFragment = (BrowseFragment) activity.getFragment(1);
                             browseFragment.initBrowserData();
@@ -580,6 +585,39 @@ public class NewAppointmentFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private void updateHistoryBean(final String objectId) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginData",Context.MODE_PRIVATE);
+        String userObjectId = sharedPreferences.getString("userBeanId","出错啦~");
+        BmobQuery<HistoryBean> q = new BmobQuery<>();
+        q.addWhereEqualTo("userObjectId",userObjectId);
+        q.findObjects(new FindListener<HistoryBean>() {
+            @Override
+            public void done(List<HistoryBean> list, BmobException e) {
+                if (e == null){
+                    if (list.size() != 0){
+                        HistoryBean historyBean = list.get(0);
+                        List<String> organizeList = historyBean.getOrganizeAppointment();
+                        if (organizeList == null){
+                            organizeList = new ArrayList<>();
+                        }
+                        organizeList.add(objectId);
+                        historyBean.setValue("organizeAppointment",organizeList);
+                        historyBean.update(historyBean.getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e != null){
+                                    Log.i("调试","发起新活动时，更新organizeAppointment时出错"+e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                }else{
+                    Log.i("调试","发起新活动时，查询当前用户在HistoryBean表中数据时出错"+e.getMessage());
+                }
+            }
+        });
     }
 
     /**
