@@ -106,6 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 检测用户在HistoryBean中未结束列表的活动是否已结束
+     *
+     * @param userObjectId 传入用户的UserBean的ObjectId
+     */
     public void checkOngoingAppointment(String userObjectId) {
 
         final Calendar cal;
@@ -130,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
                     if (list.size() != 0) {
                         final HistoryBean historyBean = list.get(0);
                         List<String> ongoingList = historyBean.getOngoingAppointment();
+                        if (ongoingList == null){
+                            ongoingList = new ArrayList<>();
+                        }
                         for (int i = 0; i < ongoingList.size(); i++) {
                             final String browserObjectId = ongoingList.get(i);
                             BmobQuery<BrowserMsgBean> q2 = new BmobQuery<>();
@@ -138,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                                     if (e == null) {
-                                        Log.i("调试","第"+ finalI +"次查询");
+                                        Log.i("调试", "第" + finalI + "次查询");
                                         String endTime = browserMsgBean.getEndTime();
                                         int year = Integer.valueOf(endTime.substring(0, 4));
                                         int month = Integer.valueOf(endTime.substring(5, 7));
@@ -156,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                                     ongoingList.remove(item);
                                                 }
                                             }
-                                            if (finishedList == null){
+                                            if (finishedList == null) {
                                                 finishedList = new ArrayList<>();
                                             }
                                             finishedList.add(browserObjectId);
@@ -166,20 +174,60 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e != null) {
-                                                        Log.i("调试","遍历未结束活动数据后更改数据存储出错" + e.getMessage());
+                                                        Log.i("调试", "遍历未结束活动数据后更改数据存储出错" + e.getMessage());
+                                                    } else {
+                                                        //初始化已结束的活动的反馈数据
+                                                        initCommentData(browserObjectId);
                                                     }
                                                 }
                                             });
                                         }
                                     } else {
-                                        Log.i("调试","遍历未结束活动数据时出错" + e.getMessage());
+                                        Log.i("调试", "遍历未结束活动数据时出错" + e.getMessage());
                                     }
                                 }
                             });
                         }
                     }
                 } else {
-                    Log.i("调试","查询当前用户的历史表数据出错" + e.getMessage());
+                    Log.i("调试", "位置:MainActivity.checkOngoingAppointment"+"\n"+"查询当前用户的历史表数据出错" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化已结束的活动的反馈数据方法
+     *
+     * @param browserObjectId 传入需要被初始化的活动的ObjectId
+     */
+    private void initCommentData(final String browserObjectId) {
+        BmobQuery<BrowserMsgBean> q = new BmobQuery<>();
+        q.getObject(browserObjectId, new QueryListener<BrowserMsgBean>() {
+            @Override
+            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                if (e == null) {
+                    int personNum = browserMsgBean.getMembers().size();
+                    String s = "";
+                    for (int i = 0;i<personNum;i++){
+                        s = s+"是";
+                    }
+                    int x = 0;
+                    List<String> commentResult = new ArrayList<>();
+                    for (int i = 0; i < personNum; i++) {
+                        commentResult.add(s);
+                    }
+                    browserMsgBean.setValue("commentResult",commentResult);
+                    browserMsgBean.update(browserObjectId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e != null){
+                                Log.i("调试","保存反馈结果时出错"+e.getMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.i("调试1", "初始化已结束活动的反馈数据时，查询被初始活动数据时出错" + e.getMessage());
                 }
             }
         });

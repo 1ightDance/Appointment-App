@@ -28,7 +28,7 @@ public class BrowserMsgBean extends BmobObject {
     private int typeCode;
     private List<String> members;
     private List<String> noCommentUser;
-    private List<Integer> commentResult;
+    private List<String> commentResult;
     private List<Integer> commentScore;
 
     public List<String> getNoCommentUser() {
@@ -39,11 +39,11 @@ public class BrowserMsgBean extends BmobObject {
         this.noCommentUser = noCommentUser;
     }
 
-    public List<Integer> getCommentResult() {
+    public List<String> getCommentResult() {
         return commentResult;
     }
 
-    public void setCommentResult(List<Integer> commentResult) {
+    public void setCommentResult(List<String> commentResult) {
         this.commentResult = commentResult;
     }
 
