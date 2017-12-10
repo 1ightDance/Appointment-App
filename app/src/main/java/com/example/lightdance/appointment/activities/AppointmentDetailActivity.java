@@ -474,7 +474,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                         int typeCode = browserMsgBean.getTypeCode();
                         BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
                         List<String> members = browserMsgBean.getMembers();
+                        List<String> noCommentUser = browserMsgBean.getNoCommentUser();
+                        noCommentUser.add(userObjectId);
                         members.add(userObjectId);
+                        //将当前用户添加到未反馈成员列表中
+                        browserMsgBean2.setNoCommentUser(noCommentUser);
                         browserMsgBean2.setMembers(members);
                         browserMsgBean2.setValue("typeCode", typeCode);
                         //更改该活动的已参与人数+1
@@ -545,9 +549,14 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             int s = memberBeanList.size();
                             int typeCode = browserMsgBean.getTypeCode();
                             BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
+                            //从参与成员列表中移除当前用户
                             List<String> members = browserMsgBean.getMembers();
                             members = remove(members, userObjectId);
                             browserMsgBean2.setMembers(members);
+                            //从未反馈成员列表中移除当前用户
+                            List<String> noCommentUser = browserMsgBean.getNoCommentUser();
+                            noCommentUser = remove(noCommentUser,userObjectId);
+                            browserMsgBean2.setNoCommentUser(noCommentUser);
                             browserMsgBean2.setValue("typeCode", typeCode);
                             browserMsgBean2.setValue("personNumberHave", s - 1);
                             browserMsgBean2.update(objectId, new UpdateListener() {

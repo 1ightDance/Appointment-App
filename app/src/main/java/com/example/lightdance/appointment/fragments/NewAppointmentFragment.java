@@ -548,6 +548,10 @@ public class NewAppointmentFragment extends Fragment {
             List<String> memberList = new ArrayList<>();
             memberList.add(userBeanId);
             browserMsgBean.setMembers(memberList);
+            List<String> noCommentUser = new ArrayList<>();
+            noCommentUser.add(userBeanId);
+            browserMsgBean.setNoCommentUser(noCommentUser);
+            {}
             browserMsgBean.save(new SaveListener<String>() {
                 @Override
                 public void done(final String s, BmobException e) {
