@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.BrowserMsgBean;
 import com.example.lightdance.appointment.Model.HistoryBean;
+import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.activities.AppointmentDetailActivity;
 import com.example.lightdance.appointment.activities.BrowserActivity;
@@ -303,7 +304,7 @@ public class NewAppointmentFragment extends Fragment {
         startTimeHour = hour;
         endTimeHour = hour;
         startTimeMin = min;
-        endTimeMin = min+1;
+        endTimeMin = min + 1;
         setSelectTime(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin, TIME_START);
         setSelectTime(endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMin, TIME_END);
     }
@@ -588,33 +589,68 @@ public class NewAppointmentFragment extends Fragment {
     }
 
     private void updateHistoryBean(final String objectId) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginData",Context.MODE_PRIVATE);
-        String userObjectId = sharedPreferences.getString("userBeanId","出错啦~");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginData", Context.MODE_PRIVATE);
+        final String userObjectId = sharedPreferences.getString("userBeanId", "出错啦~");
         BmobQuery<HistoryBean> q = new BmobQuery<>();
-        q.addWhereEqualTo("userObjectId",userObjectId);
+        q.addWhereEqualTo("userObjectId", userObjectId);
         q.findObjects(new FindListener<HistoryBean>() {
             @Override
             public void done(List<HistoryBean> list, BmobException e) {
-                if (e == null){
-                    if (list.size() != 0){
+                if (e == null) {
+                    if (list.size() != 0) {
                         HistoryBean historyBean = list.get(0);
                         List<String> organizeList = historyBean.getOrganizeAppointment();
-                        if (organizeList == null){
+                        List<String> ongoingList = historyBean.getOngoingAppointment();
+                        if (organizeList == null) {
                             organizeList = new ArrayList<>();
                         }
+                        if (ongoingList == null){
+                            ongoingList = new ArrayList<>();
+                        }
                         organizeList.add(objectId);
-                        historyBean.setValue("organizeAppointment",organizeList);
+                        ongoingList.add(objectId);
+                        historyBean.setValue("organizeAppointment", organizeList);
                         historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
-                                if (e != null){
-                                    Log.i("调试","发起新活动时，更新organizeAppointment时出错"+e.getMessage());
+                                if (e != null) {
+                                    Log.i("调试", "发起新活动时，更新organizeAppointment时出错" + e.getMessage());
                                 }
                             }
                         });
                     }
-                }else{
-                    Log.i("调试","发起新活动时，查询当前用户在HistoryBean表中数据时出错"+e.getMessage());
+                    if (list == null || list.size() == 0) {
+                        final HistoryBean historyBean = new HistoryBean();
+                        final List<String> orgnizeAppointment = new ArrayList<>();
+                        final List<String> ongoingAppointment = new ArrayList<>();
+                        orgnizeAppointment.add(objectId);
+                        ongoingAppointment.add(objectId);
+                        BmobQuery<UserBean> q = new BmobQuery<>();
+                        q.getObject(userObjectId, new QueryListener<UserBean>() {
+                            @Override
+                            public void done(UserBean userBean, BmobException e) {
+                                if (e == null) {
+                                    String userName = userBean.getUserName();
+                                    historyBean.setValue("organizeAppointment", orgnizeAppointment);
+                                    historyBean.setValue("ongoingAppointment", ongoingAppointment);
+                                    historyBean.setValue("userObjectId", userObjectId);
+                                    historyBean.setValue("userName", userName);
+                                    historyBean.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String s, BmobException e) {
+                                            if (e != null) {
+                                                Log.i("调试", "位置：NewAppointmentFragment的updateHistoryBean  错误2:" + e.getMessage());
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Log.i("调试", "位置：NewAppointmentFragment的updateHistoryBean  错误1:" + e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.i("调试", "发起新活动时，查询当前用户在HistoryBean表中数据时出错" + e.getMessage());
                 }
             }
         });
@@ -635,9 +671,9 @@ public class NewAppointmentFragment extends Fragment {
         long endMillisSec;
         switch (timeChange) {
             case TIME_START:
-                cal.set(year,month,day,hour,minute);
+                cal.set(year, month, day, hour, minute);
                 startMillisSec = cal.getTimeInMillis();
-                cal.set(endDateYear,endDateMonth,endDateDay,endTimeHour,endTimeMin);
+                cal.set(endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMin);
                 endMillisSec = cal.getTimeInMillis();
                 if (startMillisSec < endMillisSec) {
                     startDateYear = year;
@@ -651,9 +687,9 @@ public class NewAppointmentFragment extends Fragment {
                 }
                 break;
             case TIME_END:
-                cal.set(startDateYear,startDateMonth,startDateDay,startTimeHour,startTimeMin);
+                cal.set(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMin);
                 startMillisSec = cal.getTimeInMillis();
-                cal.set(year,month,day,hour,minute);
+                cal.set(year, month, day, hour, minute);
                 endMillisSec = cal.getTimeInMillis();
                 if (startMillisSec < endMillisSec) {
                     endDateYear = year;
