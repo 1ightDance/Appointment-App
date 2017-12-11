@@ -144,16 +144,16 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             //如果该用户未在表中建立数据，则创建 如果已经建立则添加
                             //e == null 即该用户在表中已创建数据 则完成添加即可
                             //当表中查不到该用户有创建过数据时，则创建
-                            if (list.size() == 0) {
+                            if (list.size() == 0 || list == null) {
                                 final HistoryBean historyBean = new HistoryBean();
                                 historyBean.setUserObjectId(userObjectId);
                                 BmobQuery<UserBean> query = new BmobQuery<>();
                                 query.getObject(userObjectId, new QueryListener<UserBean>() {
                                     @Override
                                     public void done(UserBean userBean, BmobException e) {
-                                        if (e == null){
+                                        if (e == null) {
                                             String userName = userBean.getUserName();
-                                            historyBean.setValue("userName",userName);
+                                            historyBean.setValue("userName", userName);
                                             List<String> joinedList = new ArrayList<>();
                                             List<String> ongoingList = new ArrayList<>();
                                             joinedList.add(browserObjectId);
@@ -168,7 +168,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             });
-                                        }else{
+                                        } else {
                                             Toast.makeText(AppointmentDetailActivity.this,
                                                     "创建时查询用户姓名出错：" + e.getMessage(),
                                                     Toast.LENGTH_LONG).show();
@@ -180,12 +180,21 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 List<String> joinedList = historyBean.getJoinedAppointment();
                                 List<String> noCommentList = historyBean.getNoComment();
                                 List<String> ongoingList = historyBean.getOngoingAppointment();
+                                if (joinedList == null){
+                                    joinedList = new ArrayList<>();
+                                }
+                                if (noCommentList == null){
+                                    noCommentList = new ArrayList<>();
+                                }
+                                if (ongoingList == null){
+                                    ongoingList = new ArrayList<>();
+                                }
                                 joinedList.add(browserObjectId);
                                 noCommentList.add(browserObjectId);
                                 ongoingList.add(browserObjectId);
-                                historyBean.setValue("joinedAppointment",joinedList);
-                                historyBean.setValue("noComment",noCommentList);
-                                historyBean.setValue("ongoingAppointment",ongoingList);
+                                historyBean.setValue("joinedAppointment", joinedList);
+                                historyBean.setValue("noComment", noCommentList);
+                                historyBean.setValue("ongoingAppointment", ongoingList);
                                 historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
@@ -217,12 +226,12 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             List<String> joinedList = historyBean.getJoinedAppointment();
                             List<String> noCommentList = historyBean.getNoComment();
                             List<String> ongoingList = historyBean.getOngoingAppointment();
-                            joinedList = remove(joinedList,browserObjectId);
-                            noCommentList = remove(noCommentList,browserObjectId);
-                            ongoingList = remove(ongoingList,browserObjectId);
-                            historyBean.setValue("joinedAppointment",joinedList);
-                            historyBean.setValue("noComment",noCommentList);
-                            historyBean.setValue("ongoingAppointment",ongoingList);
+                            joinedList = remove(joinedList, browserObjectId);
+                            noCommentList = remove(noCommentList, browserObjectId);
+                            ongoingList = remove(ongoingList, browserObjectId);
+                            historyBean.setValue("joinedAppointment", joinedList);
+                            historyBean.setValue("noComment", noCommentList);
+                            historyBean.setValue("ongoingAppointment", ongoingList);
                             historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
