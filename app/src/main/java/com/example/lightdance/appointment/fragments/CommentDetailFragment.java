@@ -300,71 +300,7 @@ public class CommentDetailFragment extends Fragment {
                 if (e == null) {
                     //仅当未反馈用户数量为0，即全部反馈时才计算反馈分数
                     if (browserMsgBean.getNoCommentUser().size() == 0 || browserMsgBean.getNoCommentUser() == null) {
-                        final List<String> members = browserMsgBean.getMembers();
-                        final List<String> commentResult = browserMsgBean.getCommentResult();
-                        final List<String> commentScore = browserMsgBean.getCommentScore();
-                        final int personNumber = members.size();
-                        //查询用户赴约率判断等级并初始化反馈初始分
-                        BmobQuery<UserBean> q2 = new BmobQuery<>();
-                        q2.getObject(userObjectId, new QueryListener<UserBean>() {
-                            @Override
-                            public void done(UserBean userBean, BmobException e) {
-                                if (e == null) {
-                                    int score;
-                                    int mPosition = 0;
-                                    double attendance = userBean.getAttendance();
-                                    //高于95%的初始分为20
-                                    if (attendance >= 95.00) {
-                                        score = 20;
-                                    } else {
-                                        //高于80%的初始分为10
-                                        if (attendance >= 80.00) {
-                                            score = 10;
-                                        } else {
-                                            //其余的初始分为0
-                                            score = 0;
-                                        }
-                                    }
-                                    //获取我在列表中的位置
-                                    for (int i = 0; i < personNumber; i++) {
-                                        if (userObjectId.equals(members.get(i))) {
-                                            mPosition = i;
-                                        }
-                                    }
-                                    //计算反馈分数
-                                    for (int i = 0; i < personNumber; i++) {
-                                        String comment = commentResult.get(i);
-                                        if (i == mPosition) {
-                                            String s = comment.substring(mPosition, mPosition + 1);
-                                            if (s.equals("否")) {
-                                                score = 0;
-                                                break;
-                                            }
-                                        } else {
-                                            String s = comment.substring(mPosition, mPosition + 1);
-                                            if (s.equals("是")) {
-                                                score = score + 4;
-                                            } else {
-                                                score = score - 10;
-                                            }
-                                        }
-                                    }
-                                    //更新数据并保存后台
-                                    commentScore.set(mPosition, String.valueOf(score));
-                                    browserMsgBean.setValue("commentScore", commentScore);
-                                    browserMsgBean.update(objectId, new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e != null) {
-                                                Log.i("调试", "位置:CommentDetailFragment" + "\n" + "计算完总分后，更新数据出错" + e.getMessage());
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    Log.i("调试", "位置:CommentDetailFragment" + "\n" + "查询用户赴约率时出错" + e.getMessage());
-                                }
-                            }
-                        });
+
                     }
                 } else
 
