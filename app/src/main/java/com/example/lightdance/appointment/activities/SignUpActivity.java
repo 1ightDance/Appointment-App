@@ -2,7 +2,6 @@ package com.example.lightdance.appointment.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 import com.example.lightdance.appointment.Model.UserBean;
 import com.example.lightdance.appointment.R;
-
-import org.litepal.tablemanager.Connector;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
@@ -48,7 +45,6 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioButton userSexWoman;
 
     private Button signUpFinish;
-    private SQLiteDatabase db = Connector.getDatabase();
     private MyCountDownTimer myCountDownTimer;
     private ProgressDialog progressDialog;
 

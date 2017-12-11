@@ -290,7 +290,8 @@ public class CommentDetailFragment extends Fragment {
     }
 
     /**
-     * 计算反馈分数方法 用来判断当前用户是否赴约
+     * 判断该活动是否所有成员均已反馈 若都反馈便计算各自反馈结果
+     * 计算反馈分数方法 用来判断参与用户是否赴约
      */
     private void calculateScore() {
         BmobQuery<BrowserMsgBean> q = new BmobQuery<>();
@@ -300,12 +301,125 @@ public class CommentDetailFragment extends Fragment {
                 if (e == null) {
                     //仅当未反馈用户数量为0，即全部反馈时才计算反馈分数
                     if (browserMsgBean.getNoCommentUser().size() == 0 || browserMsgBean.getNoCommentUser() == null) {
-
+                        List<String> members = browserMsgBean.getMembers();
+                        List<String> commentResult = browserMsgBean.getCommentResult();
+                        String member;
+                        String mResult;
+                        int n = members.size();
+                        int p = 0;
+                        for (int i = 0; i < n; i++) {
+                            member = members.get(i);
+                            int score = 0;
+                            p = i;
+                            for (int j = 0; j < n; j++) {
+                                mResult = commentResult.get(j);
+                                String s = mResult.substring(p, p + 1);
+                                if (j == p) {
+                                    if (s.equals("否")) {
+                                        score = 0;
+                                        break;
+                                    }
+                                }
+                                if (s.equals("是")) {
+                                    score = score + 4;
+                                } else {
+                                    score = score - 10;
+                                }
+                            }
+                            BmobQuery<UserBean> query = new BmobQuery<>();
+                            final String finalMember = member;
+                            final int finalScore = score;
+                            query.getObject(member, new QueryListener<UserBean>() {
+                                @Override
+                                public void done(UserBean userBean, BmobException e) {
+                                    if (e == null) {
+                                        double attendance = userBean.getAttendance();
+                                        int score = finalScore;
+                                        if (attendance >= 95.00) {
+                                            score = score + 20;
+                                        } else {
+                                            if (attendance >= 80.00) {
+                                                score = score + 10;
+                                            }
+                                        }
+                                        BmobQuery<HistoryBean> q1 = new BmobQuery<>();
+                                        q1.addWhereEqualTo("userObjectId", finalMember);
+                                        final int finalScore1 = score;
+                                        q1.findObjects(new FindListener<HistoryBean>() {
+                                            @Override
+                                            public void done(List<HistoryBean> list, BmobException e) {
+                                                if (e == null) {
+                                                    if (list.size() != 0) {
+                                                        HistoryBean historyBean = list.get(0);
+                                                        int keepNum = historyBean.getKeepAppointment().size();
+                                                        int breakNum = historyBean.getBreakAppointment().size();
+                                                        if (finalScore1 >= 0) {
+                                                            List<String> keepAppointment = historyBean.getKeepAppointment();
+                                                            if (keepAppointment == null) {
+                                                                keepAppointment = new ArrayList<>();
+                                                            }
+                                                            keepAppointment.add(objectId);
+                                                            keepNum = keepNum + 1;
+                                                            historyBean.setValue("keepAppointment", keepAppointment);
+                                                        } else {
+                                                            List<String> breakAppointment = historyBean.getBreakAppointment();
+                                                            if (breakAppointment == null) {
+                                                                breakAppointment = new ArrayList<>();
+                                                            }
+                                                            breakAppointment.add(objectId);
+                                                            breakNum = breakNum + 1;
+                                                            historyBean.setValue("breakAppointment", breakAppointment);
+                                                        }
+                                                        final int finalKeepNum = keepNum;
+                                                        final int finalBreakNum = breakNum;
+                                                        historyBean.update(historyBean.getObjectId(), new UpdateListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                                if (e != null) {
+                                                                    Log.i("调试", "位置:CommentDetailFragment" + "\n" + "保存22用户" + finalMember + "数据时出错" + e.getMessage());
+                                                                } else {
+                                                                    updateUserAttendance(finalKeepNum, finalBreakNum);
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                } else {
+                                                    Log.i("调试", "位置:CommentDetailFragment" + "\n" + "保存用户" + finalMember + "数据时出错" + e.getMessage());
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        Log.i("调试", "位置:CommentDetailFragment" + "\n" + "保存数据时，获取" + finalMember + "数据时出错" + e.getMessage());
+                                    }
+                                }
+                            });
+                        }
                     }
-                } else
-
-                {
+                } else {
                     Log.i("调试", "位置:CommentDetailFragment" + "\n" + "计算总分时 获取活动信息出错" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void updateUserAttendance(final int finalKeepNum, final int finalBreakNum) {
+        BmobQuery<UserBean> q = new BmobQuery<>();
+        q.getObject(userObjectId, new QueryListener<UserBean>() {
+            @Override
+            public void done(UserBean userBean, BmobException e) {
+                if (e == null){
+                    double attendance = finalKeepNum/(finalBreakNum+finalKeepNum)*100;
+                    userBean.setValue("attendance",attendance);
+                    userBean.update(userObjectId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e != null){
+                                Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 保存时出错" + e.getMessage());
+                            }
+                        }
+                    });
+                }else{
+                    Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 查询时出错" + e.getMessage());
                 }
             }
         });
@@ -323,15 +437,15 @@ public class CommentDetailFragment extends Fragment {
                     List<String> noCommentUser = browserMsgBean.getNoCommentUser();
                     for (int i = 0; i < noCommentUser.size(); i++) {
                         String user = noCommentUser.get(i);
-                        if (user.equals(userObjectId)){
+                        if (user.equals(userObjectId)) {
                             noCommentUser.remove(userObjectId);
                         }
                     }
-                    browserMsgBean.setValue("noCommentUser",noCommentUser);
+                    browserMsgBean.setValue("noCommentUser", noCommentUser);
                     browserMsgBean.update(objectId, new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            if (e != null){
+                            if (e != null) {
                                 Log.i("调试", "位置：CommentDetailFragment\n更新未反馈成员列表时，保存数据出错");
                             }
                         }
