@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -485,67 +486,101 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      */
     private void joinAppointment() {
         progressDialog.show();
-        if (isFull) {
-            Toast.makeText(AppointmentDetailActivity.this, "来晚了啊，已经满员发车了", Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
-        } else {
-            BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
-            query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
-                @Override
-                public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                    if (e == null) {
-                        //获取当前用户ObjectId
-                        SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
-                        final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
-                        //获取已参与人员列表
-                        List<String> memberBeanList = browserMsgBean.getMembers();
-                        int s = memberBeanList.size();
-                        //未参与 将当前用户添加到该活动的参与人员名单
-                        int typeCode = browserMsgBean.getTypeCode();
-                        BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
-                        List<String> members = browserMsgBean.getMembers();
-                        List<String> noCommentUser = browserMsgBean.getNoCommentUser();
-                        noCommentUser.add(userObjectId);
-                        members.add(userObjectId);
-                        //将当前用户添加到未反馈成员列表中
-                        browserMsgBean2.setNoCommentUser(noCommentUser);
-                        browserMsgBean2.setMembers(members);
-                        browserMsgBean2.setValue("typeCode", typeCode);
-                        //更改该活动的已参与人数+1
-                        browserMsgBean2.setValue("personNumberHave", s + 1);
-                        browserMsgBean2.update(objectId, new UpdateListener() {
+        //应约前再次执行检查是否满员操作 保证数据实时性
+        BmobQuery<BrowserMsgBean> q = new BmobQuery<>();
+        q.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+            @Override
+            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                if (e == null) {
+                    String need1 = browserMsgBean.getPersonNumberNeed();
+                    int have = browserMsgBean.getPersonNumberHave();
+                    if (need1.equals("∞")) {
+                        isFull = false;
+                    } else {
+                        int need = Integer.valueOf(need1);
+                        if (have >= need) {
+                            isFull = true;
+                        } else {
+                            isFull = false;
+                        }
+                    }
+                    //根据检查结果执行不同的数据逻辑
+                    if (isFull) {
+                        Toast.makeText(AppointmentDetailActivity.this, "来晚了啊，已经满员发车了", Toast.LENGTH_LONG).show();
+                        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                             @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    //应约成功后更新当前详情页数据
-                                    BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
-                                    query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
-                                        @Override
-                                        public void done(BrowserMsgBean browserMsgBean, BmobException e) {
-                                            loadMsg(browserMsgBean);
-                                        }
-                                    });
-                                    Toast.makeText(AppointmentDetailActivity.this,
-                                            "应约成功！别放别人鸽子哟~",
-                                            Toast.LENGTH_SHORT).show();
-                                    //更新应约历史记录数据
-                                    updateHistoryBean(objectId, userObjectId, MODE_JOIN);
-                                    progressDialog.dismiss();
-                                } else {
-                                    Toast.makeText(AppointmentDetailActivity.this,
-                                            "更新数组失败" + e.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                typeCode = browserMsgBean.getTypeCode();
+                                loadMsg(browserMsgBean);
                             }
                         });
-                    } else {
-                        Toast.makeText(AppointmentDetailActivity.this, "错误 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
-                    }
+                    } else {
+                        BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                        query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                            @Override
+                            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                if (e == null) {
+                                    //获取当前用户ObjectId
+                                    SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
+                                    final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
+                                    //获取已参与人员列表
+                                    List<String> memberBeanList = browserMsgBean.getMembers();
+                                    int s = memberBeanList.size();
+                                    //未参与 将当前用户添加到该活动的参与人员名单
+                                    int typeCode = browserMsgBean.getTypeCode();
+                                    BrowserMsgBean browserMsgBean2 = new BrowserMsgBean();
+                                    List<String> members = browserMsgBean.getMembers();
+                                    List<String> noCommentUser = browserMsgBean.getNoCommentUser();
+                                    noCommentUser.add(userObjectId);
+                                    members.add(userObjectId);
+                                    //将当前用户添加到未反馈成员列表中
+                                    browserMsgBean2.setNoCommentUser(noCommentUser);
+                                    browserMsgBean2.setMembers(members);
+                                    browserMsgBean2.setValue("typeCode", typeCode);
+                                    //更改该活动的已参与人数+1
+                                    browserMsgBean2.setValue("personNumberHave", s + 1);
+                                    browserMsgBean2.update(objectId, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                //应约成功后更新当前详情页数据
+                                                BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
+                                                query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+                                                    @Override
+                                                    public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                                                        loadMsg(browserMsgBean);
+                                                    }
+                                                });
+                                                Toast.makeText(AppointmentDetailActivity.this,
+                                                        "应约成功！别放别人鸽子哟~",
+                                                        Toast.LENGTH_SHORT).show();
+                                                //更新应约历史记录数据
+                                                updateHistoryBean(objectId, userObjectId, MODE_JOIN);
+                                                progressDialog.dismiss();
+                                            } else {
+                                                Log.i("调试", "更新数组失败" + e.getMessage());
+                                                Toast.makeText(AppointmentDetailActivity.this,
+                                                        "出错在AppointmentDetailActivity的joinAppointment方法",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(AppointmentDetailActivity.this, "错误 e=" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
 
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(AppointmentDetailActivity.this, "AppointmentDetailActivity的checkIsFull出错", Toast.LENGTH_LONG).show();
+                    Log.i("调试", "出错" + e.getMessage());
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
