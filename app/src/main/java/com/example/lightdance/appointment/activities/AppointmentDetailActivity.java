@@ -68,6 +68,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private String objectId;
+    private String userObjectId;
     private int typeCode;
 
     /**
@@ -98,6 +99,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         progressDialog.setMessage("加载中...");
         progressDialog.show();
 
+        SharedPreferences sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+        userObjectId = sharedPreferences.getString("userBeanId", "出错啦~");
+
         //toolbar
         mToolbar.setTitle("活动详情");
         mToolbar.setTitleTextColor(Color.parseColor("#ffffff"));
@@ -125,7 +129,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * 更新JoinedHistoryBean表数据方法
+     * 更新HistoryBean表数据方法
      *
      * @param browserObjectId 需要被添加或删除的BrowserObjectId
      * @param userObjectId    用户的UserObjectId
@@ -309,8 +313,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      */
     public void loadBtn() {
         //获取当前用户ObjectId
-        SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
-        final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
         BmobQuery<UserBean> q = new BmobQuery<>();
         q.getObject(userObjectId, new QueryListener<UserBean>() {
             @Override
@@ -522,9 +524,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                             @Override
                             public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                                 if (e == null) {
-                                    //获取当前用户ObjectId
-                                    SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
-                                    final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
                                     //获取已参与人员列表
                                     List<String> memberBeanList = browserMsgBean.getMembers();
                                     int s = memberBeanList.size();
@@ -606,9 +605,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                         if (e == null) {
-                            //获取当前用户ObjectId
-                            SharedPreferences preferences = getSharedPreferences("loginData", MODE_PRIVATE);
-                            final String userObjectId = preferences.getString("userBeanId", "错误啦啊啊啊~");
                             //获取已参与人员列表
                             List<String> memberBeanList = browserMsgBean.getMembers();
                             int s = memberBeanList.size();
@@ -690,6 +686,50 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         progressDialog.show();
+                        BmobQuery<HistoryBean> q = new BmobQuery<>();
+                        q.addWhereEqualTo("userObjectId", userObjectId);
+                        q.findObjects(new FindListener<HistoryBean>() {
+                            @Override
+                            public void done(List<HistoryBean> list, BmobException e) {
+                                if (e == null) {
+                                    if (list.size() != 0) {
+                                        HistoryBean historyBean = list.get(0);
+                                        List<String> organizeAppointment = historyBean.getOrganizeAppointment();
+                                        List<String> ongoingAppointment = historyBean.getOngoingAppointment();
+                                        for (int i = 0; i < organizeAppointment.size(); i++) {
+                                            String item = organizeAppointment.get(i);
+                                            if (item.equals(objectId)) {
+                                                organizeAppointment.remove(objectId);
+                                                break;
+                                            }
+                                        }
+                                        for (int j = 0; j < ongoingAppointment.size(); j++) {
+                                            String item = ongoingAppointment.get(j);
+                                            if (item.equals(objectId)) {
+                                                ongoingAppointment.remove(objectId);
+                                                break;
+                                            }
+                                        }
+                                        historyBean.setValue("organizeAppointment", organizeAppointment);
+                                        historyBean.setValue("ongoingAppointment", ongoingAppointment);
+                                        historyBean.update(historyBean.getObjectId(), new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e != null) {
+                                                    Toast.makeText(AppointmentDetailActivity.this, "出错啦", Toast.LENGTH_LONG).show();
+                                                    Log.i("调试", "AppointmentDetailActivity更新HistoryBean出错" + e.getMessage());
+                                                }
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.i("调试", "取消约人时更改组织历史数据失败" + e.getMessage());
+                                    Toast.makeText(AppointmentDetailActivity.this,
+                                            "取消约人时更改组织历史数据失败",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                         BmobQuery<BrowserMsgBean> query = new BmobQuery<>();
                         query.getObject(objectId, new QueryListener<BrowserMsgBean>() {
                             @Override
@@ -710,6 +750,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                                 finish();
                                             } else {
                                                 progressDialog.dismiss();
+                                                Log.i("调试", "取消约人失败" + e.getMessage());
                                                 Toast.makeText(AppointmentDetailActivity.this,
                                                         "取消约人失败" + e.getMessage(),
                                                         Toast.LENGTH_LONG).show();
@@ -739,8 +780,14 @@ public class AppointmentDetailActivity extends AppCompatActivity {
      * @param browserMsgBean 需要清理成员应约记录的BrowserBean
      */
     private void deleteMembersHistory(BrowserMsgBean browserMsgBean) {
-        List<String> members;
-        members = browserMsgBean.getMembers();
+        List<String> members = browserMsgBean.getMembers();
+        for (int j = 0; j < members.size(); j++) {
+            String item = members.get(j);
+            if (item.equals(userObjectId)) {
+                members.remove(userObjectId);
+                break;
+            }
+        }
         for (int i = 0; i < members.size(); i++) {
             String member = members.get(i);
             updateHistoryBean(objectId, member, MODE_QUIT);

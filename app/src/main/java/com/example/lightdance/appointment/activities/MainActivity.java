@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                                     if (e == null) {
-                                        Log.i("调试", "第" + finalI + "次查询");
                                         //获取每一个活动的结束时间并换算成毫秒单位表示，与系统时间进行比较
                                         String endTime = browserMsgBean.getEndTime();
                                         int year = Integer.valueOf(endTime.substring(0, 4));
