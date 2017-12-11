@@ -155,13 +155,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                             String userName = userBean.getUserName();
                                             historyBean.setValue("userName",userName);
                                             List<String> joinedList = new ArrayList<>();
-                                            List<String> noCommentList = new ArrayList<>();
                                             List<String> ongoingList = new ArrayList<>();
                                             joinedList.add(browserObjectId);
-                                            noCommentList.add(browserObjectId);
                                             ongoingList.add(browserObjectId);
                                             historyBean.setJoinedAppointment(joinedList);
-                                            historyBean.setNoComment(noCommentList);
                                             historyBean.setOngoingAppointment(ongoingList);
                                             historyBean.save(new SaveListener<String>() {
                                                 @Override

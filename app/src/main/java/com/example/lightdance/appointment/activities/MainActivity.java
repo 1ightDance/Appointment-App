@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         final Calendar cal;
         int year, month, day, hour, min;
 
-        //获取当前时间 并换算为毫秒
+        //获取当前系统时间 并换算为毫秒
         cal = Calendar.getInstance();
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH) + 1;
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         cal.set(year, month, day, hour, min);
         final long sysMillisSec = cal.getTimeInMillis();
 
+        //获取该用户的HistoryBean表数据
         BmobQuery<HistoryBean> q1 = new BmobQuery<>();
         q1.addWhereEqualTo("userObjectId", userObjectId);
         q1.findObjects(new FindListener<HistoryBean>() {
@@ -135,9 +136,10 @@ public class MainActivity extends AppCompatActivity {
                     if (list.size() != 0) {
                         final HistoryBean historyBean = list.get(0);
                         List<String> ongoingList = historyBean.getOngoingAppointment();
-                        if (ongoingList == null){
+                        if (ongoingList == null) {
                             ongoingList = new ArrayList<>();
                         }
+                        //遍历该用户HistoryBean表中每一个活动是否结束
                         for (int i = 0; i < ongoingList.size(); i++) {
                             final String browserObjectId = ongoingList.get(i);
                             BmobQuery<BrowserMsgBean> q2 = new BmobQuery<>();
@@ -147,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void done(BrowserMsgBean browserMsgBean, BmobException e) {
                                     if (e == null) {
                                         Log.i("调试", "第" + finalI + "次查询");
+                                        //获取每一个活动的结束时间并换算成毫秒单位表示，与系统时间进行比较
                                         String endTime = browserMsgBean.getEndTime();
                                         int year = Integer.valueOf(endTime.substring(0, 4));
                                         int month = Integer.valueOf(endTime.substring(5, 7));
@@ -155,9 +158,11 @@ public class MainActivity extends AppCompatActivity {
                                         int min = Integer.valueOf(endTime.substring(15, 17));
                                         cal.set(year, month, day, hour, min);
                                         long endMillisSec = cal.getTimeInMillis();
+                                        //若系统时间大于结束时间，即活动已结束 将该活动从“进行中的活动”移到“已结束活动”同时向“未反馈活动”字段添该活动加
                                         if (sysMillisSec >= endMillisSec) {
                                             List<String> ongoingList = historyBean.getOngoingAppointment();
                                             List<String> finishedList = historyBean.getFinishedAppointment();
+                                            List<String> noCommentList = historyBean.getNoComment();
                                             for (int i = ongoingList.size() - 1; i >= 0; i--) {
                                                 String item = ongoingList.get(i);
                                                 if (browserObjectId.equals(item)) {
@@ -167,9 +172,14 @@ public class MainActivity extends AppCompatActivity {
                                             if (finishedList == null) {
                                                 finishedList = new ArrayList<>();
                                             }
+                                            if (noCommentList == null) {
+                                                noCommentList = new ArrayList<>();
+                                            }
                                             finishedList.add(browserObjectId);
+                                            noCommentList.add(browserObjectId);
                                             historyBean.setValue("ongoingAppointment", ongoingList);
                                             historyBean.setValue("finishedAppointment", finishedList);
+                                            historyBean.setValue("noCommentAppointment", noCommentList);
                                             historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                                 @Override
                                                 public void done(BmobException e) {
@@ -190,14 +200,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Log.i("调试", "位置:MainActivity.checkOngoingAppointment"+"\n"+"查询当前用户的历史表数据出错" + e.getMessage());
+                    Log.i("调试", "位置:MainActivity.checkOngoingAppointment" + "\n" + "查询当前用户的历史表数据出错" + e.getMessage());
                 }
             }
         });
     }
 
     /**
-     * 初始化已结束的活动的反馈数据方法
+     * 初始化已结束的活动的反馈数据的方法
      *
      * @param browserObjectId 传入需要被初始化的活动的ObjectId
      */
@@ -209,8 +219,8 @@ public class MainActivity extends AppCompatActivity {
                 if (e == null) {
                     int personNum = browserMsgBean.getMembers().size();
                     String s = "";
-                    for (int i = 0;i<personNum;i++){
-                        s = s+"是";
+                    for (int i = 0; i < personNum; i++) {
+                        s = s + "是";
                     }
                     List<String> commentResult = new ArrayList<>();
                     List<String> commentScore = new ArrayList<>();
@@ -218,13 +228,13 @@ public class MainActivity extends AppCompatActivity {
                         commentResult.add(s);
                         commentScore.add("0");
                     }
-                    browserMsgBean.setValue("commentResult",commentResult);
-                    browserMsgBean.setValue("commentScore",commentScore);
+                    browserMsgBean.setValue("commentResult", commentResult);
+                    browserMsgBean.setValue("commentScore", commentScore);
                     browserMsgBean.update(browserObjectId, new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            if (e != null){
-                                Log.i("调试","保存反馈结果时出错"+e.getMessage());
+                            if (e != null) {
+                                Log.i("调试", "保存反馈结果时出错" + e.getMessage());
                             }
                         }
                     });
@@ -235,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 检查是否有未反馈活动的方法
+     */
     private void checkIsComment() {
         //检测是否登录 若登录则检查是否有未反馈活动
         SharedPreferences preferences = getSharedPreferences("loginData"
@@ -248,37 +261,39 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void done(List<HistoryBean> list, BmobException e) {
                     if (e == null) {
-                        HistoryBean historyBean = list.get(0);
-                        List<String> list1 = historyBean.getNoComment();
-                        if (list1 == null) {
-                            Log.i("调试","用户无数据");
-                            // 说明用户在该表中还没有数据
-                        } else {
-                            if (list1.size() != 0) {
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-                                dialog.setTitle("通知");
-                                dialog.setMessage("您还有已经结束的活动未作出反馈哟\n您的反馈对于其他用户来说都是一个非常重要的参考依据，希望得到您的配合！");
-                                dialog.setPositiveButton("去反馈", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(MainActivity.this, CommentActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
-                                dialog.setNegativeButton("再等等", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                dialog.show();
+                        if (list.size() != 0) {
+                            HistoryBean historyBean = list.get(0);
+                            List<String> list1 = historyBean.getNoComment();
+                            if (list1 == null) {
+                                Log.i("调试", "用户无数据");
+                                // 说明用户在该表中还没有数据
                             } else {
-                                Log.i("调试","用户无数据");
-                                // 说明用户在该表中的未评论活动中数据为null
+                                if (list1.size() != 0) {
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                    dialog.setTitle("通知");
+                                    dialog.setMessage("您还有已经结束的活动未作出反馈哟\n您的反馈对于其他用户来说都是一个非常重要的参考依据，希望得到您的配合！");
+                                    dialog.setPositiveButton("去反馈", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(MainActivity.this, CommentActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    dialog.setNegativeButton("再等等", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
+                                } else {
+                                    Log.i("调试", "用户无数据");
+                                    // 说明用户在该表中的未评论活动中数据为null
+                                }
                             }
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "e错误" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.i("调试","e错误" + e.getMessage());
                     }
                 }
             });
