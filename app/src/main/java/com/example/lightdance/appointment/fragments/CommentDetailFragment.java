@@ -379,6 +379,32 @@ public class CommentDetailFragment extends Fragment {
      * 更新未反馈活动列表方法 当检测到某个活动已反馈时调用该活动
      */
     private void updateNoComment() {
+        BmobQuery<BrowserMsgBean> q2 = new BmobQuery<>();
+        q2.getObject(objectId, new QueryListener<BrowserMsgBean>() {
+            @Override
+            public void done(BrowserMsgBean browserMsgBean, BmobException e) {
+                if (e == null) {
+                    List<String> noCommentUser = browserMsgBean.getNoCommentUser();
+                    for (int i = 0; i < noCommentUser.size(); i++) {
+                        String user = noCommentUser.get(i);
+                        if (user.equals(userObjectId)){
+                            noCommentUser.remove(userObjectId);
+                        }
+                    }
+                    browserMsgBean.setValue("noCommentUser",noCommentUser);
+                    browserMsgBean.update(objectId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e != null){
+                                Log.i("调试", "位置：CommentDetailFragment\n更新未反馈成员列表时，保存数据出错");
+                            }
+                        }
+                    });
+                } else {
+                    Log.i("调试", "位置：CommentDetailFragment\n更新未反馈成员列表时，查询数据出错");
+                }
+            }
+        });
         BmobQuery<HistoryBean> q = new BmobQuery<>();
         q.addWhereEqualTo("userObjectId", userObjectId);
         q.findObjects(new FindListener<HistoryBean>() {

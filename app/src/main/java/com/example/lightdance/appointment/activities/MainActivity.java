@@ -251,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
                         HistoryBean historyBean = list.get(0);
                         List<String> list1 = historyBean.getNoComment();
                         if (list1 == null) {
+                            Log.i("调试","用户无数据");
                             // 说明用户在该表中还没有数据
                         } else {
                             if (list1.size() != 0) {
@@ -272,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                                 });
                                 dialog.show();
                             } else {
+                                Log.i("调试","用户无数据");
                                 // 说明用户在该表中的未评论活动中数据为null
                             }
                         }
