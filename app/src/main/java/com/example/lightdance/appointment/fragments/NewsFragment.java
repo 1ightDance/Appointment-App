@@ -13,6 +13,7 @@ import com.example.lightdance.appointment.Model.NewsBean;
 import com.example.lightdance.appointment.R;
 import com.example.lightdance.appointment.adapters.NewsAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -49,8 +50,9 @@ public class NewsFragment extends Fragment{
         progressDialog = new ProgressDialog(getActivity());
 
         //执行初始化数据方法
-//        initNews();
-        getNews(view);
+        initNews();
+        loadNews(view);
+//        getNews(view);
 
 
         return view;
@@ -82,6 +84,9 @@ public class NewsFragment extends Fragment{
     }
 
     private void initNews() {
+        if (newsMsgList == null){
+            newsMsgList = new ArrayList<>();
+        }
         for (int i = 0;i < 5;i++) {
             NewsBean news1 = new NewsBean(R.mipmap.news_pic1, getString(R.string.news_title1),
                     getString(R.string.news_content1));

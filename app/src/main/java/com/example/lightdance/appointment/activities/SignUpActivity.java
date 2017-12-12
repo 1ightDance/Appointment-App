@@ -135,7 +135,11 @@ public class SignUpActivity extends AppCompatActivity {
                                         newUser.setUserDescription("这个人很懒，什么都没说");
                                         newUser.setUserCollege(userCollege.getText().toString());
                                         newUser.setLevelCode(1000);
-                                        newUser.setUserIconId(R.mipmap.ic_user);
+                                        if (userSex == MAN) {
+                                            newUser.setUserIconId(R.mipmap.ic_user);
+                                        }else{
+                                            newUser.setUserIconId(R.mipmap.ic_user_girl);
+                                        }
                                         newUser.save(new SaveListener<String>() {
                                             @Override
                                             public void done(String s, BmobException e) {
