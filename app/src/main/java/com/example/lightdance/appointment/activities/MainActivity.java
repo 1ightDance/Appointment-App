@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                                             noCommentList.add(browserObjectId);
                                             historyBean.setValue("ongoingAppointment", ongoingList);
                                             historyBean.setValue("finishedAppointment", finishedList);
-                                            historyBean.setValue("noCommentAppointment", noCommentList);
+                                            historyBean.setValue("noComment", noCommentList);
                                             historyBean.update(historyBean.getObjectId(), new UpdateListener() {
                                                 @Override
                                                 public void done(BmobException e) {
@@ -222,13 +222,10 @@ public class MainActivity extends AppCompatActivity {
                         s = s + "是";
                     }
                     List<String> commentResult = new ArrayList<>();
-                    List<String> commentScore = new ArrayList<>();
                     for (int i = 0; i < personNum; i++) {
                         commentResult.add(s);
-                        commentScore.add("0");
                     }
                     browserMsgBean.setValue("commentResult", commentResult);
-                    browserMsgBean.setValue("commentScore", commentScore);
                     browserMsgBean.update(browserObjectId, new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
@@ -237,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    checkIsComment();
                 } else {
                     Log.i("调试1", "初始化已结束活动的反馈数据时，查询被初始活动数据时出错" + e.getMessage());
                 }

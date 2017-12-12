@@ -263,7 +263,9 @@ public class CommentDetailFragment extends Fragment {
                     for (int i = 0; i < members.size(); i++) {
                         String item = members.get(i);
                         if (userObjectId.equals(item)) {
-                            commentResult.set(i, mComment2);
+                            if (isChange) {
+                                commentResult.set(i, mComment2);
+                            }
                         }
                     }
                     browserMsgBean.setValue("commentResult", commentResult);
@@ -277,7 +279,6 @@ public class CommentDetailFragment extends Fragment {
                                 Toast.makeText(getActivity(), "提交成功\n感谢您的合作~！", Toast.LENGTH_LONG).show();
                                 //提交成功后更新未反馈活动列表数据、计算反馈分数（在全部成员都反馈后） 结束承载该碎片的活动
                                 updateNoComment();
-                                calculateScore();
                                 getActivity().finish();
                             }
                         }
@@ -351,21 +352,21 @@ public class CommentDetailFragment extends Fragment {
                                                 if (e == null) {
                                                     if (list.size() != 0) {
                                                         HistoryBean historyBean = list.get(0);
-                                                        int keepNum = historyBean.getKeepAppointment().size();
-                                                        int breakNum = historyBean.getBreakAppointment().size();
+                                                        List<String> keepAppointment = historyBean.getKeepAppointment();
+                                                        List<String> breakAppointment = historyBean.getBreakAppointment();
+                                                        if (keepAppointment == null){
+                                                            keepAppointment = new ArrayList<>();
+                                                        }
+                                                        if (breakAppointment == null){
+                                                            breakAppointment = new ArrayList<>();
+                                                        }
+                                                        int keepNum = keepAppointment.size();
+                                                        int breakNum = breakAppointment.size();
                                                         if (finalScore1 >= 0) {
-                                                            List<String> keepAppointment = historyBean.getKeepAppointment();
-                                                            if (keepAppointment == null) {
-                                                                keepAppointment = new ArrayList<>();
-                                                            }
                                                             keepAppointment.add(objectId);
                                                             keepNum = keepNum + 1;
                                                             historyBean.setValue("keepAppointment", keepAppointment);
                                                         } else {
-                                                            List<String> breakAppointment = historyBean.getBreakAppointment();
-                                                            if (breakAppointment == null) {
-                                                                breakAppointment = new ArrayList<>();
-                                                            }
                                                             breakAppointment.add(objectId);
                                                             breakNum = breakNum + 1;
                                                             historyBean.setValue("breakAppointment", breakAppointment);
@@ -407,18 +408,18 @@ public class CommentDetailFragment extends Fragment {
         q.getObject(userObjectId, new QueryListener<UserBean>() {
             @Override
             public void done(UserBean userBean, BmobException e) {
-                if (e == null){
-                    double attendance = finalKeepNum/(finalBreakNum+finalKeepNum)*100;
-                    userBean.setValue("attendance",attendance);
+                if (e == null) {
+                    double attendance = finalKeepNum / (finalBreakNum + finalKeepNum) * 100;
+                    userBean.setValue("attendance", attendance);
                     userBean.update(userObjectId, new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            if (e != null){
+                            if (e != null) {
                                 Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 保存时出错" + e.getMessage());
                             }
                         }
                     });
-                }else{
+                } else {
                     Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 查询时出错" + e.getMessage());
                 }
             }
@@ -447,6 +448,8 @@ public class CommentDetailFragment extends Fragment {
                         public void done(BmobException e) {
                             if (e != null) {
                                 Log.i("调试", "位置：CommentDetailFragment\n更新未反馈成员列表时，保存数据出错");
+                            }else{
+                                calculateScore();
                             }
                         }
                     });
