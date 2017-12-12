@@ -276,10 +276,12 @@ public class CommentDetailFragment extends Fragment {
                                 Toast.makeText(getActivity(), "反馈失败" + e.getMessage(), Toast.LENGTH_LONG).show();
                                 Log.i("调试", "位置：CommentDetailFragment\n更新反馈结果时出错" + e.getMessage());
                             } else {
-                                Toast.makeText(getActivity(), "提交成功\n感谢您的合作~！", Toast.LENGTH_LONG).show();
+                                progressDialog.setTitle("请稍等");
+                                progressDialog.setMessage("数据提交中...");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
                                 //提交成功后更新未反馈活动列表数据、计算反馈分数（在全部成员都反馈后） 结束承载该碎片的活动
                                 updateNoComment();
-                                getActivity().finish();
                             }
                         }
                     });
@@ -295,6 +297,7 @@ public class CommentDetailFragment extends Fragment {
      * 计算反馈分数方法 用来判断参与用户是否赴约
      */
     private void calculateScore() {
+        progressDialog.setMessage("数据验算中...");
         BmobQuery<BrowserMsgBean> q = new BmobQuery<>();
         q.getObject(objectId, new QueryListener<BrowserMsgBean>() {
             @Override
@@ -308,8 +311,16 @@ public class CommentDetailFragment extends Fragment {
                         String mResult;
                         int n = members.size();
                         int p = 0;
+                        String firstMember = null;
+                        String lastMember = null;
                         for (int i = 0; i < n; i++) {
                             member = members.get(i);
+                            if (i == 0){
+                                firstMember = member;
+                            }
+                            if (i == n - 1){
+                                lastMember = member;
+                            }
                             int score = 0;
                             p = i;
                             for (int j = 0; j < n; j++) {
@@ -330,6 +341,8 @@ public class CommentDetailFragment extends Fragment {
                             BmobQuery<UserBean> query = new BmobQuery<>();
                             final String finalMember = member;
                             final int finalScore = score;
+                            final String finalFirstMember = firstMember;
+                            final String finalLastMember = lastMember;
                             query.getObject(member, new QueryListener<UserBean>() {
                                 @Override
                                 public void done(UserBean userBean, BmobException e) {
@@ -379,7 +392,14 @@ public class CommentDetailFragment extends Fragment {
                                                                 if (e != null) {
                                                                     Log.i("调试", "位置:CommentDetailFragment" + "\n" + "保存22用户" + finalMember + "数据时出错" + e.getMessage());
                                                                 } else {
-                                                                    updateUserAttendance(finalKeepNum, finalBreakNum);
+                                                                    boolean isFinished = false;
+                                                                    if (finalMember.equals(finalFirstMember)){
+                                                                        progressDialog.setMessage("用户数据更新中...");
+                                                                    }
+                                                                    if (finalMember.equals(finalLastMember)){
+                                                                        isFinished = true;
+                                                                    }
+                                                                    updateUserAttendance(isFinished,finalMember,finalKeepNum, finalBreakNum);
                                                                 }
                                                             }
                                                         });
@@ -397,13 +417,15 @@ public class CommentDetailFragment extends Fragment {
                         }
                     }
                 } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "提交成功\n感谢您的合作~！", Toast.LENGTH_LONG).show();
                     Log.i("调试", "位置:CommentDetailFragment" + "\n" + "计算总分时 获取活动信息出错" + e.getMessage());
                 }
             }
         });
     }
 
-    private void updateUserAttendance(final int finalKeepNum, final int finalBreakNum) {
+    private void updateUserAttendance(final boolean isFinished, final String userObjectId, final int finalKeepNum, final int finalBreakNum) {
         BmobQuery<UserBean> q = new BmobQuery<>();
         q.getObject(userObjectId, new QueryListener<UserBean>() {
             @Override
@@ -415,12 +437,18 @@ public class CommentDetailFragment extends Fragment {
                         @Override
                         public void done(BmobException e) {
                             if (e != null) {
-                                Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 保存时出错" + e.getMessage());
+                                Log.i("调试", "位置:CommentDetailFragment\'updateUserAttendance" + "\n" + "升级赴约率 保存时出错" + e.getMessage());
+                            }else{
+                                if (isFinished){
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getActivity(),"提交成功！\n感谢您的合作~",Toast.LENGTH_LONG).show();
+                                    getActivity().finish();
+                                }
                             }
                         }
                     });
                 } else {
-                    Log.i("调试", "位置:CommentDetailFragment" + "\n" + "升级赴约率 查询时出错" + e.getMessage());
+                    Log.i("调试", "位置:CommentDetailFragment\'updateUserAttendance" + "\n" + "更新赴约率 查询时出错" + e.getMessage());
                 }
             }
         });
@@ -449,6 +477,7 @@ public class CommentDetailFragment extends Fragment {
                             if (e != null) {
                                 Log.i("调试", "位置：CommentDetailFragment\n更新未反馈成员列表时，保存数据出错");
                             }else{
+                                //计算该活动的反馈分值并判断是否赴约
                                 calculateScore();
                             }
                         }
