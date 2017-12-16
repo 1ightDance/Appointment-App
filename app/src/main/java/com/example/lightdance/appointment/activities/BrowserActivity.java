@@ -1,7 +1,9 @@
 package com.example.lightdance.appointment.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -100,7 +102,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    public void onBackPressed() {
         if (mCurrentPosition == 2) {
             if (from == 1) {
                 BrowseFragment browseFragment = (BrowseFragment) getFragment(1);
@@ -116,9 +118,9 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
                 startActivity(intent);
                 finish();
             }
-            return false;
+        } else {
+            super.onBackPressed();
         }
-        return super.onKeyUp(keyCode, event);
     }
 
     /**
@@ -130,6 +132,7 @@ public class BrowserActivity extends AppCompatActivity implements TimePickerFrag
      * @param hour 时
      * @param minute 分
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void saveSelectTime(int year, int month, int day, int hour, int minute) {
         NewAppointmentFragment newAppointmentFragment = (NewAppointmentFragment) getFragment(2);
