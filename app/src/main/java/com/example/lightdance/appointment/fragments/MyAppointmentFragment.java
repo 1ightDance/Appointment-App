@@ -70,7 +70,7 @@ public class MyAppointmentFragment extends Fragment {
      */
     private void getMyAppointmentList(String loginStudentId) {
 
-        progressDialog.setTitle("请稍等");
+        progressDialog.setTitle("请稍等2222");
         progressDialog.setMessage("正在加载...");
         progressDialog.show();
         BmobQuery<HistoryBean> joinedHistoryList = new BmobQuery<>();
@@ -89,14 +89,13 @@ public class MyAppointmentFragment extends Fragment {
                         for (Iterator iterator = idList.iterator(); iterator.hasNext(); i++) {
                             count = count + 1;
                             objectIds[i] = (String) iterator.next();
-                            Log.e("来看数组", objectIds[i]);
                             if (count == idList.size()) {
-                                Log.e("来看数组", objectIds[0]);
                                 bindBrowserMsgBeans(objectIds);
                             }
                         }
                     } else {
                         ifEmpty.setText("应约记录空空如也");
+                        progressDialog.dismiss();
                     }
                 } else {
                     ifEmpty.setText("你网有毛病吧...");
@@ -113,9 +112,7 @@ public class MyAppointmentFragment extends Fragment {
             @Override
             public void done(List<BrowserMsgBean> list, BmobException e) {
                 if (e == null) {
-                    Log.e("呸", list.iterator().next().getInviter());
                     //debug
-                    Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT).show();
                     LinearLayoutManager layoutManager = new LinearLayoutManager(
                             getActivity());
                     mRecyclerView.setLayoutManager(layoutManager);
@@ -123,7 +120,6 @@ public class MyAppointmentFragment extends Fragment {
                     mRecyclerView.setAdapter(adapter);
                     progressDialog.dismiss();
                 } else {
-                    Log.e("略", "略略略");
                     Log.e("略", getActivity().getLocalClassName() + "失败：" + e.toString());
                     Toast.makeText(getActivity(), "失败：" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
